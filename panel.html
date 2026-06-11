@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KrypTon · Lista de espera (panel privado)</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, sans-serif;
+      background: #F1EFE8;
+      color: #1A1A1A;
+      padding: 2rem 1.5rem;
+      line-height: 1.6;
+    }
+
+    .panel {
+      max-width: 760px;
+      margin: 0 auto;
+    }
+
+    h1 {
+      font-size: 22px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+
+    .sub {
+      font-size: 14px;
+      color: #5F5E5A;
+      margin-bottom: 1.5rem;
+    }
+
+    .barra {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .stat {
+      background: #FAF9F5;
+      border: 0.5px solid rgba(0, 0, 0, 0.12);
+      border-radius: 8px;
+      padding: 10px 16px;
+    }
+
+    .stat .n {
+      font-size: 24px;
+      font-weight: 600;
+      color: #2E6E8E;
+    }
+
+    .stat .l {
+      font-size: 12px;
+      color: #888780;
+    }
+
+    button {
+      font-family: inherit;
+      font-size: 14px;
+      padding: 9px 16px;
+      border: 0.5px solid rgba(0, 0, 0, 0.2);
+      background: #fff;
+      border-radius: 8px;
+      cursor: pointer;
+      color: #1A1A1A;
+    }
+
+    button:hover {
+      background: #FAF9F5;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 0.5px solid rgba(0, 0, 0, 0.12);
+    }
+
+    th,
+    td {
+      text-align: left;
+      padding: 11px 14px;
+      font-size: 14px;
+      border-bottom: 0.5px solid rgba(0, 0, 0, 0.08);
+    }
+
+    th {
+      background: #2E6E8E;
+      color: #fff;
+      font-weight: 500;
+      font-size: 13px;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .vacio {
+      text-align: center;
+      color: #888780;
+      padding: 2rem;
+      font-size: 14px;
+    }
+
+    .aviso {
+      background: #FAEEDA;
+      border: 0.5px solid #EF9F27;
+      color: #633806;
+      padding: 12px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      margin-bottom: 1.5rem;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="panel">
+    <h1>Lista de espera</h1>
+    <p class="sub">Peluquerías apuntadas desde la landing de KrypTon.</p>
+
+    <div class="aviso">
+      Este panel es privado: no pongas el enlace en la tarjeta ni lo compartas. Sirve solo para que tú veas los
+      apuntados.
+    </div>
+
+    <div class="barra">
+      <div class="stat">
+        <div class="n" id="total">–</div>
+        <div class="l">Apuntados</div>
+      </div>
+      <button onclick="cargar()">↻ Actualizar</button>
+      <button onclick="exportarCSV()">⬇ Exportar a CSV (Excel)</button>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>Nombre</th>
+          <th>Email</th>
+          <th>Fecha</th>
+        </tr>
+      </thead>
+      <tbody id="tabla">
+        <tr>
+          <td colspan="3" class="vacio">Cargando...</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, getDocs, query, orderBy }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      
+    const firebaseConfig = {
+      apiKey: "AIzaSyDm7Nm5rYNtAqryi8EwVWV4pxd72VeHN50",
+      authDomain: "krypton-ebbc3.firebaseapp.com",
+      projectId: "krypton-ebbc3",
+      storageBucket: "krypton-ebbc3.firebasestorage.app",
+      messagingSenderId: "762807015953",
+      appId: "1:762807015953:web:79c41836bb30dee9b6efb0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    let datos = [];
+
+    window.cargar = async function () {
+      const tabla = document.getElementById('tabla');
+      tabla.innerHTML = '<tr><td colspan="3" class="vacio">Cargando...</td></tr>';
+      try {
+        const q = query(collection(db, "listaEspera"), orderBy("fecha", "desc"));
+        const snap = await getDocs(q);
+        datos = [];
+        snap.forEach(d => datos.push(d.data()));
+        document.getElementById('total').textContent = datos.length;
+        if (datos.length === 0) {
+          tabla.innerHTML = '<tr><td colspan="3" class="vacio">Aún no hay nadie apuntado.</td></tr>';
+          return;
+        }
+        tabla.innerHTML = datos.map(r => {
+          const f = r.fecha && r.fecha.toDate ? r.fecha.toDate().toLocaleString('es-ES') : '–';
+          return `<tr><td>${escapar(r.nombre)}</td><td>${escapar(r.email)}</td><td>${f}</td></tr>`;
+        }).join('');
+      } catch (e) {
+        console.error(e);
+        tabla.innerHTML = '<tr><td colspan="3" class="vacio">Error al cargar. Revisa las reglas de seguridad (ver guía).</td></tr>';
+      }
+    };
+
+    function escapar(s) {
+      return String(s || '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+    }
+
+    window.exportarCSV = function () {
+      if (!datos.length) { alert('No hay datos para exportar.'); return; }
+      const filas = [['Nombre', 'Email', 'Fecha']];
+      datos.forEach(r => {
+        const f = r.fecha && r.fecha.toDate ? r.fecha.toDate().toLocaleString('es-ES') : '';
+        filas.push([r.nombre || '', r.email || '', f]);
+      });
+      const csv = filas.map(f => f.map(c => '"' + String(c).replace(/"/g, '""') + '"').join(',')).join('\n');
+      const blob = new Blob(['\ufeff' + csv], { type: 'text/csv;charset=utf-8;' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = 'lista-espera-krypton.csv';
+      a.click();
+    };
+
+    cargar();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>KrypTon · Reservas para peluquerías de barrio en Zaragoza</title>
+  <meta name="description"
+    content="El sistema de reservas pensado para peluquerías de barrio de Zaragoza. Sin comisiones. Tus clientes siguen siendo tuyos." />
+
+  <!-- Tipografía -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <!-- Iconos Tabler -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.1.0/dist/tabler-icons.min.css" />
+
+  <style>
+    :root {
+      --azul-profundo: #0C2A3D;
+      --azul-marca: #2E6E8E;
+      --azul-claro-borde: #1D5878;
+      --azul-texto-claro: #9FC5DA;
+      --azul-texto-tenue: #6FA3BE;
+      --info-bg: #E6F1FB;
+      --info-texto: #0C447C;
+      --exito: #1D9E75;
+      --texto-primario: #1A1A1A;
+      --texto-secundario: #5F5E5A;
+      --texto-tenue: #888780;
+      --bg-pagina: #F1EFE8;
+      --bg-superficie: #FAF9F5;
+      --bg-blanco: #FFFFFF;
+      --borde: rgba(0, 0, 0, 0.12);
+      --radio-md: 8px;
+      --radio-lg: 12px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--bg-pagina);
+      color: var(--texto-primario);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+      padding: 1.5rem;
+    }
+
+    .tarjeta-landing {
+      max-width: 640px;
+      margin: 0 auto;
+      background: var(--bg-blanco);
+      border: 0.5px solid var(--borde);
+      border-radius: var(--radio-lg);
+      overflow: hidden;
+    }
+
+    /* HÉROE */
+    .heroe {
+      background: var(--azul-profundo);
+      padding: 2.5rem 2rem;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .circulo-deco {
+      position: absolute;
+      border: 1px solid var(--azul-claro-borde);
+      border-radius: 50%;
+      opacity: 0.4;
+    }
+
+    .circulo-1 {
+      left: -60px;
+      bottom: -60px;
+      width: 200px;
+      height: 200px;
+    }
+
+    .circulo-2 {
+      right: -30px;
+      top: -50px;
+      width: 160px;
+      height: 160px;
+    }
+
+    .heroe-contenido {
+      position: relative;
+    }
+
+    .marca {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      margin-bottom: 1.5rem;
+    }
+
+    .marca-icono {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radio-md);
+      background: var(--azul-marca);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .marca-icono i {
+      font-size: 18px;
+      color: var(--info-bg);
+    }
+
+    .marca-nombre {
+      font-size: 19px;
+      font-weight: 500;
+      color: #fff;
+      letter-spacing: 0.5px;
+    }
+
+    .heroe-titular {
+      font-size: 26px;
+      font-weight: 500;
+      color: #fff;
+      margin: 0 auto 12px;
+      max-width: 460px;
+      line-height: 1.35;
+    }
+
+    .heroe-subtitulo {
+      font-size: 15px;
+      color: var(--azul-texto-claro);
+      margin: 0 auto 1.75rem;
+      max-width: 420px;
+      line-height: 1.6;
+    }
+
+    .boton-cta {
+      display: inline-block;
+      background: var(--azul-marca);
+      color: #fff;
+      font-size: 15px;
+      font-weight: 500;
+      padding: 12px 28px;
+      border-radius: var(--radio-md);
+      text-decoration: none;
+      transition: opacity 0.15s;
+    }
+
+    .boton-cta:hover {
+      opacity: 0.9;
+    }
+
+    .heroe-nota {
+      font-size: 12px;
+      color: var(--azul-texto-tenue);
+      margin-top: 12px;
+    }
+
+    /* DOLOR */
+    .seccion {
+      padding: 2rem;
+    }
+
+    .seccion-etiqueta {
+      font-size: 13px;
+      color: var(--texto-tenue);
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .grid-dolor {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      gap: 12px;
+    }
+
+    .tarjeta-dolor {
+      background: var(--bg-superficie);
+      border-radius: var(--radio-md);
+      padding: 1rem;
+    }
+
+    .tarjeta-dolor i {
+      font-size: 22px;
+      color: var(--azul-marca);
+    }
+
+    .tarjeta-dolor h3 {
+      font-size: 14px;
+      font-weight: 500;
+      margin: 8px 0 4px;
+    }
+
+    .tarjeta-dolor p {
+      font-size: 13px;
+      color: var(--texto-secundario);
+      line-height: 1.5;
+    }
+
+    /* BENEFICIOS */
+    .titulo-seccion {
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 1.25rem;
+    }
+
+    .lista-beneficios {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .beneficio {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .beneficio>i {
+      font-size: 22px;
+      color: var(--azul-marca);
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .beneficio h3 {
+      font-size: 15px;
+      font-weight: 500;
+      margin-bottom: 2px;
+    }
+
+    .beneficio p {
+      font-size: 13px;
+      color: var(--texto-secundario);
+      line-height: 1.55;
+    }
+
+    /* FORMULARIO */
+    .seccion-form {
+      background: var(--bg-superficie);
+      padding: 2rem;
+      border-top: 0.5px solid var(--borde);
+    }
+
+    .form-titulo {
+      font-size: 18px;
+      font-weight: 500;
+      text-align: center;
+      margin-bottom: 6px;
+    }
+
+    .form-subtitulo {
+      font-size: 13px;
+      color: var(--texto-secundario);
+      text-align: center;
+      margin: 0 auto 1.25rem;
+      max-width: 360px;
+      line-height: 1.55;
+    }
+
+    .form-campos {
+      max-width: 380px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .form-campos input[type="text"],
+    .form-campos input[type="email"] {
+      width: 100%;
+      height: 42px;
+      padding: 0 14px;
+      font-size: 15px;
+      font-family: inherit;
+      border: 0.5px solid var(--borde);
+      border-radius: var(--radio-md);
+      background: var(--bg-blanco);
+      color: var(--texto-primario);
+      transition: border-color 0.15s;
+    }
+
+    .form-campos input:focus {
+      outline: none;
+      border-color: var(--azul-marca);
+    }
+
+    .form-campos input.error {
+      border-color: #E24B4A;
+    }
+
+    .form-consentimiento {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      font-size: 12px;
+      color: var(--texto-secundario);
+      line-height: 1.45;
+      margin: 2px 0;
+    }
+
+    .form-consentimiento input {
+      margin-top: 2px;
+      flex-shrink: 0;
+    }
+
+    .form-consentimiento a {
+      color: var(--azul-marca);
+    }
+
+    .boton-enviar {
+      background: var(--azul-marca);
+      color: #fff;
+      border: none;
+      padding: 12px;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: var(--radio-md);
+      cursor: pointer;
+      transition: opacity 0.15s;
+    }
+
+    .boton-enviar:hover {
+      opacity: 0.9;
+    }
+
+    .boton-enviar:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .form-nota-legal {
+      font-size: 11px;
+      color: var(--texto-tenue);
+      text-align: center;
+      margin-top: 4px;
+    }
+
+    .form-error-msg {
+      font-size: 13px;
+      color: #E24B4A;
+      text-align: center;
+      display: none;
+    }
+
+    .form-exito {
+      display: none;
+      max-width: 380px;
+      margin: 0 auto;
+      text-align: center;
+      padding: 1.5rem 0;
+    }
+
+    .form-exito i {
+      font-size: 38px;
+      color: var(--exito);
+    }
+
+    .form-exito h3 {
+      font-size: 16px;
+      font-weight: 500;
+      margin: 10px 0 4px;
+    }
+
+    .form-exito p {
+      font-size: 13px;
+      color: var(--texto-secundario);
+    }
+
+    /* PIE */
+    .pie {
+      padding: 1.25rem 2rem;
+      text-align: center;
+      border-top: 0.5px solid var(--borde);
+    }
+
+    .pie p {
+      font-size: 12px;
+      color: var(--texto-tenue);
+    }
+
+    .pie a {
+      color: var(--texto-tenue);
+    }
+
+    @media (max-width: 480px) {
+      body {
+        padding: 0;
+      }
+
+      .tarjeta-landing {
+        border-radius: 0;
+        border: none;
+      }
+
+      .heroe-titular {
+        font-size: 22px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <main class="tarjeta-landing">
+
+    <!-- HÉROE -->
+    <header class="heroe">
+      <span class="circulo-deco circulo-1"></span>
+      <span class="circulo-deco circulo-2"></span>
+      <div class="heroe-contenido">
+        <div class="marca">
+          <span class="marca-icono"><i class="ti ti-calendar-check" aria-hidden="true"></i></span>
+          <span class="marca-nombre">KrypTon</span>
+        </div>
+        <h1 class="heroe-titular">Tus clientes reservan solos. Tú dejas de coger el teléfono.</h1>
+        <p class="heroe-subtitulo">El sistema de reservas pensado para peluquerías de barrio de Zaragoza. Sin
+          comisiones. Tus clientes siguen siendo tuyos.</p>
+        <a href="#form" class="boton-cta">Apúntate gratis a la lista de espera</a>
+        <p class="heroe-nota">Los primeros del barrio la prueban gratis</p>
+      </div>
+    </header>
+
+    <!-- DOLOR -->
+    <section class="seccion">
+      <p class="seccion-etiqueta">¿Te suena esto?</p>
+      <div class="grid-dolor">
+        <div class="tarjeta-dolor">
+          <i class="ti ti-phone-ringing" aria-hidden="true"></i>
+          <h3>El teléfono no para</h3>
+          <p>Te cortan mientras atiendes a un cliente.</p>
+        </div>
+        <div class="tarjeta-dolor">
+          <i class="ti ti-user-x" aria-hidden="true"></i>
+          <h3>Citas que no aparecen</h3>
+          <p>Huecos perdidos por olvidos de última hora.</p>
+        </div>
+        <div class="tarjeta-dolor">
+          <i class="ti ti-notebook" aria-hidden="true"></i>
+          <h3>Todo en una libreta</h3>
+          <p>Sin avisos automáticos ni copia de seguridad.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- BENEFICIOS -->
+    <section class="seccion" style="padding-top: 0;">
+      <h2 class="titulo-seccion">Cómo te ayuda KrypTon</h2>
+      <div class="lista-beneficios">
+        <div class="beneficio">
+          <i class="ti ti-clock-24" aria-hidden="true"></i>
+          <div>
+            <h3>Reservas 24/7 desde el móvil</h3>
+            <p>Tus clientes reservan a la hora que quieran, sin llamarte.</p>
+          </div>
+        </div>
+        <div class="beneficio">
+          <i class="ti ti-bell-ringing" aria-hidden="true"></i>
+          <div>
+            <h3>Recordatorios automáticos</h3>
+            <p>Menos ausencias: el cliente recibe un aviso antes de su cita.</p>
+          </div>
+        </div>
+        <div class="beneficio">
+          <i class="ti ti-layout-grid" aria-hidden="true"></i>
+          <div>
+            <h3>Tu agenda del día de un vistazo</h3>
+            <p>Desde el móvil o el ordenador que ya tienes. Sin comprar nada.</p>
+          </div>
+        </div>
+        <div class="beneficio">
+          <i class="ti ti-heart-handshake" aria-hidden="true"></i>
+          <div>
+            <h3>Tus clientes son tuyos</h3>
+            <p>Cuota fija, sin comisiones por reserva. Sin competencia en el mismo sitio.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FORMULARIO -->
+    <section class="seccion-form" id="form">
+      <h2 class="form-titulo">Sé de los primeros del barrio</h2>
+      <p class="form-subtitulo">Déjanos tu email y te avisamos cuando esté lista. Gratis al principio y sin compromiso.
+      </p>
+
+      <div class="form-campos" id="form-campos">
+        <input type="text" id="nombre" placeholder="Nombre de tu peluquería" autocomplete="organization" />
+        <input type="email" id="email" placeholder="Tu email" autocomplete="email" />
+        <label class="form-consentimiento">
+          <input type="checkbox" id="consentimiento" />
+          <span>Acepto que KrypTon guarde mi nombre y email para avisarme del lanzamiento. Consulta la <a
+              href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</span>
+        </label>
+        <button class="boton-enviar" id="boton-enviar" onclick="enviarFormulario()">Apuntarme a la lista</button>
+        <p class="form-error-msg" id="form-error">Revisa los datos: necesitamos un email válido y tu consentimiento.</p>
+        <p class="form-nota-legal">Cumplimos el RGPD. No compartimos tus datos con nadie.</p>
+      </div>
+
+      <div class="form-exito" id="form-exito">
+        <i class="ti ti-circle-check" aria-hidden="true"></i>
+        <h3>¡Apuntado!</h3>
+        <p>Te escribiremos en cuanto la primera versión esté lista.</p>
+      </div>
+    </section>
+
+    <!-- PIE -->
+    <footer class="pie">
+      <p>KrypTon · Hecho en Zaragoza por Kevin Rodríguez · <a href="privacidad.html">Privacidad</a></p>
+    </footer>
+
+  </main>
+
+  <!-- ============================================================= -->
+  <!-- FIREBASE: guarda los nombres y emails en Firestore            -->
+  <!-- Sigue la GUÍA para rellenar firebaseConfig con TUS claves.    -->
+  <!-- ============================================================= -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+    import { getFirestore, collection, addDoc, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+      
+    const firebaseConfig = {
+      apiKey: "AIzaSyDm7Nm5rYNtAqryi8EwVWV4pxd72VeHN50",
+      authDomain: "krypton-ebbc3.firebaseapp.com",
+      projectId: "krypton-ebbc3",
+      storageBucket: "krypton-ebbc3.firebasestorage.app",
+      messagingSenderId: "762807015953",
+      appId: "1:762807015953:web:79c41836bb30dee9b6efb0"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    // Exponemos la función para que el botón la pueda llamar
+    window.enviarFormulario = async function () {
+      const nombre = document.getElementById('nombre');
+      const email = document.getElementById('email');
+      const consentimiento = document.getElementById('consentimiento');
+      const errorMsg = document.getElementById('form-error');
+      const boton = document.getElementById('boton-enviar');
+
+      // Validación básica
+      const emailValido = email.value.trim().includes('@') && email.value.trim().includes('.');
+      let hayError = false;
+
+      email.classList.remove('error');
+      if (!emailValido) { email.classList.add('error'); hayError = true; }
+      if (!consentimiento.checked) { hayError = true; }
+
+      if (hayError) { errorMsg.style.display = 'block'; return; }
+      errorMsg.style.display = 'none';
+
+      boton.disabled = true;
+      boton.textContent = 'Guardando...';
+
+      try {
+        await addDoc(collection(db, "listaEspera"), {
+          nombre: nombre.value.trim() || "(sin nombre)",
+          email: email.value.trim(),
+          fecha: serverTimestamp(),
+          origen: "landing"
+        });
+        // Éxito
+        document.getElementById('form-campos').style.display = 'none';
+        document.getElementById('form-exito').style.display = 'block';
+      } catch (e) {
+        console.error("Error al guardar:", e);
+        boton.disabled = false;
+        boton.textContent = 'Apuntarme a la lista';
+        errorMsg.textContent = 'Ups, algo falló. Inténtalo de nuevo en un momento.';
+        errorMsg.style.display = 'block';
+      }
+    };
+  </script>
+
+</body>
+
+</html>
