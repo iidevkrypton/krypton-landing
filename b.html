@@ -1,0 +1,61 @@
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Abriendo KBook...</title>
+  <style>
+    body {
+      background: #0C2A3D;
+      color: #9FC5DA;
+      font-family: sans-serif;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      text-align: center;
+      padding: 24px;
+      box-sizing: border-box;
+    }
+
+    h1 {
+      color: #2E6E8E;
+      font-size: 2rem;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-size: 1rem;
+      opacity: 0.8;
+      max-width: 320px;
+    }
+
+    a {
+      color: #2E6E8E;
+    }
+  </style>
+  <script>
+    (function () {
+      var id = new URLSearchParams(window.location.search).get('id');
+      if (!id) { document.title = 'Enlace no válido'; return; }
+      // Redirige a la app                                                                                                                                                                                                        
+      window.location.href = 'kbook://book/' + id;
+      // Si la app no está instalada, muestra el mensaje de fallback tras 1.5s                                                                                                                                                    
+      setTimeout(function () {
+        document.getElementById('fallback').style.display = 'block';
+      }, 1500);
+    })();                                                                                                                                                                                                                         
+  </script>
+</head>
+
+<body>
+  <h1>KBook</h1>
+  <p>Abriendo la agenda de reservas...</p>
+  <div id="fallback" style="display:none; margin-top: 24px;">
+    <p>¿No se ha abierto la app?</p>
+    <p><a href="https://play.google.com/store/apps/details?id=com.devkrypton.kbook">
+        Descarga KBook en Google Play
+      </a></p>
+  </div>
