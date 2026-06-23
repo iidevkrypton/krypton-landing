@@ -48,7 +48,7 @@
     p { font-size: 1rem; color: #948CC4; max-width: 320px; line-height: 1.4; }
 
     .acciones {
-      display: none;
+      display: flex;
       flex-direction: column;
       gap: 12px;
       margin-top: 8px;
@@ -80,24 +80,22 @@
 
       var esAndroid = /android/i.test(navigator.userAgent || '');
 
-      if (esAndroid) {
-        // intent:// lo respeta Samsung Browser (window.location='kbook://…' no).
-        // Abre la app si está instalada y cae solo a Play Store si no (browser_fallback_url).
-        window.location.href =
-          'intent://book/' + encodeURIComponent(id) +
+      // URL que abre la app. En Android intent:// (lo respeta Samsung Browser y cae
+      // solo a Play Store si no está instalada); en iOS/escritorio, el esquema propio.
+      var abrirUrl = esAndroid
+        ? 'intent://book/' + encodeURIComponent(id) +
           '#Intent;scheme=kbook;package=' + PACKAGE +
-          ';S.browser_fallback_url=' + encodeURIComponent(PLAY_URL) + ';end';
-      } else {
-        // iOS / escritorio: intento del esquema propio
-        window.location.href = 'kbook://book/' + encodeURIComponent(id);
-      }
+          ';S.browser_fallback_url=' + encodeURIComponent(PLAY_URL) + ';end'
+        : 'kbook://book/' + encodeURIComponent(id);
 
-      // Si seguimos aquí pasados ~2 s, mostramos el respaldo
-      setTimeout(function () {
-        document.getElementById('spinner').style.display = 'none';
-        document.getElementById('msg').textContent = '¿No se ha abierto la app?';
-        document.getElementById('acciones').style.display = 'flex';
-      }, 2000);
+      // El botón "Abrir en la app" usa la misma URL (un toque la abre con seguridad,
+      // por si el navegador bloquea el intento automático sin gesto del usuario).
+      document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('abrirApp').setAttribute('href', abrirUrl);
+      });
+
+      // Intento automático al cargar (funciona en muchos navegadores; otros exigen toque)
+      window.location.href = abrirUrl;
     })();
   </script>
 </head>
@@ -105,9 +103,10 @@
 <body>
   <div class="marca">KBook</div>
   <div class="spinner" id="spinner"></div>
-  <p id="msg">Abriendo la agenda de reservas…</p>
+  <p id="msg">Abriendo la app…</p>
 
   <div class="acciones" id="acciones">
+    <a class="btn primario" id="abrirApp" href="#">Abrir en la app</a>
     <a class="btn secundario"
        href="https://play.google.com/store/apps/details?id=com.devkrypton.kbook"
        target="_blank" rel="noopener">Descargar KBook en Google Play</a>
