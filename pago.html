@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KBook · Pago</title>
+<!--
+  Vuelta de Stripe Checkout: success_url/cancel_url apuntan aquí.
+    https://devkrypton.com/pago?estado=ok&negocio=… → rebota a kbook://pago?estado=ok
+    https://devkrypton.com/pago?estado=cancel&…     → rebota a kbook://pago?estado=cancel
+  SUBIR a la raíz del landing como /pago.html (GitHub Pages lo sirve en /pago).
+-->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { min-height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #15112E; color: #948CC4; }
+  .wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px 24px; gap: 16px; }
+  .marca { font-size: 40px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; background: linear-gradient(135deg,#6C4DFF,#00C2A8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: #6C4DFF; }
+  h1 { color: #D2CCF2; font-size: 1.4rem; }
+  p { color: #948CC4; max-width: 320px; line-height: 1.45; }
+  a.btn { display: inline-block; text-decoration: none; padding: 14px 22px; border-radius: 12px; font-size: .95rem; font-weight: 600; margin-top: 8px; background: #6C4DFF; color: #fff; }
+  .pie { margin-top: 12px; font-size: .75rem; color: #948CC4; }
+</style>
+<script>
+(function () {
+  var PACKAGE = 'com.devkrypton.kbook';
+  var PLAY_URL = 'https://play.google.com/store/apps/details?id=' + PACKAGE;
+  var p = new URLSearchParams(location.search);
+  var estado = p.get('estado') || 'ok';
+  var esAndroid = /android/i.test(navigator.userAgent || '');
+
+  var abrirUrl = esAndroid
+    ? 'intent://pago?estado=' + encodeURIComponent(estado) +
+      '#Intent;scheme=kbook;package=' + PACKAGE +
+      ';S.browser_fallback_url=' + encodeURIComponent(PLAY_URL) + ';end'
+    : 'kbook://pago?estado=' + encodeURIComponent(estado);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('volver').setAttribute('href', abrirUrl);
+    if (estado === 'cancel') {
+      document.getElementById('titulo').textContent = 'Pago cancelado';
+      document.getElementById('texto').textContent = 'No se ha realizado ningún cargo. Vuelve a la app para elegir un plan.';
+    } else {
+      document.getElementById('titulo').textContent = '¡Pago completado!';
+      document.getElementById('texto').textContent = 'Estamos activando tu suscripción. Vuelve a la app para continuar.';
+    }
+  });
+
+  try { location.href = abrirUrl; } catch (e) {}
+})();
+</script>
+</head>
+<body>
+  <div class="wrap">
+    <div class="marca">KBook</div>
+    <h1 id="titulo">Un momento…</h1>
+    <p id="texto"></p>
+    <a class="btn" id="volver" href="#">Volver a la app</a>
+    <div class="pie">KBook · by KrypTon</div>
+  </div>
+</body>
+</html>
