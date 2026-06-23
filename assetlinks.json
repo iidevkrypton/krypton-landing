@@ -1,0 +1,12 @@
+[
+  {
+    "relation": ["delegate_permission/common.handle_all_urls"],
+    "target": {
+      "namespace": "android_app",
+      "package_name": "com.devkrypton.kbook",
+      "sha256_cert_fingerprints": [
+        "9C:B7:31:21:12:DF:98:75:D3:C2:3E:A5:A4:30:B7:0E:99:AB:41:A1:08:2E:13:85:BF:04:DF:8A:C9:1A:EA:69"
+      ]
+    }
+  }
+]
