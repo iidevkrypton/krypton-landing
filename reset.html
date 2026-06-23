@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KBook</title>
+<!--
+  Página de acciones de cuenta de KBook (action handler de Firebase Auth).
+  Firebase manda aquí TODOS los enlaces de correo (es un único action URL global):
+    · mode=resetPassword → rebota a la app (kbook://reset?oobCode=…) para cambiar la contraseña DENTRO de la app.
+    · mode=verifyEmail   → activa la cuenta aquí mismo (applyActionCode) y avisa.
+    · mode=recoverEmail  → revierte un cambio de correo (applyActionCode).
+  SUBIR a la raíz del sitio de devkrypton.com como /reset.html (GitHub Pages lo sirve en /reset).
+-->
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { min-height: 100%; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #15112E; color: #948CC4; }
+  .wrap { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 32px 24px; gap: 16px; }
+  .marca { font-size: 40px; font-weight: 900; letter-spacing: -0.03em; line-height: 1; background: linear-gradient(135deg,#6C4DFF,#00C2A8); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; color: #6C4DFF; }
+  h1 { color: #D2CCF2; font-size: 1.4rem; }
+  p { color: #948CC4; max-width: 340px; line-height: 1.45; }
+  .spinner { width: 34px; height: 34px; border: 3px solid rgba(108,77,255,0.25); border-top-color: #6C4DFF; border-radius: 50%; animation: giro .9s linear infinite; }
+  @keyframes giro { to { transform: rotate(360deg); } }
+  a.btn { display: inline-block; text-decoration: none; padding: 14px 22px; border-radius: 12px; font-size: .95rem; font-weight: 600; margin-top: 8px; }
+  a.primario { background: #6C4DFF; color: #fff; }
+  a.secundario { border: 1px solid #352D5C; color: #D2CCF2; }
+  .pie { margin-top: 12px; font-size: .75rem; color: #948CC4; }
+  .oculto { display: none; }
+</style>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+</head>
+<body>
+<div class="wrap">
+  <div class="marca">KBook</div>
+  <div class="spinner" id="spinner"></div>
+  <h1 id="titulo">Un momento…</h1>
+  <p id="texto"></p>
+  <div id="acciones" class="oculto">
+    <a class="btn primario" id="abrirApp" href="#">Abrir en la app</a>
+    <a class="btn secundario" id="descargar" href="https://play.google.com/store/apps/details?id=com.devkrypton.kbook" target="_blank" rel="noopener">Descargar KBook</a>
+  </div>
+  <div class="pie">KBook · by KrypTon</div>
+</div>
+
+<script>
+(function () {
+  var PACKAGE = 'com.devkrypton.kbook';
+  var PLAY_URL = 'https://play.google.com/store/apps/details?id=' + PACKAGE;
+
+  firebase.initializeApp({
+    apiKey: 'AIzaSyDfaNh08j3cPmkErt6sNP9uYAYRqX9O3BU',
+    authDomain: 'kbook-efa91.firebaseapp.com',
+    projectId: 'kbook-efa91'
+  });
+
+  var p = new URLSearchParams(location.search);
+  var mode = p.get('mode');
+  var oobCode = p.get('oobCode');
+  var esAndroid = /android/i.test(navigator.userAgent || '');
+
+  function ui(titulo, texto, mostrarAcciones, abrirUrl) {
+    document.getElementById('spinner').style.display = 'none';
+    document.getElementById('titulo').textContent = titulo;
+    document.getElementById('texto').textContent = texto;
+    if (mostrarAcciones) {
+      if (abrirUrl) document.getElementById('abrirApp').setAttribute('href', abrirUrl);
+      else document.getElementById('abrirApp').style.display = 'none';
+      document.getElementById('acciones').classList.remove('oculto');
+    }
+  }
+
+  if (!mode || !oobCode) {
+    ui('Enlace no válido', 'Falta información en el enlace. Solicita uno nuevo desde la app.', true, null);
+    return;
+  }
+
+  if (mode === 'resetPassword') {
+    // Abrir la app para cambiar la contraseña DENTRO de la app.
+    var intentUrl = 'intent://reset?oobCode=' + encodeURIComponent(oobCode) +
+      '#Intent;scheme=kbook;package=' + PACKAGE +
+      ';S.browser_fallback_url=' + encodeURIComponent(PLAY_URL) + ';end';
+    var abrirUrl = esAndroid ? intentUrl : ('kbook://reset?oobCode=' + encodeURIComponent(oobCode));
+    try { location.href = abrirUrl; } catch (e) {}
+    ui('Abriendo la app…', 'Sigue en la app para crear tu nueva contraseña. Si no se abre sola, pulsa el botón.', true, abrirUrl);
+  } else if (mode === 'verifyEmail') {
+    firebase.auth().applyActionCode(oobCode)
+      .then(function () { ui('Cuenta activada', 'Ya puedes volver a la app de KBook y continuar.', true, 'kbook://book/0'); })
+      .catch(function () { ui('Enlace no válido', 'El enlace de activación ha caducado o ya se ha usado. Solicita uno nuevo desde la app.', true, null); });
+  } else if (mode === 'recoverEmail') {
+    firebase.auth().applyActionCode(oobCode)
+      .then(function () { ui('Correo restaurado', 'Hemos revertido el cambio de tu correo.', false, null); })
+      .catch(function () { ui('Enlace no válido', 'El enlace ha caducado o ya se ha usado.', false, null); });
+  } else {
+    ui('Enlace no reconocido', 'Vuelve a la app e inténtalo de nuevo.', true, null);
+  }
+})();
+</script>
+</body>
+</html>
