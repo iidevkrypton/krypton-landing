@@ -6,32 +6,40 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>KBook · Reservas para tu negocio</title>
   <meta name="description"
-    content="El sistema de reservas pensado para tu negocio. Sin comisiones. Tus clientes siguen siendo tuyos." />
+    content="El sistema de reservas para peluquerías, barberías y cualquier negocio con cita previa. Sin comisiones y con tus clientes siempre tuyos. Cuota fija." />
+  <meta name="theme-color" content="#15112E" />
 
   <!-- Tipografía -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+    rel="stylesheet" />
   <!-- Iconos Tabler -->
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.1.0/dist/tabler-icons.min.css" />
 
   <style>
     :root {
-      --azul-profundo: #0C2A3D;
-      --azul-marca: #2E6E8E;
-      --azul-claro-borde: #1D5878;
-      --azul-texto-claro: #9FC5DA;
-      --azul-texto-tenue: #6FA3BE;
-      --info-bg: #E6F1FB;
-      --info-texto: #0C447C;
-      --exito: #1D9E75;
+      /* Paleta "Dúo" — violeta → turquesa (CLAUDE.md §5) */
+      --azul-profundo: #15112E;
+      --azul-superficie-osc: #211B40;
+      --azul-marca: #6C4DFF;
+      --turquesa: #00C2A8;
+      --violeta-claro: #8A6CFF;
+      --azul-claro-borde: #352D5C;
+      --azul-texto-claro: #D2CCF2;
+      --azul-texto-tenue: #948CC4;
+      --info-bg: #ECE9FD;
+      --info-texto: #3A2E8C;
+      --exito: #00C2A8;
+      --error: #E5484D;
       --texto-primario: #1A1A1A;
-      --texto-secundario: #5F5E5A;
-      --texto-tenue: #888780;
-      --bg-pagina: #F1EFE8;
-      --bg-superficie: #FAF9F5;
+      --texto-secundario: #524E66;
+      --texto-tenue: #8B86A1;
+      --bg-pagina: #F4F2FB;
+      --bg-superficie: #FBFAFE;
       --bg-blanco: #FFFFFF;
-      --borde: rgba(0, 0, 0, 0.12);
+      --borde: rgba(21, 17, 46, 0.10);
+      --gradiente-marca: linear-gradient(135deg, #6C4DFF, #00C2A8);
       --radio-md: 8px;
       --radio-lg: 12px;
     }
@@ -49,6 +57,16 @@
       line-height: 1.6;
       -webkit-font-smoothing: antialiased;
       padding: 1.5rem;
+    }
+
+    /* Texto con degradado de marca reutilizable */
+    .degradado {
+      background: var(--gradiente-marca);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      color: #6C4DFF;
+      /* fallback visible — nunca color:transparent */
     }
 
     .tarjeta-landing {
@@ -73,7 +91,7 @@
       position: absolute;
       border: 1px solid var(--azul-claro-borde);
       border-radius: 50%;
-      opacity: 0.4;
+      opacity: 0.45;
     }
 
     .circulo-1 {
@@ -90,6 +108,13 @@
       height: 160px;
     }
 
+    .circulo-3 {
+      right: 10px;
+      top: -10px;
+      width: 80px;
+      height: 80px;
+    }
+
     .heroe-contenido {
       position: relative;
     }
@@ -102,30 +127,30 @@
     }
 
     .marca-icono {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: var(--radio-md);
-      background: var(--azul-marca);
+      background: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
     }
 
-    .marca-icono i {
-      font-size: 18px;
-      color: var(--info-bg);
+    .marca-icono span {
+      font-size: 21px;
+      font-weight: 900;
+      line-height: 1;
     }
 
     .marca-nombre {
-      font-size: 19px;
-      font-weight: 500;
-      color: #fff;
-      letter-spacing: 0.5px;
+      font-size: 21px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
     }
 
     .heroe-titular {
       font-size: 26px;
-      font-weight: 500;
+      font-weight: 600;
       color: #fff;
       margin: 0 auto 12px;
       max-width: 460px;
@@ -136,30 +161,61 @@
       font-size: 15px;
       color: var(--azul-texto-claro);
       margin: 0 auto 1.75rem;
-      max-width: 420px;
+      max-width: 430px;
       line-height: 1.6;
     }
 
     .boton-cta {
       display: inline-block;
-      background: var(--azul-marca);
+      background: var(--gradiente-marca);
       color: #fff;
       font-size: 15px;
-      font-weight: 500;
-      padding: 12px 28px;
+      font-weight: 600;
+      padding: 13px 28px;
       border-radius: var(--radio-md);
       text-decoration: none;
-      transition: opacity 0.15s;
+      transition: opacity 0.15s, transform 0.15s;
     }
 
     .boton-cta:hover {
-      opacity: 0.9;
+      opacity: 0.92;
+      transform: translateY(-1px);
     }
 
     .heroe-nota {
       font-size: 12px;
       color: var(--azul-texto-tenue);
       margin-top: 12px;
+    }
+
+    /* SECTORES (multi-sector) */
+    .sectores {
+      padding: 1.5rem 2rem 0.5rem;
+      text-align: center;
+    }
+
+    .sectores-intro {
+      font-size: 12px;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--azul-marca);
+      margin-bottom: 0.85rem;
+    }
+
+    .sectores-chips {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 7px;
+    }
+
+    .sectores-chips span {
+      font-size: 12.5px;
+      color: var(--info-texto);
+      background: var(--info-bg);
+      border-radius: 999px;
+      padding: 5px 12px;
     }
 
     /* DOLOR */
@@ -182,6 +238,7 @@
 
     .tarjeta-dolor {
       background: var(--bg-superficie);
+      border: 0.5px solid var(--borde);
       border-radius: var(--radio-md);
       padding: 1rem;
     }
@@ -193,7 +250,7 @@
 
     .tarjeta-dolor h3 {
       font-size: 14px;
-      font-weight: 500;
+      font-weight: 600;
       margin: 8px 0 4px;
     }
 
@@ -206,7 +263,7 @@
     /* BENEFICIOS */
     .titulo-seccion {
       font-size: 18px;
-      font-weight: 500;
+      font-weight: 600;
       text-align: center;
       margin-bottom: 1.25rem;
     }
@@ -225,16 +282,25 @@
       align-items: flex-start;
     }
 
-    .beneficio>i {
-      font-size: 22px;
-      color: var(--azul-marca);
-      margin-top: 2px;
+    .beneficio-icono {
+      width: 38px;
+      height: 38px;
       flex-shrink: 0;
+      border-radius: var(--radio-md);
+      background: var(--info-bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .beneficio-icono i {
+      font-size: 20px;
+      color: var(--azul-marca);
     }
 
     .beneficio h3 {
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 600;
       margin-bottom: 2px;
     }
 
@@ -246,21 +312,31 @@
 
     /* FORMULARIO */
     .seccion-form {
-      background: var(--bg-superficie);
-      padding: 2rem;
-      border-top: 0.5px solid var(--borde);
+      background: var(--azul-profundo);
+      padding: 2.25rem 2rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .seccion-form .circulo-deco {
+      opacity: 0.35;
+    }
+
+    .form-contenido {
+      position: relative;
     }
 
     .form-titulo {
-      font-size: 18px;
-      font-weight: 500;
+      font-size: 19px;
+      font-weight: 600;
       text-align: center;
+      color: #fff;
       margin-bottom: 6px;
     }
 
     .form-subtitulo {
       font-size: 13px;
-      color: var(--texto-secundario);
+      color: var(--azul-texto-claro);
       text-align: center;
       margin: 0 auto 1.25rem;
       max-width: 360px;
@@ -278,15 +354,19 @@
     .form-campos input[type="text"],
     .form-campos input[type="email"] {
       width: 100%;
-      height: 42px;
+      height: 44px;
       padding: 0 14px;
       font-size: 15px;
       font-family: inherit;
-      border: 0.5px solid var(--borde);
+      border: 1px solid var(--azul-claro-borde);
       border-radius: var(--radio-md);
-      background: var(--bg-blanco);
-      color: var(--texto-primario);
+      background: var(--azul-superficie-osc);
+      color: #fff;
       transition: border-color 0.15s;
+    }
+
+    .form-campos input::placeholder {
+      color: var(--azul-texto-tenue);
     }
 
     .form-campos input:focus {
@@ -295,7 +375,7 @@
     }
 
     .form-campos input.error {
-      border-color: #E24B4A;
+      border-color: var(--error);
     }
 
     .form-consentimiento {
@@ -303,7 +383,7 @@
       gap: 8px;
       align-items: flex-start;
       font-size: 12px;
-      color: var(--texto-secundario);
+      color: var(--azul-texto-claro);
       line-height: 1.45;
       margin: 2px 0;
     }
@@ -311,26 +391,27 @@
     .form-consentimiento input {
       margin-top: 2px;
       flex-shrink: 0;
+      accent-color: var(--azul-marca);
     }
 
     .form-consentimiento a {
-      color: var(--azul-marca);
+      color: var(--violeta-claro);
     }
 
     .boton-enviar {
-      background: var(--azul-marca);
+      background: var(--gradiente-marca);
       color: #fff;
       border: none;
-      padding: 12px;
+      padding: 13px;
       font-size: 15px;
-      font-weight: 500;
+      font-weight: 600;
       border-radius: var(--radio-md);
       cursor: pointer;
       transition: opacity 0.15s;
     }
 
     .boton-enviar:hover {
-      opacity: 0.9;
+      opacity: 0.92;
     }
 
     .boton-enviar:disabled {
@@ -340,14 +421,14 @@
 
     .form-nota-legal {
       font-size: 11px;
-      color: var(--texto-tenue);
+      color: var(--azul-texto-tenue);
       text-align: center;
       margin-top: 4px;
     }
 
     .form-error-msg {
       font-size: 13px;
-      color: #E24B4A;
+      color: #FF9DA0;
       text-align: center;
       display: none;
     }
@@ -361,25 +442,27 @@
     }
 
     .form-exito i {
-      font-size: 38px;
-      color: var(--exito);
+      font-size: 40px;
+      color: var(--turquesa);
     }
 
     .form-exito h3 {
-      font-size: 16px;
-      font-weight: 500;
+      font-size: 17px;
+      font-weight: 600;
+      color: #fff;
       margin: 10px 0 4px;
     }
 
     .form-exito p {
       font-size: 13px;
-      color: var(--texto-secundario);
+      color: var(--azul-texto-claro);
     }
 
     /* PIE */
     .pie {
       padding: 1.25rem 2rem;
       text-align: center;
+      background: var(--bg-superficie);
       border-top: 0.5px solid var(--borde);
     }
 
@@ -389,7 +472,8 @@
     }
 
     .pie a {
-      color: var(--texto-tenue);
+      color: var(--azul-marca);
+      text-decoration: none;
     }
 
     @media (max-width: 480px) {
@@ -417,18 +501,34 @@
     <header class="heroe">
       <span class="circulo-deco circulo-1"></span>
       <span class="circulo-deco circulo-2"></span>
+      <span class="circulo-deco circulo-3"></span>
       <div class="heroe-contenido">
         <div class="marca">
-          <span class="marca-icono"><i class="ti ti-calendar-check" aria-hidden="true"></i></span>
-          <span class="marca-nombre">KBook</span>
+          <span class="marca-icono"><span class="degradado">K</span></span>
+          <span class="marca-nombre degradado">KBook</span>
         </div>
         <h1 class="heroe-titular">Tus clientes reservan solos. Tú dejas de coger el teléfono.</h1>
-        <p class="heroe-subtitulo">El sistema de reservas pensado para todo tipo de servicios. Sin
-          comisiones. Tus clientes siguen siendo tuyos.</p>
+        <p class="heroe-subtitulo">El sistema de reservas para peluquerías, barberías y cualquier negocio
+          con cita previa. Sin comisiones y con tus clientes siempre tuyos.</p>
         <a href="#form" class="boton-cta">Apúntate gratis a la lista de espera</a>
-        <p class="heroe-nota">Sé de los primeros y pruébalo gratis</p>
+        <p class="heroe-nota">Los primeros del barrio la prueban gratis.</p>
       </div>
     </header>
+
+    <!-- SECTORES -->
+    <section class="sectores">
+      <p class="sectores-intro">Para todo negocio con cita previa</p>
+      <div class="sectores-chips">
+        <span>Peluquerías</span>
+        <span>Barberías</span>
+        <span>Estética</span>
+        <span>Uñas</span>
+        <span>Tatuajes</span>
+        <span>Fisioterapia</span>
+        <span>Restaurantes</span>
+        <span>y más</span>
+      </div>
+    </section>
 
     <!-- DOLOR -->
     <section class="seccion">
@@ -457,31 +557,31 @@
       <h2 class="titulo-seccion">Cómo te ayuda KBook</h2>
       <div class="lista-beneficios">
         <div class="beneficio">
-          <i class="ti ti-clock-24" aria-hidden="true"></i>
+          <span class="beneficio-icono"><i class="ti ti-clock-24" aria-hidden="true"></i></span>
           <div>
             <h3>Reservas 24/7 desde el móvil</h3>
-            <p>Tus clientes reservan a la hora que quieran, sin llamarte.</p>
+            <p>Tus clientes reservan a la hora que quieran, sin llamarte. Tú compartes tu enlace o tu código QR.</p>
           </div>
         </div>
         <div class="beneficio">
-          <i class="ti ti-bell-ringing" aria-hidden="true"></i>
+          <span class="beneficio-icono"><i class="ti ti-bell-ringing" aria-hidden="true"></i></span>
           <div>
             <h3>Recordatorios automáticos</h3>
-            <p>Menos ausencias: el cliente recibe un aviso antes de su cita.</p>
+            <p>Menos ausencias: el cliente recibe un aviso antes de su cita, sin que tú muevas un dedo.</p>
           </div>
         </div>
         <div class="beneficio">
-          <i class="ti ti-layout-grid" aria-hidden="true"></i>
+          <span class="beneficio-icono"><i class="ti ti-layout-grid" aria-hidden="true"></i></span>
           <div>
             <h3>Tu agenda del día de un vistazo</h3>
-            <p>Desde el móvil o el ordenador que ya tienes. Sin comprar nada.</p>
+            <p>Servicios, profesionales y horarios desde el móvil que ya tienes. Sin comprar nada.</p>
           </div>
         </div>
         <div class="beneficio">
-          <i class="ti ti-heart-handshake" aria-hidden="true"></i>
+          <span class="beneficio-icono"><i class="ti ti-heart-handshake" aria-hidden="true"></i></span>
           <div>
             <h3>Tus clientes son tuyos</h3>
-            <p>Cuota fija, sin comisiones por reserva. Sin competencia en el mismo sitio.</p>
+            <p>Cuota fija, sin comisiones por reserva. Y con soporte cercano: estamos en Zaragoza.</p>
           </div>
         </div>
       </div>
@@ -489,33 +589,39 @@
 
     <!-- FORMULARIO -->
     <section class="seccion-form" id="form">
-      <h2 class="form-titulo">Sé de los primeros</h2>
-      <p class="form-subtitulo">Déjanos tu email y te avisamos cuando esté lista. Gratis al principio y sin compromiso.
-      </p>
+      <span class="circulo-deco circulo-1"></span>
+      <span class="circulo-deco circulo-2"></span>
+      <div class="form-contenido">
+        <h2 class="form-titulo">Sé de los primeros</h2>
+        <p class="form-subtitulo">Déjanos tu email y te avisamos cuando esté lista. Gratis al principio y sin
+          compromiso.</p>
 
-      <div class="form-campos" id="form-campos">
-        <input type="text" id="nombre" placeholder="Nombre de tu negocio" autocomplete="organization" />
-        <input type="email" id="email" placeholder="Tu email" autocomplete="email" />
-        <label class="form-consentimiento">
-          <input type="checkbox" id="consentimiento" />
-          <span>Acepto que KBook guarde mi nombre y email para avisarme del lanzamiento. Consulta la <a
-              href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</span>
-        </label>
-        <button class="boton-enviar" id="boton-enviar" onclick="enviarFormulario()">Apuntarme a la lista</button>
-        <p class="form-error-msg" id="form-error">Revisa los datos: necesitamos un email válido y tu consentimiento.</p>
-        <p class="form-nota-legal">Cumplimos el RGPD. No compartimos tus datos con nadie.</p>
-      </div>
+        <div class="form-campos" id="form-campos">
+          <input type="text" id="nombre" placeholder="Nombre de tu negocio" autocomplete="organization" />
+          <input type="email" id="email" placeholder="Tu email" autocomplete="email" />
+          <label class="form-consentimiento">
+            <input type="checkbox" id="consentimiento" />
+            <span>Acepto que KBook guarde mi nombre y email para avisarme del lanzamiento. Consulta la <a
+                href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</span>
+          </label>
+          <button class="boton-enviar" id="boton-enviar" onclick="enviarFormulario()">Apuntarme a la lista</button>
+          <p class="form-error-msg" id="form-error">Revisa los datos: necesitamos un email válido y tu
+            consentimiento.</p>
+          <p class="form-nota-legal">Cumplimos el RGPD. No compartimos tus datos con nadie.</p>
+        </div>
 
-      <div class="form-exito" id="form-exito">
-        <i class="ti ti-circle-check" aria-hidden="true"></i>
-        <h3>¡Apuntado!</h3>
-        <p>Te escribiremos en cuanto la primera versión esté lista.</p>
+        <div class="form-exito" id="form-exito">
+          <i class="ti ti-circle-check" aria-hidden="true"></i>
+          <h3>¡Apuntado!</h3>
+          <p>Te escribiremos en cuanto la primera versión esté lista.</p>
+        </div>
       </div>
     </section>
 
     <!-- PIE -->
     <footer class="pie">
-      <p>KrypTon · Hecho en Zaragoza por Kevin Rodríguez · <a href="privacidad.html">Privacidad</a></p>
+      <p>KrypTon · Hecho en Zaragoza por Kevin Rodríguez · <a href="https://devkrypton.com">devkrypton.com</a> · <a
+          href="privacidad.html">Privacidad</a></p>
     </footer>
 
   </main>
@@ -529,7 +635,7 @@
     import { getFirestore, collection, addDoc, serverTimestamp }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-      
+
     const firebaseConfig = {
       apiKey: "AIzaSyDm7Nm5rYNtAqryi8EwVWV4pxd72VeHN50",
       authDomain: "krypton-ebbc3.firebaseapp.com",
