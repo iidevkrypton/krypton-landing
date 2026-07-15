@@ -1,0 +1,177 @@
+<!-- @dsCard group="Website" viewport="1120x900" name="Fichas de clientes (interna)" subtitle="Tabla CRM privada — lista de todas las fichas guardadas" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Fichas de clientes — KrypTon (interno)</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="site.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="_ds_bundle.js"></script>
+<script>window.KtCRMReady = new Promise((r) => { window.__ktCRMResolve = r; });</script>
+<script type="module" src="firebase-crm.js"></script>
+<style>
+  #root { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1; }
+  .wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; width: 100%; }
+  .toolbar { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; margin-bottom: 20px; }
+  .search { flex: 1; min-width: 200px; }
+  .kt-field { width: 100%; background: var(--kt-bg-raise); color: var(--kt-text); border: 1px solid var(--kt-line); border-radius: var(--kt-radius-md); padding: 10px 14px; font-family: var(--kt-font); font-size: 0.9375rem; }
+  .kt-field:focus { outline: none; border-color: var(--kt-violet); box-shadow: var(--kt-focus-ring); }
+
+  .tablecard { border: 1px solid var(--kt-line); border-radius: var(--kt-radius-lg); overflow: hidden; background: var(--kt-surface); }
+  .scroll { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; font-size: var(--kt-fs-small); white-space: nowrap; }
+  thead th { text-align: left; font-family: var(--kt-mono); font-size: 0.6875rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--kt-text-muted); font-weight: 500; padding: 14px 16px; background: var(--kt-bg-raise); border-bottom: 1px solid var(--kt-line); position: sticky; top: 0; }
+  tbody td { padding: 13px 16px; border-bottom: 1px solid var(--kt-line-soft); color: var(--kt-text); vertical-align: top; }
+  tbody tr:last-child td { border-bottom: 0; }
+  tbody tr:hover td { background: var(--kt-surface-2); }
+  td .muted { color: var(--kt-text-muted); }
+  td .nota { white-space: normal; max-width: 260px; color: var(--kt-text-muted); }
+  .empty { padding: 48px 24px; text-align: center; color: var(--kt-text-muted); }
+  .pill { display: inline-flex; align-items: center; padding: 3px 9px; border-radius: var(--kt-radius-pill); font-family: var(--kt-mono); font-size: 0.625rem; letter-spacing: 0.08em; text-transform: uppercase; border: 1px solid; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="sections.jsx" data-presets="react"></script>
+<script type="text/babel" src="crm.jsx" data-presets="react"></script>
+<script type="text/babel" data-presets="react">
+(function () {
+const { Button, Badge, Logo } = window.KrypTonDesignSystem_6d2e6d;
+const AuthGate = window.KtAuthGate;
+const LogoutButton = window.KtLogoutButton;
+const { Section, Eyebrow } = window.KtLayout;
+const Ic = window.KtIcons;
+
+// Datos de ejemplo (se muestran si aún no has guardado ninguna ficha real).
+const DEMO = [
+  { id:'d1', dueno:'Antonio García', local:'Peluquería Antonio', telefono:'600 12 34 56', edad:'50-55', direccion:'C/ Delicias 12, Zaragoza', categoria:'Peluquería', fuente:'Flyer', servicio:'Libreta / agenda de papel', satisfaccion:'Contento pero abierto a mejorar', estado:'Interesado', interes:'Caliente', seguimiento:'2026-07-20', nota:'Pierde citas los sábados. Paga 0€ ahora, sensible al precio.', fecha:'2026-07-14T10:00:00Z' },
+  { id:'d2', dueno:'Laura Sanz', local:'Estética Bella', telefono:'611 98 76 54', edad:'35-40', direccion:'Av. Goya 44, Zaragoza', categoria:'Estética / Belleza', fuente:'Instagram', servicio:'Otra app de reservas', satisfaccion:'Descontento — busca alternativa', estado:'Contactado', interes:'Tibio', seguimiento:'2026-07-18', nota:'Le cobran comisión por reserva, quiere cuota fija.', fecha:'2026-07-13T16:30:00Z' },
+  { id:'d3', dueno:'Miguel Torres', local:'Barbería Torres', telefono:'622 33 44 55', edad:'28-32', direccion:'C/ San Miguel 8, Zaragoza', categoria:'Barbería', fuente:'Boca a boca / referido', servicio:'WhatsApp', satisfaccion:'Neutral / le da igual', estado:'Nuevo', interes:'Frío', seguimiento:'', nota:'', fecha:'2026-07-12T09:15:00Z' },
+];
+
+const COLS = [
+  ['dueno','Dueño'], ['local','Local'], ['telefono','Teléfono'], ['edad','Edad'],
+  ['direccion','Dirección'], ['categoria','Categoría'], ['fuente','Fuente'],
+  ['servicio','Servicio actual'], ['satisfaccion','Satisfacción'],
+  ['estado','Estado'], ['interes','Interés'], ['seguimiento','Seguimiento'], ['nota','Nota'],
+];
+
+const interesTone = (v) => v === 'Caliente' ? { color:'#FF8A8A', borderColor:'rgba(255,138,138,0.4)' }
+  : v === 'Tibio' ? { color:'#F0BABE', borderColor:'rgba(240,186,190,0.5)' }
+  : v === 'Frío' ? { color:'#7FB2FF', borderColor:'rgba(127,178,255,0.4)' } : {};
+
+function fmtDate(iso) {
+  if (!iso) return '';
+  try { return new Date(iso).toLocaleDateString('es-ES', { day:'2-digit', month:'short' }); } catch { return iso; }
+}
+
+function App() {
+  const crm = window.KtUseCRM();
+  const [rows, setRows] = React.useState([]);
+  const [cargando, setCargando] = React.useState(true);
+  const [errorCarga, setErrorCarga] = React.useState('');
+  const [q, setQ] = React.useState('');
+
+  React.useEffect(() => {
+    if (!crm) return;
+    const unsub = crm.escucharFichas(
+      (fichas) => { setRows(fichas); setCargando(false); },
+      () => { setErrorCarga('No se pudieron cargar las fichas.'); setCargando(false); }
+    );
+    return () => unsub && unsub();
+  }, [crm]);
+
+  const filtered = rows.filter((r) => {
+    if (!q.trim()) return true;
+    const s = q.toLowerCase();
+    return [r.dueno, r.local, r.categoria, r.telefono].some((v) => (v || '').toLowerCase().includes(s));
+  });
+
+  const del = async (id) => {
+    if (!confirm('¿Borrar esta ficha?')) return;
+    try { await crm.borrarFicha(id); } catch (e) { alert('No se pudo borrar la ficha.'); }
+  };
+
+  return (
+    <>
+      <header style={{ height: 'var(--kt-header-h)', display: 'flex', alignItems: 'center', borderBottom: '1px solid var(--kt-line-soft)' }}>
+        <div className="wrap" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <a href="index.html" style={{ display: 'inline-flex' }}><Logo size={22} /></a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <Badge tone="violet">Interno · CRM</Badge>
+            <LogoutButton />
+          </div>
+        </div>
+      </header>
+      <main>
+        <Section style={{ paddingTop: 'clamp(32px,5vw,56px)', paddingBottom: 'clamp(48px,7vw,88px)' }}>
+          <div className="wrap">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12, marginBottom: 24 }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                <Eyebrow>Fichas de clientes</Eyebrow>
+                <h1 style={{ fontSize: 'var(--kt-fs-h1)', letterSpacing: '-0.025em' }}>{filtered.length} {filtered.length === 1 ? 'ficha' : 'fichas'}</h1>
+              </div>
+              <Button as="a" href="ficha-cliente.html" variant="primary">Nueva ficha {Ic.arrow()}</Button>
+            </div>
+
+            {errorCarga && (
+              <p style={{ color: '#FF8A8A', fontSize: 'var(--kt-fs-small)', marginBottom: 16 }}>{errorCarga}</p>
+            )}
+
+            <div className="toolbar">
+              <div className="search"><input className="kt-field" placeholder="Buscar por dueño, local, categoría o teléfono…" value={q} onChange={(e) => setQ(e.target.value)} /></div>
+            </div>
+
+            <div className="tablecard">
+              <div className="scroll">
+                <table>
+                  <thead>
+                    <tr>
+                      {COLS.map(([k, l]) => <th key={k}>{l}</th>)}
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {filtered.map((r) => (
+                      <tr key={r.id}>
+                        <td><strong>{r.dueno || <span className="muted">—</span>}</strong></td>
+                        <td>{r.local || <span className="muted">—</span>}</td>
+                        <td>{r.telefono ? <a href={'tel:' + r.telefono.replace(/\s/g,'')}>{r.telefono}</a> : <span className="muted">—</span>}</td>
+                        <td>{r.edad || <span className="muted">—</span>}</td>
+                        <td className="muted">{r.direccion || '—'}</td>
+                        <td>{r.categoria || <span className="muted">—</span>}</td>
+                        <td className="muted">{r.fuente || '—'}</td>
+                        <td className="muted">{r.servicio || '—'}</td>
+                        <td className="muted">{r.satisfaccion || '—'}</td>
+                        <td>{r.estado ? <span className="pill" style={{ color:'var(--kt-text-muted)', borderColor:'var(--kt-line)' }}>{r.estado}</span> : <span className="muted">—</span>}</td>
+                        <td>{r.interes ? <span className="pill" style={interesTone(r.interes)}>{r.interes}</span> : <span className="muted">—</span>}</td>
+                        <td>{r.seguimiento ? fmtDate(r.seguimiento) : <span className="muted">—</span>}</td>
+                        <td className="nota">{r.nota || <span className="muted">—</span>}</td>
+                        <td><button onClick={() => del(r.id)} title="Borrar" style={{ background:'transparent', border:'1px solid var(--kt-line)', color:'var(--kt-text-muted)', borderRadius:'var(--kt-radius-sm)', width:32, height:32, cursor:'pointer' }}>×</button></td>
+                      </tr>
+                    ))}
+                    {!filtered.length && (
+                      <tr><td colSpan={COLS.length + 1}><div className="empty">{cargando ? 'Cargando fichas…' : q ? ('Sin resultados para “' + q + '”.') : 'Aún no hay fichas. Crea la primera desde “Nueva ficha”.'}</div></td></tr>
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </Section>
+      </main>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AuthGate><App /></AuthGate>);
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+/* KrypTon website — page-level styling (v2: editorial dark). */
+
+.kt-btn { transition: background var(--kt-dur) var(--kt-ease), border-color var(--kt-dur) var(--kt-ease), color var(--kt-dur) var(--kt-ease), transform var(--kt-dur-fast) var(--kt-ease); }
+.kt-btn--primary:hover { background: var(--kt-violet-strong); }
+.kt-btn--primary:active { transform: translateY(1px); }
+.kt-btn--secondary:hover { border-color: var(--kt-text-muted); }
+.kt-btn--ghost:hover { color: var(--kt-text); }
+
+.kt-card--interactive:hover { transform: translateY(-2px); border-color: var(--kt-text-muted); }
+
+a.kt-textlink { color: var(--kt-text); display: inline-flex; align-items: center; gap: 6px; font-weight: 500; }
+a.kt-textlink:hover { color: var(--kt-violet); gap: 9px; transition: gap var(--kt-dur) var(--kt-ease), color var(--kt-dur) var(--kt-ease); }
+
+.kt-field:focus { outline: none; border-color: var(--kt-violet) !important; box-shadow: var(--kt-focus-ring); }
+.kt-field::placeholder { color: var(--kt-text-lavender); opacity: 0.7; }
+
+/* Responsive nav */
+@media (max-width: 760px) {
+  .kt-nav-links { display: none !important; }
+  .kt-nav-burger { display: block !important; }
+}
+
+/* Feature row (editorial: hairline-separated, mono-labelled) */
+.kt-feature { display: flex; gap: 16px; align-items: flex-start; padding: 20px 0; border-top: 1px solid var(--kt-line-soft); }
+.kt-feature:first-child { border-top: 0; }
+.kt-feature .ico { flex: none; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--kt-radius-md); background: var(--kt-bg-raise); color: var(--kt-violet); border: 1px solid rgba(108,77,255,0.3); }
+.kt-feature h4 { font-size: 1.0625rem; font-weight: 600; margin-bottom: 4px; letter-spacing: -0.01em; }
+.kt-feature p { color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+
+/* Section header helper (mono index + title) */
+.kt-sectionhead { display: flex; align-items: baseline; gap: 14px; }

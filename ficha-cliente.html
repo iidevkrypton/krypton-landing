@@ -1,0 +1,197 @@
+<!-- @dsCard group="Website" viewport="1120x900" name="Ficha de cliente (interna)" subtitle="Formulario CRM privado — no enlazado en la web" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Ficha de cliente — KrypTon (interno)</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="site.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="_ds_bundle.js"></script>
+<script>window.KtCRMReady = new Promise((r) => { window.__ktCRMResolve = r; });</script>
+<script type="module" src="firebase-crm.js"></script>
+<style>
+  #root { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1; }
+  .form-wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .span2 { grid-column: 1 / -1; }
+  @media (max-width: 680px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .kt-select, .kt-field {
+    width: 100%; background: var(--kt-bg-raise); color: var(--kt-text);
+    border: 1px solid var(--kt-line); border-radius: var(--kt-radius-md);
+    padding: 12px 14px; font-family: var(--kt-font); font-size: 1rem; line-height: 1.5;
+    transition: border-color var(--kt-dur) var(--kt-ease), box-shadow var(--kt-dur) var(--kt-ease);
+    appearance: none; -webkit-appearance: none;
+  }
+  .kt-select { background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A1A1AA' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; cursor: pointer; }
+  .kt-select:focus, .kt-field:focus { outline: none; border-color: var(--kt-violet); box-shadow: var(--kt-focus-ring); }
+  .kt-select option { background: var(--kt-bg-raise); color: var(--kt-text); }
+  .fld { display: flex; flex-direction: column; gap: 8px; }
+  .fld > label { font-size: var(--kt-fs-small); font-weight: 500; color: var(--kt-text-muted); }
+  .grouphead { display: flex; align-items: baseline; gap: 12px; margin: 8px 0 2px; }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" src="sections.jsx" data-presets="react"></script>
+<script type="text/babel" src="crm.jsx" data-presets="react"></script>
+<script type="text/babel" data-presets="react">
+(function () {
+const { Button, Field, Card, Badge, Logo } = window.KrypTonDesignSystem_6d2e6d;
+const AuthGate = window.KtAuthGate;
+const LogoutButton = window.KtLogoutButton;
+const { Container, Section, Eyebrow } = window.KtLayout;
+const Ic = window.KtIcons;
+
+const CATEGORIAS = [
+  'Peluquería','Barbería','Estética / Belleza','Uñas / Manicura','Centro de depilación',
+  'Spa / Masajes','Tatuajes / Piercing','Clínica dental','Fisioterapia','Podología',
+  'Psicología / Terapia','Clínica veterinaria','Óptica','Restaurante','Bar / Cafetería',
+  'Gimnasio / Entrenador personal','Yoga / Pilates','Autoescuela','Taller mecánico',
+  'Lavado de coches','Academia / Clases','Asesoría / Gestoría','Fotografía','Otro',
+];
+const SERVICIOS = [
+  'WhatsApp','De cabeza / memoria','Libreta / agenda de papel','Hoja de cálculo (Excel)',
+  'Otra app de reservas','Llamadas / teléfono','Redes sociales (DM)','Ninguno',
+];
+const SATISFACCION = [
+  'Muy contento — no quiere cambiar','Contento pero abierto a mejorar','Neutral / le da igual',
+  'Descontento — busca alternativa','Muy descontento — quiere cambiar ya','Aún no lo sabe',
+];
+const ESTADO = ['Nuevo','Contactado','Interesado','Propuesta enviada','Cerrado — cliente','Descartado'];
+const INTERES = ['Frío','Tibio','Caliente'];
+const FUENTE = ['Flyer','Boca a boca / referido','Visita en persona','Instagram','Llamada','WhatsApp','Web','Otro'];
+
+function Sel({ label, options, value, onChange, placeholder = 'Selecciona…' }) {
+  return (
+    <div className="fld">
+      <label>{label}</label>
+      <select className="kt-select" value={value} onChange={onChange}>
+        <option value="">{placeholder}</option>
+        {options.map((o) => <option key={o} value={o}>{o}</option>)}
+      </select>
+    </div>
+  );
+}
+
+function GroupHead({ n, children }) {
+  return (
+    <div className="grouphead span2">
+      <span className="kt-index">{n}</span>
+      <span className="kt-eyebrow">{children}</span>
+    </div>
+  );
+}
+
+function Ficha() {
+  const KEY = 'kt-ficha-draft';
+  const crm = window.KtUseCRM();
+  const [f, setF] = React.useState(() => {
+    try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch { return {}; }
+  });
+  const [saved, setSaved] = React.useState(false);
+  const [guardando, setGuardando] = React.useState(false);
+  const [errorGuardar, setErrorGuardar] = React.useState('');
+  const set = (k) => (e) => { setF((p) => ({ ...p, [k]: e.target.value })); setSaved(false); };
+
+  const submit = async (e) => {
+    e.preventDefault();
+    if (!crm || guardando) return;
+    setErrorGuardar('');
+    setGuardando(true);
+    try {
+      await crm.guardarFicha(f);
+      try { localStorage.removeItem(KEY); } catch {}
+      setF({});
+      setSaved(true);
+    } catch (err) {
+      console.error(err);
+      setErrorGuardar('No se pudo guardar la ficha en la nube. Revisa tu conexión e inténtalo de nuevo.');
+    } finally {
+      setGuardando(false);
+    }
+  };
+
+  return (
+    <form onSubmit={submit}>
+      <Card style={{ borderRadius: 'var(--kt-radius-xl)' }}>
+        <div className="grid2">
+          <GroupHead n="01">Contacto</GroupHead>
+          <Field label="Nombre del dueño" value={f.dueno || ''} onChange={set('dueno')} placeholder="Ej. Antonio García" />
+          <Field label="Nombre del local" value={f.local || ''} onChange={set('local')} placeholder="Ej. Peluquería Antonio" />
+          <Field label="Teléfono" type="tel" value={f.telefono || ''} onChange={set('telefono')} placeholder="600 00 00 00" />
+          <Field label="Email" type="email" value={f.email || ''} onChange={set('email')} placeholder="opcional" />
+          <Field label="Posible edad" value={f.edad || ''} onChange={set('edad')} placeholder="Ej. 45-50" />
+          <Field label="Dirección del local" value={f.direccion || ''} onChange={set('direccion')} placeholder="Calle, nº, ciudad" />
+
+          <GroupHead n="02">Negocio</GroupHead>
+          <Sel label="Categoría del local" options={CATEGORIAS} value={f.categoria || ''} onChange={set('categoria')} />
+          <Sel label="Cómo nos conoció" options={FUENTE} value={f.fuente || ''} onChange={set('fuente')} />
+          <Sel label="Servicio que ya usa" options={SERVICIOS} value={f.servicio || ''} onChange={set('servicio')} />
+          <Sel label="Satisfacción con su servicio actual" options={SATISFACCION} value={f.satisfaccion || ''} onChange={set('satisfaccion')} />
+
+          <GroupHead n="03">Seguimiento</GroupHead>
+          <Sel label="Estado del lead" options={ESTADO} value={f.estado || ''} onChange={set('estado')} />
+          <Sel label="Interés en KBook" options={INTERES} value={f.interes || ''} onChange={set('interes')} />
+          <div className="fld">
+            <label>Próximo seguimiento</label>
+            <input className="kt-field" type="date" value={f.seguimiento || ''} onChange={set('seguimiento')} />
+          </div>
+          <div></div>
+
+          <div className="span2">
+            <Field label="Nota" multiline rows={5} value={f.nota || ''} onChange={set('nota')} placeholder="Detalles de la conversación, objeciones, precio que paga ahora, etc." />
+          </div>
+        </div>
+
+        <div style={{ marginTop: 24, display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
+          <Button type="submit" variant="primary" size="lg" disabled={guardando}>{guardando ? 'Guardando…' : <>Guardar ficha {Ic.arrow()}</>}</Button>
+          <Button type="button" variant="secondary" onClick={() => { if (confirm('¿Vaciar la ficha?')) { setF({}); try { localStorage.removeItem(KEY); } catch {} setSaved(false); } }}>Vaciar</Button>
+          {saved && <span style={{ color: 'var(--kt-turquoise)', fontSize: 'var(--kt-fs-small)', display: 'inline-flex', alignItems: 'center', gap: 6 }}>{Ic.check({ width: 16, height: 16 })} Ficha guardada</span>}
+          {errorGuardar && <span style={{ color: '#FF8A8A', fontSize: 'var(--kt-fs-small)' }}>{errorGuardar}</span>}
+          <a className="kt-textlink" href="clientes.html" style={{ marginLeft: 'auto' }}>Ver todas las fichas {Ic.arrow({ width: 16, height: 16 })}</a>
+        </div>
+      </Card>
+    </form>
+  );
+}
+
+function App() {
+  return (
+    <>
+      <header style={{ height: 'var(--kt-header-h)', display: 'flex', alignItems: 'center', borderBottom: '1px solid var(--kt-line-soft)' }}>
+        <div className="form-wrap" style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <a href="index.html" style={{ display: 'inline-flex' }}><Logo size={22} /></a>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <a href="clientes.html" style={{ display: 'inline-flex', textDecoration: 'none' }}><Badge tone="violet">Interno · CRM</Badge></a>
+            <LogoutButton />
+          </div>
+        </div>
+      </header>
+      <main>
+        <Section style={{ paddingTop: 'clamp(32px,5vw,56px)', paddingBottom: 'clamp(48px,7vw,88px)' }}>
+          <div className="form-wrap">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 28 }}>
+              <Eyebrow>Ficha de cliente</Eyebrow>
+              <h1 style={{ fontSize: 'var(--kt-fs-h1)', letterSpacing: '-0.025em' }}>Nuevo contacto</h1>
+              <p style={{ color: 'var(--kt-text-muted)', maxWidth: '52ch' }}>Registro privado para preparar la conversación de KBook. Se guarda solo en este dispositivo.</p>
+            </div>
+            <Ficha />
+          </div>
+        </Section>
+      </main>
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<AuthGate><App /></AuthGate>);
+})();
+</script>
+</body>
+</html>

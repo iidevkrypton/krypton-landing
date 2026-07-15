@@ -1,695 +1,131 @@
+<!-- @dsCard group="Website" viewport="1120x760" name="Inicio" subtitle="Home — hero, product strip, the maker, closing CTA" -->
+<!-- @startingPoint section="Website" subtitle="KrypTon home page" viewport="1280x900" -->
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KBook · Reservas para tu negocio</title>
-  <meta name="description"
-    content="El sistema de reservas para peluquerías, barberías y cualquier negocio con cita previa. Sin comisiones y con tus clientes siempre tuyos. Cuota fija." />
-  <meta name="theme-color" content="#15112E" />
-
-  <!-- Tipografía -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
-    rel="stylesheet" />
-  <!-- Iconos Tabler -->
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@3.1.0/dist/tabler-icons.min.css" />
-
-  <style>
-    :root {
-      /* Paleta "Dúo" — violeta → turquesa (CLAUDE.md §5) */
-      --azul-profundo: #15112E;
-      --azul-superficie-osc: #211B40;
-      --azul-marca: #6C4DFF;
-      --turquesa: #00C2A8;
-      --violeta-claro: #8A6CFF;
-      --azul-claro-borde: #352D5C;
-      --azul-texto-claro: #D2CCF2;
-      --azul-texto-tenue: #948CC4;
-      --info-bg: #ECE9FD;
-      --info-texto: #3A2E8C;
-      --exito: #00C2A8;
-      --error: #E5484D;
-      --texto-primario: #1A1A1A;
-      --texto-secundario: #524E66;
-      --texto-tenue: #8B86A1;
-      --bg-pagina: #F4F2FB;
-      --bg-superficie: #FBFAFE;
-      --bg-blanco: #FFFFFF;
-      --borde: rgba(21, 17, 46, 0.10);
-      --gradiente-marca: linear-gradient(135deg, #6C4DFF, #00C2A8);
-      --radio-md: 8px;
-      --radio-lg: 12px;
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
-
-    body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-      background: var(--bg-pagina);
-      color: var(--texto-primario);
-      line-height: 1.6;
-      -webkit-font-smoothing: antialiased;
-      padding: 1.5rem;
-    }
-
-    /* Texto con degradado de marca reutilizable */
-    .degradado {
-      background: var(--gradiente-marca);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-      color: #6C4DFF;
-      /* fallback visible — nunca color:transparent */
-    }
-
-    .tarjeta-landing {
-      max-width: 640px;
-      margin: 0 auto;
-      background: var(--bg-blanco);
-      border: 0.5px solid var(--borde);
-      border-radius: var(--radio-lg);
-      overflow: hidden;
-    }
-
-    /* HÉROE */
-    .heroe {
-      background: var(--azul-profundo);
-      padding: 2.5rem 2rem;
-      text-align: center;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .circulo-deco {
-      position: absolute;
-      border: 1px solid var(--azul-claro-borde);
-      border-radius: 50%;
-      opacity: 0.45;
-    }
-
-    .circulo-1 {
-      left: -60px;
-      bottom: -60px;
-      width: 200px;
-      height: 200px;
-    }
-
-    .circulo-2 {
-      right: -30px;
-      top: -50px;
-      width: 160px;
-      height: 160px;
-    }
-
-    .circulo-3 {
-      right: 10px;
-      top: -10px;
-      width: 80px;
-      height: 80px;
-    }
-
-    .heroe-contenido {
-      position: relative;
-    }
-
-    .marca {
-      display: inline-flex;
-      align-items: center;
-      gap: 9px;
-      margin-bottom: 1.5rem;
-    }
-
-    .marca-icono {
-      width: 34px;
-      height: 34px;
-      border-radius: var(--radio-md);
-      background: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .marca-icono span {
-      font-size: 21px;
-      font-weight: 900;
-      line-height: 1;
-    }
-
-    .marca-nombre {
-      font-size: 21px;
-      font-weight: 800;
-      letter-spacing: -0.02em;
-    }
-
-    .heroe-titular {
-      font-size: 26px;
-      font-weight: 600;
-      color: #fff;
-      margin: 0 auto 12px;
-      max-width: 460px;
-      line-height: 1.35;
-    }
-
-    .heroe-subtitulo {
-      font-size: 15px;
-      color: var(--azul-texto-claro);
-      margin: 0 auto 1.75rem;
-      max-width: 430px;
-      line-height: 1.6;
-    }
-
-    .boton-cta {
-      display: inline-block;
-      background: var(--gradiente-marca);
-      color: #fff;
-      font-size: 15px;
-      font-weight: 600;
-      padding: 13px 28px;
-      border-radius: var(--radio-md);
-      text-decoration: none;
-      transition: opacity 0.15s, transform 0.15s;
-    }
-
-    .boton-cta:hover {
-      opacity: 0.92;
-      transform: translateY(-1px);
-    }
-
-    .heroe-nota {
-      font-size: 12px;
-      color: var(--azul-texto-tenue);
-      margin-top: 12px;
-    }
-
-    /* SECTORES (multi-sector) */
-    .sectores {
-      padding: 1.5rem 2rem 0.5rem;
-      text-align: center;
-    }
-
-    .sectores-intro {
-      font-size: 12px;
-      font-weight: 500;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: var(--azul-marca);
-      margin-bottom: 0.85rem;
-    }
-
-    .sectores-chips {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      gap: 7px;
-    }
-
-    .sectores-chips span {
-      font-size: 12.5px;
-      color: var(--info-texto);
-      background: var(--info-bg);
-      border-radius: 999px;
-      padding: 5px 12px;
-    }
-
-    /* DOLOR */
-    .seccion {
-      padding: 2rem;
-    }
-
-    .seccion-etiqueta {
-      font-size: 13px;
-      color: var(--texto-tenue);
-      text-align: center;
-      margin-bottom: 1.25rem;
-    }
-
-    .grid-dolor {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-      gap: 12px;
-    }
-
-    .tarjeta-dolor {
-      background: var(--bg-superficie);
-      border: 0.5px solid var(--borde);
-      border-radius: var(--radio-md);
-      padding: 1rem;
-    }
-
-    .tarjeta-dolor i {
-      font-size: 22px;
-      color: var(--azul-marca);
-    }
-
-    .tarjeta-dolor h3 {
-      font-size: 14px;
-      font-weight: 600;
-      margin: 8px 0 4px;
-    }
-
-    .tarjeta-dolor p {
-      font-size: 13px;
-      color: var(--texto-secundario);
-      line-height: 1.5;
-    }
-
-    /* BENEFICIOS */
-    .titulo-seccion {
-      font-size: 18px;
-      font-weight: 600;
-      text-align: center;
-      margin-bottom: 1.25rem;
-    }
-
-    .lista-beneficios {
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-      max-width: 480px;
-      margin: 0 auto;
-    }
-
-    .beneficio {
-      display: flex;
-      gap: 14px;
-      align-items: flex-start;
-    }
-
-    .beneficio-icono {
-      width: 38px;
-      height: 38px;
-      flex-shrink: 0;
-      border-radius: var(--radio-md);
-      background: var(--info-bg);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .beneficio-icono i {
-      font-size: 20px;
-      color: var(--azul-marca);
-    }
-
-    .beneficio h3 {
-      font-size: 15px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .beneficio p {
-      font-size: 13px;
-      color: var(--texto-secundario);
-      line-height: 1.55;
-    }
-
-    /* FORMULARIO */
-    .seccion-form {
-      background: var(--azul-profundo);
-      padding: 2.25rem 2rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .seccion-form .circulo-deco {
-      opacity: 0.35;
-    }
-
-    .form-contenido {
-      position: relative;
-    }
-
-    .form-titulo {
-      font-size: 19px;
-      font-weight: 600;
-      text-align: center;
-      color: #fff;
-      margin-bottom: 6px;
-    }
-
-    .form-subtitulo {
-      font-size: 13px;
-      color: var(--azul-texto-claro);
-      text-align: center;
-      margin: 0 auto 1.25rem;
-      max-width: 360px;
-      line-height: 1.55;
-    }
-
-    .form-campos {
-      max-width: 380px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .form-campos input[type="text"],
-    .form-campos input[type="email"] {
-      width: 100%;
-      height: 44px;
-      padding: 0 14px;
-      font-size: 15px;
-      font-family: inherit;
-      border: 1px solid var(--azul-claro-borde);
-      border-radius: var(--radio-md);
-      background: var(--azul-superficie-osc);
-      color: #fff;
-      transition: border-color 0.15s;
-    }
-
-    .form-campos input::placeholder {
-      color: var(--azul-texto-tenue);
-    }
-
-    .form-campos input:focus {
-      outline: none;
-      border-color: var(--azul-marca);
-    }
-
-    .form-campos input.error {
-      border-color: var(--error);
-    }
-
-    .form-consentimiento {
-      display: flex;
-      gap: 8px;
-      align-items: flex-start;
-      font-size: 12px;
-      color: var(--azul-texto-claro);
-      line-height: 1.45;
-      margin: 2px 0;
-    }
-
-    .form-consentimiento input {
-      margin-top: 2px;
-      flex-shrink: 0;
-      accent-color: var(--azul-marca);
-    }
-
-    .form-consentimiento a {
-      color: var(--violeta-claro);
-    }
-
-    .boton-enviar {
-      background: var(--gradiente-marca);
-      color: #fff;
-      border: none;
-      padding: 13px;
-      font-size: 15px;
-      font-weight: 600;
-      border-radius: var(--radio-md);
-      cursor: pointer;
-      transition: opacity 0.15s;
-    }
-
-    .boton-enviar:hover {
-      opacity: 0.92;
-    }
-
-    .boton-enviar:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .form-nota-legal {
-      font-size: 11px;
-      color: var(--azul-texto-tenue);
-      text-align: center;
-      margin-top: 4px;
-    }
-
-    .form-error-msg {
-      font-size: 13px;
-      color: #FF9DA0;
-      text-align: center;
-      display: none;
-    }
-
-    .form-exito {
-      display: none;
-      max-width: 380px;
-      margin: 0 auto;
-      text-align: center;
-      padding: 1.5rem 0;
-    }
-
-    .form-exito i {
-      font-size: 40px;
-      color: var(--turquesa);
-    }
-
-    .form-exito h3 {
-      font-size: 17px;
-      font-weight: 600;
-      color: #fff;
-      margin: 10px 0 4px;
-    }
-
-    .form-exito p {
-      font-size: 13px;
-      color: var(--azul-texto-claro);
-    }
-
-    /* PIE */
-    .pie {
-      padding: 1.25rem 2rem;
-      text-align: center;
-      background: var(--bg-superficie);
-      border-top: 0.5px solid var(--borde);
-    }
-
-    .pie p {
-      font-size: 12px;
-      color: var(--texto-tenue);
-    }
-
-    .pie a {
-      color: var(--azul-marca);
-      text-decoration: none;
-    }
-
-    @media (max-width: 480px) {
-      body {
-        padding: 0;
-      }
-
-      .tarjeta-landing {
-        border-radius: 0;
-        border: none;
-      }
-
-      .heroe-titular {
-        font-size: 22px;
-      }
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KrypTon — Software propio, desde Zaragoza</title>
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="site.css">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="_ds_bundle.js"></script>
+<style>
+  #root { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1; }
+  .hero-grid { display: grid; grid-template-columns: 1fr; gap: clamp(28px,5vw,56px); align-items: start; }
+  @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
+  .prod-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 24px; align-items: stretch; }
+  @media (max-width: 820px) { .prod-grid { grid-template-columns: 1fr; } }
+</style>
 </head>
-
 <body>
+<div id="root"></div>
+<script type="text/babel" src="sections.jsx" data-presets="react"></script>
+<script type="text/babel" data-presets="react">
+(function () {
+const { Button, Badge, AppCard, NavBar, Footer } = window.KrypTonDesignSystem_6d2e6d;
+const { Container, Section, Eyebrow } = window.KtLayout;
+const Ic = window.KtIcons;
 
-  <main class="tarjeta-landing">
+function Hero() {
+  return (
+    <Section className="kt-concentric" style={{ paddingTop: 'clamp(48px,6vw,80px)', paddingBottom: 'clamp(40px,5vw,64px)' }}>
+      <Container>
+        <div className="hero-grid">
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
+            <Eyebrow>Desarrollo de software · Zaragoza</Eyebrow>
+            <h1 className="kt-reveal" style={{ fontSize: 'var(--kt-fs-display)', letterSpacing: 'var(--kt-tracking-display)', lineHeight: 1.02, maxWidth: '16ch' }}>
+              Construimos, publicamos y mantenemos<br /><span className="kt-gradient-text">nuestro propio software</span>.
+            </h1>
+            <p className="kt-reveal" style={{ fontSize: 'var(--kt-fs-lead)', color: 'var(--kt-text-muted)', maxWidth: '48ch' }}>
+              La vida es demasiado corta para desarrollar algo que nadie quiere.
+            </p>
+          </div>
 
-    <!-- HÉROE -->
-    <header class="heroe">
-      <span class="circulo-deco circulo-1"></span>
-      <span class="circulo-deco circulo-2"></span>
-      <span class="circulo-deco circulo-3"></span>
-      <div class="heroe-contenido">
-        <div class="marca">
-          <span class="marca-icono"><span class="degradado">K</span></span>
-          <span class="marca-nombre degradado">KBook</span>
-        </div>
-        <h1 class="heroe-titular">Tus clientes reservan solos. Tú dejas de coger el teléfono.</h1>
-        <p class="heroe-subtitulo">El sistema de reservas para peluquerías, barberías y cualquier negocio
-          con cita previa. Sin comisiones y con tus clientes siempre tuyos.</p>
-        <a href="#form" class="boton-cta">Apúntate gratis a la lista de espera</a>
-        <p class="heroe-nota">Sé de los primeros en descargarla y pruébala gratis.</p>
-      </div>
-    </header>
-
-    <!-- SECTORES -->
-    <section class="sectores">
-      <p class="sectores-intro">Para todo negocio con cita previa</p>
-      <div class="sectores-chips">
-        <span>Peluquerías</span>
-        <span>Barberías</span>
-        <span>Estética</span>
-        <span>Uñas</span>
-        <span>Tatuajes</span>
-        <span>Fisioterapia</span>
-        <span>Restaurantes</span>
-        <span>y más</span>
-      </div>
-    </section>
-
-    <!-- DOLOR -->
-    <section class="seccion">
-      <p class="seccion-etiqueta">¿Te suena esto?</p>
-      <div class="grid-dolor">
-        <div class="tarjeta-dolor">
-          <i class="ti ti-phone" aria-hidden="true"></i>
-          <h3>El teléfono no para</h3>
-          <p>Te cortan mientras atiendes a un cliente.</p>
-        </div>
-        <div class="tarjeta-dolor">
-          <i class="ti ti-user-x" aria-hidden="true"></i>
-          <h3>Citas que no aparecen</h3>
-          <p>Huecos perdidos por olvidos de última hora.</p>
-        </div>
-        <div class="tarjeta-dolor">
-          <i class="ti ti-notebook" aria-hidden="true"></i>
-          <h3>Todo en una libreta</h3>
-          <p>Sin avisos automáticos ni copia de seguridad.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- BENEFICIOS -->
-    <section class="seccion" style="padding-top: 0;">
-      <h2 class="titulo-seccion">Cómo te ayuda KBook</h2>
-      <div class="lista-beneficios">
-        <div class="beneficio">
-          <span class="beneficio-icono"><i class="ti ti-clock-24" aria-hidden="true"></i></span>
-          <div>
-            <h3>Reservas 24/7 desde el móvil</h3>
-            <p>Tus clientes reservan a la hora que quieran, sin llamarte. Tú compartes tu enlace o tu código QR.</p>
+          <div className="kt-reveal" style={{ display: 'none', border: '1px solid var(--kt-line)', borderRadius: 'var(--kt-radius-xl)', background: 'var(--kt-surface)', padding: 22, flexDirection: 'column', gap: 10, alignSelf: 'start' }}>
+            <span className="kt-eyebrow" style={{ marginBottom: 6 }}>Empieza aquí</span>
+            <Button as="a" href="aplicaciones.html" variant="primary" size="lg" style={{ width: '100%', justifyContent: 'space-between', borderRadius: 'var(--kt-radius-md)' }}>Ver aplicaciones {Ic.arrow()}</Button>
+            <Button as="a" href="contacto.html" variant="secondary" size="lg" style={{ width: '100%', justifyContent: 'space-between', borderRadius: 'var(--kt-radius-md)', background: 'var(--kt-surface-2)' }}>Contacto {Ic.arrow()}</Button>
+            <hr className="kt-rule" style={{ margin: '10px 0 6px' }} />
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <a className="kt-textlink" href="aplicaciones.html" style={{ justifyContent: 'space-between' }}><span>KBook</span> {Ic.arrow({ width: 16, height: 16 })}</a>
+              <a className="kt-textlink" href="aplicaciones.html" style={{ justifyContent: 'space-between' }}><span>KImpostor</span> {Ic.arrow({ width: 16, height: 16 })}</a>
+            </div>
           </div>
         </div>
-        <div class="beneficio">
-          <span class="beneficio-icono"><i class="ti ti-bell-ringing" aria-hidden="true"></i></span>
+      </Container>
+    </Section>
+  );
+}
+
+function Productos() {
+  return (
+    <Section style={{ paddingTop: 0 }}>
+      <Container>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12, marginBottom: 28 }}>
           <div>
-            <h3>Recordatorios automáticos</h3>
-            <p>Menos ausencias: el cliente recibe un aviso antes de su cita, sin que tú muevas un dedo.</p>
+            <Eyebrow>Lo que hemos publicado</Eyebrow>
+            <h2 style={{ fontSize: 'var(--kt-fs-h2)', marginTop: 10 }}>Dos productos, muy distintos a propósito</h2>
+          </div>
+          <a className="kt-textlink" href="aplicaciones.html">Ver las dos apps {Ic.arrow({ width: 16, height: 16 })}</a>
+        </div>
+        <div className="prod-grid">
+          <AppCard tone="violet" name="KBook" glyph={<img src="assets/kbook-icon.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit' }} />}
+            tagline="Reservas y citas para tu negocio de barrio"
+            description="La agenda que se queda con tus clientes en tu casa: peluquerías, barberías, estética, clínicas y cualquier negocio con cita previa. También reserva de mesa en restaurantes."
+            badge={<Badge tone="violet">Producto insignia</Badge>}
+            cta={<Button as="a" href="aplicaciones.html" variant="primary">Conocer KBook {Ic.arrow()}</Button>} />
+          <AppCard tone="turquoise" style={{ borderTopColor: '#f0babe' }} name="KImpostor" glyph={<img src="assets/kimpostor-icon.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit' }} />}
+            tagline="Juego social de fiesta"
+            description="Para jugar en grupo, en el sofá o en el bar. Encuentra al impostor antes de que te descubran."
+            badge={<Badge tone="turquoise" style={{ borderColor: '#f0babe', color: '#f0babe' }}>Ocio</Badge>}
+            cta={<a className="kt-textlink" href="aplicaciones.html">Ver KImpostor {Ic.arrow({ width: 16, height: 16 })}</a>} />
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+function Maker() {
+  return (
+    <Section style={{ paddingTop: 0 }}>
+      <Container>
+        <div style={{ borderRadius: 'var(--kt-radius-xl)', border: '1px solid var(--kt-line)', background: 'var(--kt-surface)', padding: 'clamp(28px,4vw,52px)', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 'clamp(20px,4vw,44px)', alignItems: 'center' }}>
+          <img src="assets/kevin.jpg" alt="Kevin Rodríguez" style={{ width: 132, height: 132, borderRadius: 'var(--kt-radius-lg)', objectFit: 'cover', border: '1px solid var(--kt-line)', flex: 'none', display: 'block' }} />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+            <Eyebrow>Quién está detrás</Eyebrow>
+            <h2 style={{ fontSize: 'var(--kt-fs-h3)', fontWeight: 600 }}>Kevin Rodríguez — desarrollador y fundador</h2>
+            <p style={{ color: 'var(--kt-text-muted)', maxWidth: '62ch' }}>
+              KrypTon es una persona, no un departamento. Escribo el código, publico las apps y respondo el teléfono. Estar en Zaragoza no es un detalle del pie de página: significa que hablas con quien construye el producto, sin centralitas ni tickets que se pierden.
+            </p>
           </div>
         </div>
-        <div class="beneficio">
-          <span class="beneficio-icono"><i class="ti ti-layout-grid" aria-hidden="true"></i></span>
-          <div>
-            <h3>Tu agenda del día de un vistazo</h3>
-            <p>Servicios, profesionales y horarios desde el móvil que ya tienes. Sin comprar nada.</p>
-          </div>
-        </div>
-        <div class="beneficio">
-          <span class="beneficio-icono"><i class="ti ti-heart-handshake" aria-hidden="true"></i></span>
-          <div>
-            <h3>Tus clientes son tuyos</h3>
-            <p>Cuota fija, sin comisiones por reserva. Y con soporte cercano: estamos en Zaragoza.</p>
-          </div>
-        </div>
-      </div>
-    </section>
+      </Container>
+    </Section>
+  );
+}
 
-    <!-- FORMULARIO -->
-    <section class="seccion-form" id="form">
-      <span class="circulo-deco circulo-1"></span>
-      <span class="circulo-deco circulo-2"></span>
-      <div class="form-contenido">
-        <h2 class="form-titulo">Sé de los primeros</h2>
-        <p class="form-subtitulo">Déjanos tu email y te avisamos cuando esté lista. Gratis al principio y sin
-          compromiso.</p>
+function App() {
+  return (
+    <>
+      <NavBar active="inicio" cta={<Button as="a" href="contacto.html" variant="primary" size="sm" style={{ marginLeft: 8 }}>Contacto</Button>} />
+      <main>
+        <Hero />
+        <Productos />
+        {window.KtClosingCta({ heading: '¿Tienes una idea? Vamos a construirla', body: 'Estoy abierto a escuchar propuestas de todo tipo. Si tienes una idea para una app, hablemos y veamos cómo desarrollarla juntos.' })}
+        <Maker />
+      </main>
+      <Footer />
+    </>
+  );
+}
 
-        <div class="form-campos" id="form-campos">
-          <input type="text" id="nombre" placeholder="Nombre de tu negocio" autocomplete="organization" />
-          <input type="email" id="email" placeholder="Tu email" autocomplete="email" />
-          <label class="form-consentimiento">
-            <input type="checkbox" id="consentimiento" />
-            <span>Acepto que KBook guarde mi nombre y email para avisarme del lanzamiento. Consulta la <a
-                href="privacidad.html" target="_blank" rel="noopener">política de privacidad</a>.</span>
-          </label>
-          <button class="boton-enviar" id="boton-enviar" onclick="enviarFormulario()">Apuntarme a la lista</button>
-          <p class="form-error-msg" id="form-error">Revisa los datos: necesitamos un email válido y tu
-            consentimiento.</p>
-          <p class="form-nota-legal">Cumplimos el RGPD. No compartimos tus datos con nadie.</p>
-        </div>
-
-        <div class="form-exito" id="form-exito">
-          <i class="ti ti-circle-check" aria-hidden="true"></i>
-          <h3>¡Apuntado!</h3>
-          <p>Te escribiremos en cuanto la primera versión esté lista.</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- PIE -->
-    <footer class="pie">
-      <p>KrypTon · Hecho en Zaragoza por Kevin Rodríguez · <a href="https://devkrypton.com">devkrypton.com</a> · <a
-          href="privacidad.html">Privacidad</a></p>
-    </footer>
-
-  </main>
-
-  <!-- ============================================================= -->
-  <!-- FIREBASE: guarda los nombres y emails en Firestore            -->
-  <!-- Sigue la GUÍA para rellenar firebaseConfig con TUS claves.    -->
-  <!-- ============================================================= -->
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-    import { getFirestore, collection, addDoc, serverTimestamp }
-      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-
-
-    const firebaseConfig = {
-      apiKey: "AIzaSyDm7Nm5rYNtAqryi8EwVWV4pxd72VeHN50",
-      authDomain: "krypton-ebbc3.firebaseapp.com",
-      projectId: "krypton-ebbc3",
-      storageBucket: "krypton-ebbc3.firebasestorage.app",
-      messagingSenderId: "762807015953",
-      appId: "1:762807015953:web:79c41836bb30dee9b6efb0"
-    };
-
-    const app = initializeApp(firebaseConfig);
-    const db = getFirestore(app);
-
-    // Exponemos la función para que el botón la pueda llamar
-    window.enviarFormulario = async function () {
-      const nombre = document.getElementById('nombre');
-      const email = document.getElementById('email');
-      const consentimiento = document.getElementById('consentimiento');
-      const errorMsg = document.getElementById('form-error');
-      const boton = document.getElementById('boton-enviar');
-
-      // Validación básica
-      const emailValido = email.value.trim().includes('@') && email.value.trim().includes('.');
-      let hayError = false;
-
-      email.classList.remove('error');
-      if (!emailValido) { email.classList.add('error'); hayError = true; }
-      if (!consentimiento.checked) { hayError = true; }
-
-      if (hayError) { errorMsg.style.display = 'block'; return; }
-      errorMsg.style.display = 'none';
-
-      boton.disabled = true;
-      boton.textContent = 'Guardando...';
-
-      try {
-        await addDoc(collection(db, "listaEspera"), {
-          nombre: nombre.value.trim() || "(sin nombre)",
-          email: email.value.trim(),
-          fecha: serverTimestamp(),
-          origen: "landing"
-        });
-        // Éxito
-        document.getElementById('form-campos').style.display = 'none';
-        document.getElementById('form-exito').style.display = 'block';
-      } catch (e) {
-        console.error("Error al guardar:", e);
-        boton.disabled = false;
-        boton.textContent = 'Apuntarme a la lista';
-        errorMsg.textContent = 'Ups, algo falló. Inténtalo de nuevo en un momento.';
-        errorMsg.style.display = 'block';
-      }
-    };
-  </script>
-
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+window.KtReveal();
+})();
+</script>
 </body>
-
 </html>

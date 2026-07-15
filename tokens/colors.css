@@ -1,0 +1,47 @@
+/* KrypTon — Color tokens (v2: neo-minimalist high-end SaaS, editorial dark)
+   Near-black neutrals. Single restrained violet accent. Turquoise = KImpostor only. */
+:root {
+  /* Base surfaces — true near-black neutral stack */
+  --kt-bg: #09090B;              /* page background */
+  --kt-bg-raise: #0E0E11;        /* raised panel */
+  --kt-surface: #131316;         /* card surface */
+  --kt-surface-2: #1A1A1F;       /* nested / hover surface */
+  --kt-line: #26262C;            /* hairline borders */
+  --kt-line-soft: #1B1B20;       /* softer divider */
+
+  /* Accents — used sparingly */
+  --kt-violet: #6C4DFF;          /* the single brand accent */
+  --kt-violet-strong: #5A3BEC;   /* pressed / deep */
+  --kt-turquoise: #00C2A8;       /* KImpostor differentiator only */
+  --kt-turquoise-strong: #00A891;
+
+  /* Text — neutral, editorial */
+  --kt-text: #F4F4F5;            /* primary */
+  --kt-text-muted: #A1A1AA;      /* secondary — AA on near-black */
+  --kt-text-lavender: #8A8A94;   /* dim tertiary / meta */
+  --kt-text-on-accent: #FFFFFF;  /* text on violet fills */
+  --kt-text-on-violet: #FFFFFF;
+
+  /* Focus */
+  --kt-focus: #A78BFF;
+
+  /* Brand gradient — LOGO MARK ONLY in v2. Do not use as decoration. */
+  --kt-gradient: linear-gradient(120deg, #6C4DFF 0%, #00C2A8 100%); /* @kind color */
+  --kt-gradient-soft: linear-gradient(120deg, rgba(108,77,255,0.16) 0%, rgba(0,194,168,0.16) 100%); /* @kind color */
+
+  /* Subtle editorial background aids */
+  --kt-halo-violet: radial-gradient(60% 60% at 50% 0%, rgba(108,77,255,0.10) 0%, rgba(108,77,255,0) 70%); /* @kind color */
+  --kt-grid-line: rgba(255,255,255,0.035); /* @kind color */
+  --kt-arc-line: rgba(255,255,255,0.05); /* @kind color */
+
+  /* Semantic aliases */
+  --surface-page: var(--kt-bg);
+  --surface-card: var(--kt-surface);
+  --surface-card-hover: var(--kt-surface-2);
+  --border-hairline: var(--kt-line);
+  --text-body: var(--kt-text);
+  --text-secondary: var(--kt-text-muted);
+  --accent-primary: var(--kt-violet);
+  --accent-secondary: var(--kt-turquoise);
+  --focus-ring: var(--kt-focus);
+}

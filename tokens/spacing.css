@@ -1,0 +1,27 @@
+/* KrypTon — Spacing, radius, layout tokens (v2)
+   Tighter radii for a neo-minimalist, precise feel. */
+:root {
+  --kt-space-1: 4px;
+  --kt-space-2: 8px;
+  --kt-space-3: 12px;
+  --kt-space-4: 16px;
+  --kt-space-5: 24px;
+  --kt-space-6: 32px;
+  --kt-space-7: 48px;
+  --kt-space-8: 64px;
+  --kt-space-9: 96px;
+  --kt-space-10: 128px;
+
+  /* Radii — reduced. Squarer, more editorial. */
+  --kt-radius-sm: 6px;
+  --kt-radius-md: 9px;
+  --kt-radius-lg: 12px;
+  --kt-radius-xl: 16px;
+  --kt-radius-pill: 999px;
+
+  /* Layout */
+  --kt-container: 1120px; /* @kind spacing */
+  --kt-container-narrow: 720px; /* @kind spacing */
+  --kt-section-y: clamp(72px, 10vw, 144px); /* @kind spacing */
+  --kt-header-h: 64px; /* @kind spacing */
+}
