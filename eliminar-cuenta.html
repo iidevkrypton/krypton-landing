@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Eliminar tu cuenta de KBook — KrypTon</title>
+<meta name="description" content="Cómo eliminar tu cuenta de KBook y qué datos se borran, se anonimizan o se conservan.">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* Página legal: HTML estático, sin dependencias de JS ni CDN. */
+  .doc { max-width: 760px; margin: 0 auto; padding: 0 24px 96px; }
+
+  .doc-head { padding: 40px 0 28px; border-bottom: 1px solid var(--kt-line); margin-bottom: 40px; }
+  .brand { display: inline-flex; align-items: baseline; gap: 10px; margin-bottom: 28px; }
+  .brand .mark { font-weight: 700; font-size: 1.0625rem; letter-spacing: -0.01em; color: var(--kt-text); }
+  .brand .sep { color: var(--kt-line); }
+  .brand .app { font-weight: 600; font-size: 1.0625rem;
+    background: linear-gradient(120deg, var(--kt-violet), var(--kt-turquoise));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--kt-violet); }
+  .doc-head h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 12px; }
+  .doc-head p { color: var(--kt-text-muted); font-size: 1.0625rem; }
+
+  .doc h2 { font-size: 1.25rem; margin: 44px 0 14px; }
+  .doc h3 { font-size: 1rem; margin: 26px 0 8px; color: var(--kt-text); }
+  .doc p, .doc li { color: var(--kt-text-muted); }
+  .doc p { margin-bottom: 14px; }
+  .doc ul, .doc ol { margin: 0 0 16px; padding-left: 22px; }
+  .doc li { margin-bottom: 8px; }
+  .doc strong { color: var(--kt-text); font-weight: 600; }
+  .doc a { color: var(--kt-violet); text-decoration: underline; text-underline-offset: 3px; }
+  .doc a:hover { color: var(--kt-turquoise); }
+
+  /* Pasos numerados: la secuencia es real, el orden importa */
+  ol.steps { list-style: none; padding: 0; counter-reset: step; }
+  ol.steps > li { counter-increment: step; position: relative; padding-left: 44px; margin-bottom: 16px; }
+  ol.steps > li::before {
+    content: counter(step); position: absolute; left: 0; top: -1px;
+    width: 28px; height: 28px; display: grid; place-content: center;
+    border: 1px solid var(--kt-line); border-radius: 999px;
+    background: var(--kt-surface-2); color: var(--kt-violet);
+    font-size: 0.8125rem; font-weight: 700; font-variant-numeric: tabular-nums;
+  }
+
+  .panel { background: var(--kt-surface); border: 1px solid var(--kt-line);
+    border-radius: var(--kt-radius-lg, 14px); padding: 22px 24px; margin: 20px 0 28px; }
+  .panel h3 { margin-top: 0; }
+  .panel:last-child { margin-bottom: 0; }
+
+  .mail { display: inline-block; font-weight: 600; color: var(--kt-turquoise); }
+
+  table.data { width: 100%; border-collapse: collapse; margin: 8px 0 24px; font-size: 0.9375rem; }
+  table.data th, table.data td { text-align: left; padding: 11px 12px; border-bottom: 1px solid var(--kt-line-soft); vertical-align: top; }
+  table.data th { color: var(--kt-text); font-weight: 600; font-size: 0.8125rem;
+    text-transform: uppercase; letter-spacing: 0.08em; }
+  table.data td { color: var(--kt-text-muted); }
+  table.data td:first-child { color: var(--kt-text); font-weight: 500; width: 38%; }
+  .tablewrap { overflow-x: auto; }
+
+  .doc-foot { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--kt-line);
+    color: var(--kt-text-lavender); font-size: 0.875rem; display: flex; gap: 18px; flex-wrap: wrap; }
+  .doc-foot a { color: var(--kt-text-lavender); text-decoration: none; }
+  .doc-foot a:hover { color: var(--kt-violet); }
+</style>
+</head>
+<body>
+
+<div class="doc">
+
+  <header class="doc-head">
+    <div class="brand">
+      <span class="mark">KrypTon</span>
+      <span class="sep">·</span>
+      <span class="app">KBook</span>
+    </div>
+    <h1>Eliminar tu cuenta de KBook</h1>
+    <p>Puedes borrar tu cuenta y tus datos personales cuando quieras, desde la propia aplicación o escribiéndonos. Aquí te explicamos cómo hacerlo y qué ocurre exactamente con cada dato.</p>
+  </header>
+
+  <h2>Desde la aplicación</h2>
+  <p>Es la vía más rápida: la eliminación es inmediata y no hay que esperar a que nadie la tramite.</p>
+
+  <div class="panel">
+    <h3>Si usas KBook como cliente</h3>
+    <ol class="steps">
+      <li>Abre KBook e inicia sesión.</li>
+      <li>Entra en la pestaña <strong>Perfil</strong>.</li>
+      <li>Baja hasta <strong>Zona de peligro</strong> y pulsa <strong>Eliminar mi cuenta</strong>.</li>
+      <li>Confirma en el aviso. La sesión se cierra sola al terminar.</li>
+    </ol>
+  </div>
+
+  <div class="panel">
+    <h3>Si usas KBook como negocio</h3>
+    <ol class="steps">
+      <li>Abre KBook e inicia sesión con la cuenta del negocio.</li>
+      <li>Entra en la pestaña <strong>Perfil</strong>.</li>
+      <li>Pulsa <strong>Eliminar mi cuenta</strong> al final de la pantalla.</li>
+      <li>Confirma. Tu suscripción se cancela en el mismo momento y no se te vuelve a cobrar.</li>
+    </ol>
+  </div>
+
+  <h2>Sin la aplicación</h2>
+  <p>Si ya has desinstalado KBook o no puedes acceder a tu cuenta, escríbenos a <a class="mail" href="mailto:administracion@devkrypton.com?subject=Solicitud%20de%20eliminaci%C3%B3n%20de%20cuenta%20KBook">administracion@devkrypton.com</a> con el asunto <strong>«Solicitud de eliminación de cuenta»</strong>, indicando el <strong>correo electrónico con el que te registraste</strong>.</p>
+  <p>Verificaremos que la petición viene de la persona titular de esa cuenta y la eliminaremos en un plazo máximo de <strong>30 días</strong>, confirmándotelo por correo. No pedimos ningún dato adicional ni cobramos nada por ello.</p>
+
+  <h2>Qué se borra y qué se conserva</h2>
+  <p>Eliminar la cuenta es <strong>irreversible</strong>: no hay forma de recuperar los datos después.</p>
+
+  <div class="tablewrap">
+    <table class="data">
+      <thead>
+        <tr><th>Dato</th><th>Qué ocurre al eliminar la cuenta</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Tu perfil</td>
+          <td>Se borra por completo: nombre, correo, teléfono, foto y credenciales de acceso.</td>
+        </tr>
+        <tr>
+          <td>Tus citas y reservas pasadas</td>
+          <td>No se borran (el negocio necesita su historial), pero se <strong>anonimizan</strong>: tu nombre pasa a «Usuario eliminado» y se eliminan tu teléfono y los datos de contacto asociados.</td>
+        </tr>
+        <tr>
+          <td>Tus citas y reservas futuras</td>
+          <td>Se <strong>cancelan automáticamente</strong> para que el negocio libere el hueco.</td>
+        </tr>
+        <tr>
+          <td>Mensajes con soporte</td>
+          <td>Se borran junto con la cuenta, incluidas las conversaciones.</td>
+        </tr>
+        <tr>
+          <td>Puntos, cupones y referidos</td>
+          <td>Se eliminan y dejan de ser canjeables.</td>
+        </tr>
+        <tr>
+          <td>Datos del negocio <span style="opacity:.7">(solo cuentas de negocio)</span></td>
+          <td>Se borran el negocio y todo su contenido: servicios, profesionales, mesas, carta, galería, reseñas recibidas y agenda.</td>
+        </tr>
+        <tr>
+          <td>Datos de pago</td>
+          <td>KBook <strong>nunca almacena datos de tarjeta</strong>: los gestiona Stripe. Al eliminar la cuenta se cancela la suscripción.</td>
+        </tr>
+        <tr>
+          <td>Facturas emitidas</td>
+          <td>Se <strong>conservan</strong> el tiempo que exige la normativa fiscal y contable española, aunque elimines la cuenta. Es una obligación legal, no una decisión comercial.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2>Otros derechos</h2>
+  <p>Además de la supresión, puedes ejercer tus derechos de acceso, rectificación, oposición, limitación y portabilidad escribiendo a la misma dirección. Tienes el detalle en nuestra <a href="privacidad.html">política de privacidad</a>.</p>
+
+  <footer class="doc-foot">
+    <a href="index.html">Inicio</a>
+    <a href="privacidad.html">Privacidad</a>
+    <a href="contacto.html">Contacto</a>
+    <span style="margin-left:auto">KrypTon · Zaragoza (España)</span>
+  </footer>
+
+</div>
+
+</body>
+</html>

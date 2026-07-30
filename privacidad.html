@@ -1,47 +1,203 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KrypTon · Política de privacidad</title>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Inter', -apple-system, sans-serif; background: #F1EFE8; color: #1A1A1A; padding: 2.5rem 1.5rem; line-height: 1.7; }
-    .doc { max-width: 640px; margin: 0 auto; background: #fff; border: 0.5px solid rgba(0,0,0,0.12); border-radius: 12px; padding: 2.5rem; }
-    h1 { font-size: 24px; font-weight: 600; margin-bottom: 1.5rem; }
-    h2 { font-size: 17px; font-weight: 500; margin: 1.5rem 0 0.5rem; color: #2E6E8E; }
-    p { font-size: 14px; color: #333; margin-bottom: 0.5rem; }
-    a { color: #2E6E8E; }
-    .nota { font-size: 13px; color: #888780; margin-top: 2rem; font-style: italic; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Política de privacidad — KBook · KrypTon</title>
+<meta name="description" content="Política de privacidad y aviso legal de KBook: qué datos tratamos, con qué finalidad y cómo ejercer tus derechos.">
+<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="site.css">
+<style>
+  /* Página legal: HTML estático, sin dependencias de JS ni CDN. */
+  .doc { max-width: 760px; margin: 0 auto; padding: 0 24px 96px; }
+
+  .doc-head { padding: 40px 0 28px; border-bottom: 1px solid var(--kt-line); margin-bottom: 8px; }
+  .brand { display: inline-flex; align-items: baseline; gap: 10px; margin-bottom: 28px; }
+  .brand .mark { font-weight: 700; font-size: 1.0625rem; letter-spacing: -0.01em; color: var(--kt-text); }
+  .brand .sep { color: var(--kt-line); }
+  .brand .app { font-weight: 600; font-size: 1.0625rem;
+    background: linear-gradient(120deg, var(--kt-violet), var(--kt-turquoise));
+    -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: var(--kt-violet); }
+  .doc-head h1 { font-size: clamp(1.75rem, 4vw, 2.5rem); margin-bottom: 12px; }
+  .doc-head .updated { color: var(--kt-text-lavender); font-size: 0.875rem; }
+
+  .doc h2 { font-size: 1.1875rem; margin: 44px 0 12px; scroll-margin-top: 20px; }
+  .doc h3 { font-size: 0.9375rem; margin: 24px 0 8px; color: var(--kt-text);
+    text-transform: uppercase; letter-spacing: 0.08em; }
+  .doc p, .doc li { color: var(--kt-text-muted); }
+  .doc p { margin-bottom: 14px; }
+  .doc ul { margin: 0 0 16px; padding-left: 22px; }
+  .doc li { margin-bottom: 8px; }
+  .doc strong { color: var(--kt-text); font-weight: 600; }
+  .doc a { color: var(--kt-violet); text-decoration: underline; text-underline-offset: 3px; }
+  .doc a:hover { color: var(--kt-turquoise); }
+
+  /* Índice */
+  nav.toc { background: var(--kt-surface); border: 1px solid var(--kt-line);
+    border-radius: var(--kt-radius-lg, 14px); padding: 20px 24px; margin: 32px 0 8px; }
+  nav.toc h2 { margin: 0 0 12px; font-size: 0.8125rem; text-transform: uppercase;
+    letter-spacing: 0.1em; color: var(--kt-text-muted); }
+  nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 32px; }
+  @media (max-width: 620px) { nav.toc ol { columns: 1; } }
+  nav.toc li { margin-bottom: 6px; font-size: 0.9375rem; }
+  nav.toc a { color: var(--kt-text-muted); text-decoration: none; }
+  nav.toc a:hover { color: var(--kt-violet); }
+
+  /* Marcador pendiente de rellenar — imposible de pasar por alto */
+  .todo { display: inline-block; background: #4A2A00; color: #FFC46B;
+    border: 1px dashed #C98A12; border-radius: 6px; padding: 1px 8px;
+    font-weight: 700; font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+    font-size: 0.875rem; }
+  .todo-note { background: #2A1A00; border: 1px solid #C98A12; border-left-width: 3px;
+    border-radius: var(--kt-radius-md, 10px); padding: 16px 18px; margin: 24px 0; }
+  .todo-note p { color: #FFD79A; margin: 0; font-size: 0.9375rem; }
+  .todo-note strong { color: #FFC46B; }
+
+  .tablewrap { overflow-x: auto; }
+  table.data { width: 100%; border-collapse: collapse; margin: 8px 0 24px; font-size: 0.9375rem; }
+  table.data th, table.data td { text-align: left; padding: 11px 12px;
+    border-bottom: 1px solid var(--kt-line-soft); vertical-align: top; }
+  table.data th { color: var(--kt-text); font-weight: 600; font-size: 0.8125rem;
+    text-transform: uppercase; letter-spacing: 0.08em; }
+  table.data td { color: var(--kt-text-muted); }
+  table.data td:first-child { color: var(--kt-text); font-weight: 500; }
+
+  .doc-foot { margin-top: 56px; padding-top: 24px; border-top: 1px solid var(--kt-line);
+    color: var(--kt-text-lavender); font-size: 0.875rem; display: flex; gap: 18px; flex-wrap: wrap; }
+  .doc-foot a { color: var(--kt-text-lavender); text-decoration: none; }
+  .doc-foot a:hover { color: var(--kt-violet); }
+</style>
 </head>
 <body>
-  <div class="doc">
-    <h1>Política de privacidad</h1>
 
-    <p>En KrypTon nos tomamos en serio tus datos. Aquí te explicamos qué recogemos y para qué.</p>
+<div class="doc">
 
-    <h2>Quién es el responsable</h2>
-    <p>Kevin Rodríguez (KrypTon), Zaragoza. Contacto: idevkrypton@gmail.com</p>
+  <header class="doc-head">
+    <div class="brand">
+      <span class="mark">KrypTon</span>
+      <span class="sep">·</span>
+      <span class="app">KBook</span>
+    </div>
+    <h1>Política de privacidad y aviso legal</h1>
+    <p class="updated">Última actualización: 30 de julio de 2026</p>
+  </header>
 
-    <h2>Qué datos recogemos</h2>
-    <p>Solo el nombre de tu establecimiento y tu correo electrónico, que nos facilitas voluntariamente al apuntarte a la lista de espera.</p>
-
-    <h2>Para qué los usamos</h2>
-    <p>Únicamente para avisarte cuando la herramienta esté disponible y darte acceso a la prueba gratuita. No los usamos para nada más.</p>
-
-    <h2>Con quién los compartimos</h2>
-    <p>Con nadie. No vendemos ni cedemos tus datos a terceros. Se almacenan de forma segura en servicios de Google (Firebase), que cumplen la normativa europea.</p>
-
-    <h2>Cuánto tiempo los guardamos</h2>
-    <p>Hasta que el proyecto se lance o nos pidas que los borremos, lo que ocurra antes.</p>
-
-    <h2>Tus derechos</h2>
-    <p>Puedes pedir acceder, rectificar o eliminar tus datos en cualquier momento escribiéndonos a idevkrypton@gmail.com. También puedes reclamar ante la Agencia Española de Protección de Datos (aepd.es).</p>
-
-    <p class="nota">Plantilla orientativa. Sustituye idevkrypton@gmail.com por tu contacto real. Para un proyecto que crezca, conviene revisar este texto con un profesional.</p>
-    <p style="margin-top:1.5rem;"><a href="index.html">← Volver a la página</a></p>
+  <div class="todo-note">
+    <p><strong>Pendiente antes de publicar:</strong> sustituir el <span class="todo">{{CODIGO_POSTAL}}</span> del domicilio y revisar todo el texto con asesoría jurídica. Después, borrar este aviso.</p>
   </div>
+
+  <nav class="toc">
+    <h2>Contenido</h2>
+    <ol>
+      <li><a href="#responsable">Quién trata tus datos</a></li>
+      <li><a href="#doble-rol">Negocios y clientes</a></li>
+      <li><a href="#datos">Qué datos tratamos</a></li>
+      <li><a href="#finalidades">Para qué y con qué base</a></li>
+      <li><a href="#proveedores">Proveedores</a></li>
+      <li><a href="#conservacion">Cuánto los conservamos</a></li>
+      <li><a href="#derechos">Tus derechos</a></li>
+      <li><a href="#terceros">Datos de otras personas</a></li>
+      <li><a href="#menores">Menores de edad</a></li>
+      <li><a href="#seguridad">Seguridad</a></li>
+      <li><a href="#cambios">Cambios</a></li>
+    </ol>
+  </nav>
+
+  <h2 id="responsable">1. Quién trata tus datos</h2>
+  <p>El responsable del tratamiento y titular de la aplicación <strong>KBook</strong> es <strong>Kevin Rodríguez</strong>, que opera bajo el nombre comercial <strong>KrypTon</strong>, con NIF <strong>X8986660P</strong> y domicilio en <strong>Calle Heroísmo 37, 1.º A derecha, <span class="todo">{{CODIGO_POSTAL}}</span> Zaragoza (España)</strong>.</p>
+  <p>Datos de contacto: correo electrónico <a href="mailto:administracion@devkrypton.com">administracion@devkrypton.com</a>, teléfono <a href="tel:+34605551487">605 55 14 87</a>, sitio web <a href="https://devkrypton.com">devkrypton.com</a>.</p>
+  <p>Esta información se facilita también en cumplimiento del artículo 10 de la Ley 34/2002 de servicios de la sociedad de la información y de comercio electrónico (LSSI-CE).</p>
+
+  <h2 id="doble-rol">2. Negocios y clientes: quién responde de qué</h2>
+  <p>KBook es una herramienta que usan dos tipos de personas, y nuestro papel es distinto en cada caso. Conviene entenderlo porque determina a quién debes dirigirte.</p>
+  <ul>
+    <li><strong>Si eres un negocio</strong> que contrata KBook para gestionar su agenda: nosotros somos el responsable de los datos de tu cuenta (los de la propia relación contractual), y actuamos como <strong>encargado del tratamiento</strong> respecto de los datos de <em>tus</em> clientes, que tratamos únicamente siguiendo tus instrucciones y para prestarte el servicio. Las condiciones de ese encargo, conforme al artículo 28 del RGPD, forman parte de las condiciones del servicio que aceptas al registrarte.</li>
+    <li><strong>Si eres una persona que reserva</strong> una cita o una mesa: el negocio en el que reservas es el responsable de esos datos de reserva; nosotros los tratamos por cuenta suya. De los datos de tu cuenta de KBook (correo, nombre, teléfono, foto) sí somos nosotros los responsables.</li>
+  </ul>
+
+  <h2 id="datos">3. Qué datos tratamos</h2>
+  <p>Solo recogemos lo necesario para que la aplicación funcione. <strong>KBook no utiliza herramientas de analítica ni de publicidad</strong>, no elabora perfiles con fines comerciales y no vende datos a nadie.</p>
+
+  <h3>Datos de tu cuenta</h3>
+  <p>Nombre, correo electrónico, teléfono y, si la subes, una fotografía de perfil. Si accedes con Google o con Apple, recibimos de esos servicios tu identificador y tu correo, no tu contraseña.</p>
+
+  <h3>Datos del negocio (si tienes una cuenta de negocio)</h3>
+  <p>Nombre comercial, sector, dirección y teléfono del local, horarios, servicios, profesionales, mesas, carta y las fotografías que publiques.</p>
+
+  <h3>Datos de citas y reservas</h3>
+  <p>Fecha y hora, servicio o mesa, profesional, estado de la reserva, notas que añadas y, si cancelas, el motivo. Si reservas para otra persona, su nombre y teléfono (ver el apartado 8).</p>
+
+  <h3>Datos técnicos y del dispositivo</h3>
+  <p>Un identificador de notificaciones (token de Firebase Cloud Messaging) para poder enviarte avisos y recordatorios, y una señal de presencia (si tienes la aplicación abierta y la fecha de tu última conexión) que se usa únicamente para mostrar el estado en el chat de soporte.</p>
+
+  <h3>Datos de pago (solo cuentas de negocio)</h3>
+  <p><strong>Nunca almacenamos datos de tarjeta.</strong> El pago se realiza íntegramente en la pasarela de Stripe. Nosotros guardamos un identificador de cliente y de suscripción de Stripe, el plan contratado y el historial de facturas.</p>
+
+  <h3>Programa de recompensas</h3>
+  <p>Puntos acumulados, nivel de reputación, invitaciones a amigos y cupones obtenidos.</p>
+
+  <h3>Soporte</h3>
+  <p>El contenido de las incidencias, ideas y mensajes que nos envíes desde la aplicación.</p>
+
+  <h2 id="finalidades">4. Para qué los tratamos y con qué base jurídica</h2>
+  <div class="tablewrap">
+    <table class="data">
+      <thead>
+        <tr><th>Finalidad</th><th>Base jurídica</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>Crear y mantener tu cuenta; gestionar citas y reservas</td><td>Ejecución del contrato (art. 6.1.b RGPD)</td></tr>
+        <tr><td>Cobro de la suscripción y emisión de facturas</td><td>Ejecución del contrato y obligación legal (art. 6.1.b y 6.1.c)</td></tr>
+        <tr><td>Recordatorios y avisos del estado de tus reservas</td><td>Ejecución del contrato: son parte del servicio</td></tr>
+        <tr><td>Atención al usuario y resolución de incidencias</td><td>Interés legítimo en prestar un servicio correcto (art. 6.1.f)</td></tr>
+        <tr><td>Seguridad y prevención del fraude en el programa de recompensas</td><td>Interés legítimo (art. 6.1.f)</td></tr>
+        <tr><td>Comunicaciones comerciales sobre KBook</td><td>Tu consentimiento, revocable en cualquier momento (art. 6.1.a)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="proveedores">5. Proveedores que acceden a los datos</h2>
+  <p>No cedemos tus datos a terceros para sus propios fines. Sí trabajamos con proveedores que los tratan por cuenta nuestra, bajo contrato y con las garantías del RGPD:</p>
+  <ul>
+    <li><strong>Google Ireland Ltd. (Firebase)</strong> — alojamiento de la base de datos, autenticación, almacenamiento de imágenes y envío de notificaciones. La base de datos está ubicada en la <strong>Unión Europea</strong> (multirregión europea).</li>
+    <li><strong>Stripe Payments Europe Ltd.</strong> — procesamiento de los pagos de la suscripción y emisión de las facturas.</li>
+  </ul>
+  <p>Si algún tratamiento implicase una transferencia internacional de datos, se realizará amparada en las cláusulas contractuales tipo aprobadas por la Comisión Europea u otra garantía adecuada.</p>
+
+  <h2 id="conservacion">6. Cuánto tiempo conservamos los datos</h2>
+  <ul>
+    <li><strong>Datos de tu cuenta:</strong> mientras la cuenta exista. Si la eliminas, se borran.</li>
+    <li><strong>Citas y reservas:</strong> mientras el negocio los necesite como historial. Si eliminas tu cuenta, se anonimizan (tu nombre pasa a «Usuario eliminado» y se borran tus datos de contacto).</li>
+    <li><strong>Facturas y datos contables:</strong> durante los plazos que imponen la normativa fiscal y mercantil española, aunque canceles la cuenta.</li>
+    <li><strong>Mensajes de soporte:</strong> se eliminan junto con la cuenta.</li>
+  </ul>
+  <p>Puedes consultar el detalle completo en la página <a href="eliminar-cuenta.html">eliminar tu cuenta</a>.</p>
+
+  <h2 id="derechos">7. Tus derechos</h2>
+  <p>Puedes ejercer en cualquier momento tus derechos de <strong>acceso, rectificación, supresión, oposición, limitación del tratamiento y portabilidad</strong>, así como retirar el consentimiento que hubieras prestado, escribiendo a <a href="mailto:administracion@devkrypton.com">administracion@devkrypton.com</a>. Responderemos en el plazo máximo de un mes.</p>
+  <p>La supresión también puedes hacerla tú directamente desde la aplicación, sin escribirnos: tienes las instrucciones en <a href="eliminar-cuenta.html">eliminar tu cuenta</a>.</p>
+  <p>Si consideras que no hemos atendido correctamente tu solicitud, puedes presentar una reclamación ante la <strong>Agencia Española de Protección de Datos</strong> (<a href="https://www.aepd.es">aepd.es</a>).</p>
+
+  <h2 id="terceros">8. Cuando reservas para otra persona</h2>
+  <p>KBook te permite reservar a nombre de un amigo o un familiar, lo que implica facilitarnos su nombre y su teléfono. Al hacerlo, confirmas que cuentas con su conocimiento para ello. Esos datos se usan <strong>únicamente</strong> para identificar la cita ante el negocio y para avisar de cambios, y se eliminan o anonimizan con el resto de la reserva.</p>
+
+  <h2 id="menores">9. Menores de edad</h2>
+  <p>Para crear una cuenta en KBook es necesario tener al menos <strong>14 años</strong>, edad a partir de la cual el consentimiento del menor es válido según la legislación española. Por debajo de esa edad hace falta el consentimiento de quien ostente la patria potestad o tutela. Si detectamos una cuenta que incumple este requisito, la eliminaremos.</p>
+
+  <h2 id="seguridad">10. Seguridad</h2>
+  <p>Las comunicaciones entre la aplicación y nuestros servidores viajan cifradas. El acceso a los datos está restringido mediante reglas de seguridad que impiden que un negocio acceda a la información de otro, y las operaciones sensibles se ejecutan en servidor y no en el dispositivo. Si se produjese una violación de seguridad que afecte a tus datos, lo notificaremos a la autoridad de control y, cuando proceda, a las personas afectadas.</p>
+
+  <h2 id="cambios">11. Cambios en esta política</h2>
+  <p>Si modificamos esta política, actualizaremos la fecha del encabezado y, cuando el cambio sea relevante, te avisaremos dentro de la aplicación. Te recomendamos revisarla de vez en cuando.</p>
+
+  <footer class="doc-foot">
+    <a href="index.html">Inicio</a>
+    <a href="eliminar-cuenta.html">Eliminar cuenta</a>
+    <a href="contacto.html">Contacto</a>
+    <span style="margin-left:auto">KrypTon · Zaragoza (España)</span>
+  </footer>
+
+</div>
+
 </body>
 </html>
