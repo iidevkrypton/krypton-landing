@@ -1,0 +1,97 @@
+/* KrypTon — base element styles + brand utilities (v2: editorial dark). */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--kt-bg);
+  color: var(--kt-text);
+  font-family: var(--kt-font);
+  font-size: var(--kt-fs-body);
+  line-height: var(--kt-lh-body);
+  font-weight: var(--kt-fw-regular);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Links */
+a { color: var(--kt-text); text-decoration: none; transition: color var(--kt-dur) var(--kt-ease); }
+a:hover { color: var(--kt-violet); }
+
+/* Headings */
+h1, h2, h3, h4 {
+  margin: 0;
+  font-weight: var(--kt-fw-semibold);
+  line-height: var(--kt-lh-snug);
+  letter-spacing: var(--kt-tracking-head);
+  color: var(--kt-text);
+  text-wrap: balance;
+}
+
+p { margin: 0; text-wrap: pretty; }
+
+/* Visible keyboard focus everywhere */
+:focus-visible {
+  outline: none;
+  box-shadow: var(--kt-focus-ring);
+  border-radius: var(--kt-radius-sm);
+}
+
+/* ---- Brand utilities ---- */
+
+/* Gradient text — v2: reserved for the logo mark; avoid on copy. */
+.kt-gradient-text {
+  background: var(--kt-gradient);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* Eyebrow — monospace, uppercase, tracked (developer-first label) */
+.kt-eyebrow {
+  font-family: var(--kt-mono);
+  font-size: var(--kt-fs-eyebrow);
+  letter-spacing: var(--kt-tracking-eyebrow);
+  text-transform: uppercase;
+  font-weight: var(--kt-fw-medium);
+  color: var(--kt-text-muted);
+}
+
+/* Monospace section index, e.g. "01" */
+.kt-index {
+  font-family: var(--kt-mono);
+  font-size: var(--kt-fs-small);
+  color: var(--kt-violet);
+  letter-spacing: 0.05em;
+}
+
+/* Editorial signature background: a faint top halo over a barely-there grid.
+   Replaces the old concentric-circles motif with clean, precise negative space. */
+.kt-concentric {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+.kt-concentric::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: var(--kt-halo-violet);
+}
+/* Standalone faint grid utility (opt-in only) */
+.kt-grid {
+  background-image:
+    linear-gradient(var(--kt-grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--kt-grid-line) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+/* Hairline rule */
+.kt-rule { border: 0; border-top: 1px solid var(--kt-line-soft); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+}

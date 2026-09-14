@@ -1,0 +1,326 @@
+<!-- @dsCard group="Copistería" viewport="1120x800" name="Cliente — subir archivo" subtitle="Página pública: arrastra o elige el archivo a imprimir" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Copistería Ebro — Envía tu archivo</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/copisteria.css">
+<!-- Antes que el resto: aplica la paleta guardada sin parpadeo. -->
+<script src="assets/paletas.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="assets/ds-bundle.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js" integrity="sha384-ZaR6mWzmJtrRibZ1Vm7SoHFr8OXjyAuGAXalGDKqbxFT18oi/z+oZLIRFkpeNor1" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js" integrity="sha384-XgUhjZUY/4vSJ8bUS7DFmLGK73fbJgS+nlrQDEC5X3QBpGgO+597wN8Syegw3ONj" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js" integrity="sha384-Ke0FJhH7LyRqDxZ0wt+/OXV38yfQVu7g9VPEEGjYmB4RVOY/ta04uecRhsMwT7V3" crossorigin="anonymous"></script>
+<script src="assets/firebase.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/marca.js"></script>
+<script src="https://unpkg.com/pako@2.1.0/dist/pako.min.js" integrity="sha384-rNlaE5fs9dGIjmxWDALQh/RBAaGRYT5ChrzHo6tRfgrZ36iRFAiquP5g41Jsv+0j" crossorigin="anonymous"></script>
+<script src="assets/tarifa.js"></script>
+<style>
+  #root { min-height: 100vh; display: flex; flex-direction: column; }
+  main { flex: 1; }
+  .opts { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  @media (max-width: 620px) { .opts { grid-template-columns: 1fr; } }
+  .kt-select { width: 100%; background: var(--kt-bg-raise); color: var(--kt-text); border: 1px solid var(--kt-line); border-radius: var(--kt-radius-md); padding: 12px 14px; font-family: var(--kt-font); font-size: 1rem; appearance: none; -webkit-appearance: none; background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23A1A1AA' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'><path d='M6 9l6 6 6-6'/></svg>"); background-repeat: no-repeat; background-position: right 14px center; padding-right: 40px; cursor: pointer; }
+  .kt-select:focus { outline: none; border-color: var(--kt-violet); box-shadow: var(--kt-focus-ring); }
+  .fld { display: flex; flex-direction: column; gap: 8px; }
+  .fld > label { font-size: var(--kt-fs-small); font-weight: 500; color: var(--kt-text-muted); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+(function () {
+const { Button, Card, Field, Badge } = window.KrypTonDesignSystem_6d2e6d;
+const { size, ext, hora } = window.CopiUtil;
+
+const Ic = {
+  upload: (p) => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 16V4M7 9l5-5 5 5"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>,
+  trash: (p) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>,
+  check: (p) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M20 6L9 17l-5-5"/></svg>,
+  arrow: (p) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 12h14M13 6l6 6-6 6"/></svg>,
+};
+
+function Drop({ onFiles }) {
+  const [over, setOver] = React.useState(false);
+  const input = React.useRef(null);
+  return (
+    <>
+      <div
+        className={'drop' + (over ? ' over' : '')}
+        onClick={() => input.current.click()}
+        onDragOver={(e) => { e.preventDefault(); setOver(true); }}
+        onDragLeave={() => setOver(false)}
+        onDrop={(e) => { e.preventDefault(); setOver(false); onFiles([...e.dataTransfer.files]); }}
+        role="button" tabIndex={0}
+        onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') input.current.click(); }}
+      >
+        <div className="drop-ico">{Ic.upload()}</div>
+        <h3>Arrastra tu archivo aquí</h3>
+        <p>o haz clic para elegirlo — PDF, Word, imágenes… hasta 50 MB</p>
+      </div>
+      <input ref={input} type="file" multiple style={{ display: 'none' }} onChange={(e) => { onFiles([...e.target.files]); e.target.value = ''; }} />
+    </>
+  );
+}
+
+function App() {
+  const [marca, setMarca] = React.useState(window.CopiMarca.actual());
+  const [logoAbierto, setLogoAbierto] = React.useState(false);
+  React.useEffect(() => window.CopiMarca.subscribe(setMarca), []);
+  // La paleta la elige el trabajador; aquí solo se obedece.
+  React.useEffect(() => { window.CopiPaletas.aplicar(marca.paleta); }, [marca.paleta]);
+  React.useEffect(() => { window.CopiPaletas.aplicarEstilo(marca.estilo); }, [marca.estilo]);
+
+  React.useEffect(() => {
+    if (!logoAbierto) return;
+    const tecla = (e) => { if (e.key === 'Escape') setLogoAbierto(false); };
+    window.addEventListener('keydown', tecla);
+    return () => window.removeEventListener('keydown', tecla);
+  }, [logoAbierto]);
+  // La pestaña también lleva el nombre de la tienda, no uno escrito a mano.
+  React.useEffect(() => { document.title = marca.nombre + ' — Envía tu archivo'; }, [marca.nombre]);
+
+  const [pend, setPend] = React.useState([]);   // archivos elegidos, sin enviar
+  const [form, setForm] = React.useState({ nombre: '', telefono: '', copias: '1', color: 'Blanco y negro', caras: 'Una cara', nota: '' });
+  const [sent, setSent] = React.useState(false);
+  const [enviando, setEnviando] = React.useState(false);
+  const [progreso, setProgreso] = React.useState(null);
+  const [fallo, setFallo] = React.useState('');
+  const set = (k) => (e) => setForm((p) => ({ ...p, [k]: e.target.value }));
+
+  // Guardamos el File entero: el panel lo necesita para imprimir de verdad.
+  /* paginas: null mientras se averigua, número si se logró, 0 si el formato
+     no deja saberlo y hay que preguntárselo al cliente. */
+  const addFiles = (files) => {
+    const nuevos = files.map((f) => ({
+      key: f.name + f.size + Math.random(), name: f.name, bytes: f.size, tipo: f.type, file: f,
+      paginas: null,
+    }));
+    setPend((p) => [...p, ...nuevos]);
+    nuevos.forEach(async (n) => {
+      const cuenta = await window.CopiTarifa.paginasDe(n.file).catch(() => null);
+      setPend((p) => p.map((x) => (x.key === n.key ? { ...x, paginas: cuenta || 0 } : x)));
+    });
+  };
+
+  const setPaginas = (key, valor) => {
+    const n = Math.max(1, Math.min(2000, parseInt(valor, 10) || 1));
+    setPend((p) => p.map((x) => (x.key === key ? { ...x, paginas: n } : x)));
+  };
+
+  /* El precio se calcula al enviar y viaja con el pedido, pero no se le
+     enseña al cliente: lo cobra la copistería en el mostrador, donde puede
+     ajustar lo que haga falta. Aquí solo se le pide el número de páginas. */
+  const hayDudas = pend.some((f) => f.paginas === 0);
+
+  const enviar = async (e) => {
+    e.preventDefault();
+    setFallo('');
+    setEnviando(true);
+    try {
+      // Cada archivo sube a Firebase Storage antes de anotar el pedido:
+      // si la subida falla, el trabajador no ve un pedido sin archivo.
+      for (let i = 0; i < pend.length; i++) {
+        const f = pend[i];
+        setProgreso({ n: i + 1, de: pend.length, pct: 0 });
+        const g = await window.CopiApi.subir(f.file, (pct) => setProgreso({ n: i + 1, de: pend.length, pct }));
+        // Con await: si Firestore rechaza el alta, el catch de abajo lo muestra
+        // en vez de dar el pedido por bueno.
+        try {
+          await window.CopiStore.add({
+            archivo: f.name, bytes: f.bytes, tipo: f.tipo,
+            ruta: g.ruta, url: g.url,
+            cliente: form.nombre, telefono: form.telefono,
+            copias: form.copias, color: form.color, caras: form.caras, nota: form.nota,
+            paginas: f.paginas || 1,
+            precio: window.CopiTarifa.calcular({
+              paginas: f.paginas || 1, copias: form.copias, color: form.color, caras: form.caras,
+              tarifas: marca.tarifas,
+            }).total,
+          });
+        } catch (err) {
+          // El archivo ya está arriba pero no hay pedido que lo reclame: se
+          // retira, o el bucket acumula basura que nadie sabe de quién es.
+          await window.CopiApi.borrar(g.ruta).catch(() => {});
+          throw err;
+        }
+      }
+      setSent(true);
+    } catch (err) {
+      setFallo('No se pudo registrar el pedido: ' + err.message);
+    } finally {
+      setEnviando(false);
+      setProgreso(null);
+    }
+  };
+
+  if (sent) {
+    return (
+      <div className="wrap" style={{ paddingTop: 80, paddingBottom: 80 }}>
+        <Card style={{ borderRadius: 'var(--kt-radius-xl)', textAlign: 'center' }}>
+          <span style={{ width: 52, height: 52, borderRadius: '50%', background: 'var(--kt-gradient-soft)', border: '1px solid var(--copi-listo-line)', color: 'var(--copi-listo)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{Ic.check({ width: 24, height: 24 })}</span>
+          <h1 style={{ fontSize: 'var(--kt-fs-h2)', marginTop: 18 }}>Archivo enviado</h1>
+          <p style={{ color: 'var(--kt-text-muted)', marginTop: 12, maxWidth: '44ch', marginInline: 'auto' }}>
+            Ya está en la copistería. Te avisan al {form.telefono || 'teléfono'} cuando esté listo para recoger.
+          </p>
+          <div style={{ marginTop: 26, display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
+            <Button variant="secondary" onClick={() => { setPend([]); setSent(false); }}>Enviar otro archivo</Button>
+          </div>
+        </Card>
+      </div>
+    );
+  }
+
+  return (
+    <>
+      {logoAbierto && marca.logoUrl && (
+        <div className="modal-fondo" onClick={() => setLogoAbierto(false)}>
+          <div className="logo-grande" role="dialog" aria-label={'Logotipo de ' + marca.nombre} onClick={(e) => e.stopPropagation()}>
+            <img src={marca.logoUrl} alt={'Logotipo de ' + marca.nombre} />
+            <button type="button" className="salir" onClick={() => setLogoAbierto(false)}>Cerrar</button>
+          </div>
+        </div>
+      )}
+
+      {/* Membrete: identidad a la izquierda, cómo localizarles a la derecha.
+          Es la disposición que se reconoce de una web de empresa, y al ser
+          compacta puede volver a quedarse fija arriba sin comerse pantalla. */}
+      <header className="cab">
+        <div className="wrap cab-in">
+          <div className="cab-marca">
+            {marca.logoUrl
+              ? (
+                /* Con imagen el logotipo es pulsable y se abre a tamaño grande.
+                   Sin ella son iniciales dibujadas, y ampliar un div no aporta. */
+                <button type="button" className="shop-logo-btn" onClick={() => setLogoAbierto(true)}
+                        title="Ver el logotipo" aria-label="Ver el logotipo a tamaño completo">
+                  <img className="shop-logo shop-logo--img" src={marca.logoUrl} alt={'Logotipo de ' + marca.nombre} />
+                </button>
+              )
+              : <span className="shop-logo">{window.CopiMarca.iniciales(marca.nombre)}</span>}
+
+            <div className="cab-txt">
+              <div className="shop-name">{marca.nombre}</div>
+              {marca.direccion && <div className="shop-meta">{marca.direccion}</div>}
+            </div>
+          </div>
+
+          <div className="cab-datos">
+            <div className="cab-contacto">
+              {marca.telefono && (
+                <a className="cab-tel" href={'tel:' + marca.telefono.replace(/\s/g, '')}>{marca.telefono}</a>
+              )}
+              {marca.telefono && marca.horario && <span className="cab-sep" aria-hidden="true" />}
+              {marca.horario && <span className="shop-meta">{marca.horario}</span>}
+            </div>
+            <span className={'estado' + (marca.abierto ? ' on' : '')}>
+              <i aria-hidden="true" />{marca.abierto ? 'Abierto ahora' : 'Cerrado'}
+            </span>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div className="wrap" style={{ paddingTop: 'clamp(36px,6vw,64px)', paddingBottom: 'clamp(48px,7vw,88px)' }}>
+          <form onSubmit={enviar} style={{ display: 'flex', flexDirection: 'column', gap: 18 }}>
+            <Card style={{ borderRadius: 'var(--kt-radius-xl)' }}>
+              <Drop onFiles={addFiles} />
+
+              {!!pend.length && (
+                <div style={{ marginTop: 20 }}>
+                  {pend.map((f) => {
+                    return (
+                      <div className="row" key={f.key}>
+                        <span className="chip">{ext(f.name)}</span>
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div className="nm">{f.name}</div>
+                          <div className="mt">{size(f.bytes)}</div>
+                        </div>
+                        <label className="pags">
+                          <span>Páginas</span>
+                          <input type="number" min="1" max="2000" className="pags-num"
+                                 value={f.paginas === null ? '' : f.paginas || 1}
+                                 placeholder={f.paginas === null ? '…' : '1'}
+                                 onChange={(e) => setPaginas(f.key, e.target.value)} />
+                        </label>
+                        <button type="button" className="ibtn danger" title="Quitar" onClick={() => setPend((p) => p.filter((x) => x.key !== f.key))}>{Ic.trash()}</button>
+                      </div>
+                    );
+                  })}
+
+                  {hayDudas && (
+                    <p className="presu-nota">
+                      No hemos podido contar las páginas de algún archivo. Revisa el número:
+                      es lo que la copistería va a imprimir.
+                    </p>
+                  )}
+                </div>
+              )}
+            </Card>
+
+            <Card style={{ borderRadius: 'var(--kt-radius-xl)', display: 'flex', flexDirection: 'column', gap: 18 }}>
+              <span className="kt-eyebrow">Cómo lo quieres</span>
+              <div className="opts">
+                <Field label="Tu nombre" value={form.nombre} onChange={set('nombre')} placeholder="Ej. Laura" required />
+                <Field label="Teléfono" type="tel" value={form.telefono} onChange={set('telefono')} placeholder="600 00 00 00" required />
+                <Field label="Copias" type="number" min="1" value={form.copias} onChange={set('copias')} />
+                <div className="fld">
+                  <label htmlFor="color">Color</label>
+                  <select id="color" className="kt-select" value={form.color} onChange={set('color')}>
+                    <option>Blanco y negro</option><option>Color</option>
+                  </select>
+                </div>
+                <div className="fld">
+                  <label htmlFor="caras">Caras</label>
+                  <select id="caras" className="kt-select" value={form.caras} onChange={set('caras')}>
+                    <option>Una cara</option><option>Doble cara</option>
+                  </select>
+                </div>
+              </div>
+              <Field label="Nota para el trabajador" multiline rows={3} value={form.nota} onChange={set('nota')} placeholder="Ej. imprimir solo las páginas 1 a 4" />
+            </Card>
+
+            {fallo && (
+              <p style={{ color: 'var(--copi-danger)', fontSize: 'var(--kt-fs-small)', border: '1px solid var(--copi-danger-line)', borderRadius: 'var(--kt-radius-md)', padding: '12px 16px' }}>
+                {fallo}
+              </p>
+            )}
+
+            <div style={{ display: 'flex', gap: 14, alignItems: 'center', flexWrap: 'wrap' }}>
+              <Button type="submit" variant="primary" size="lg" disabled={!pend.length || enviando} style={!pend.length || enviando ? { opacity: 0.45, cursor: 'not-allowed' } : undefined}>
+                {enviando ? 'Subiendo…' : <>Enviar a la copistería {Ic.arrow()}</>}
+              </Button>
+              <span style={{ color: 'var(--kt-text-lavender)', fontSize: 'var(--kt-fs-small)' }}>
+                {progreso
+                  ? `Subiendo ${progreso.n} de ${progreso.de} — ${progreso.pct}%`
+                  : pend.length ? `${pend.length} archivo${pend.length > 1 ? 's' : ''} listo${pend.length > 1 ? 's' : ''}` : 'Añade un archivo para continuar'}
+              </span>
+            </div>
+          </form>
+        </div>
+      </main>
+
+      {/* Pie mínimo, solo con el enlace legal: el aviso legal tiene que ser
+          accesible desde la página, no escondido. */}
+      <footer className="pie-legal">
+        <div className="wrap">
+          <a href="legal.html">Aviso legal y privacidad</a>
+          <span>{[marca.razonSocial || marca.nombre].filter(Boolean).join('')}</span>
+        </div>
+      </footer>
+
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+})();
+</script>
+</body>
+</html>

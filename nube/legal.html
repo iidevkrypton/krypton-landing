@@ -1,0 +1,230 @@
+<!-- @dsCard group="Copistería" viewport="1120x800" name="Cliente — aviso legal" subtitle="Aviso legal, privacidad y condiciones del servicio" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="index, follow">
+<title>Aviso legal y privacidad</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/copisteria.css">
+<script src="assets/paletas.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js" integrity="sha384-ZaR6mWzmJtrRibZ1Vm7SoHFr8OXjyAuGAXalGDKqbxFT18oi/z+oZLIRFkpeNor1" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js" integrity="sha384-Ke0FJhH7LyRqDxZ0wt+/OXV38yfQVu7g9VPEEGjYmB4RVOY/ta04uecRhsMwT7V3" crossorigin="anonymous"></script>
+<script src="assets/firebase.js"></script>
+<script src="assets/marca.js"></script>
+</head>
+<body>
+
+<header class="cab">
+  <div class="wrap cab-in">
+    <div class="cab-marca">
+      <span class="shop-logo" data-logo>··</span>
+      <div class="cab-txt">
+        <div class="shop-name" data-nombre>Copistería</div>
+        <div class="shop-meta" data-direccion></div>
+      </div>
+    </div>
+    <a class="salir" href="index.html">← Volver a enviar un archivo</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap legal">
+    <span class="kt-eyebrow">Información legal</span>
+    <h1>Aviso legal, privacidad y condiciones</h1>
+    <p class="legal-intro">
+      Esta página explica quién presta el servicio, qué datos se recogen cuando envías
+      un archivo a imprimir, qué se hace con ellos y durante cuánto tiempo se guardan.
+    </p>
+
+    <nav class="legal-indice" aria-label="Secciones">
+      <a href="#titular">1. Titular</a>
+      <a href="#privacidad">2. Privacidad</a>
+      <a href="#archivos">3. Tus archivos</a>
+      <a href="#almacenamiento">4. Cookies</a>
+      <a href="#condiciones">5. Condiciones</a>
+    </nav>
+
+    <section id="titular">
+      <h2>1. Titular del servicio</h2>
+      <p>
+        En cumplimiento del artículo 10 de la Ley 34/2002, de servicios de la sociedad de
+        la información y de comercio electrónico (LSSI-CE), se informa de que este servicio
+        está prestado por:
+      </p>
+      <dl class="legal-datos">
+        <dt>Titular</dt><dd data-razon>— pendiente de completar —</dd>
+        <dt>NIF / CIF</dt><dd data-nif>— pendiente de completar —</dd>
+        <dt>Domicilio</dt><dd data-direccion-larga>— pendiente de completar —</dd>
+        <dt>Teléfono</dt><dd data-telefono>—</dd>
+        <dt>Correo</dt><dd data-email>— pendiente de completar —</dd>
+        <dt>Actividad</dt><dd>Servicios de reprografía, impresión y encuadernación.</dd>
+      </dl>
+    </section>
+
+    <section id="privacidad">
+      <h2>2. Política de privacidad</h2>
+
+      <h3>Quién trata tus datos</h3>
+      <p>
+        El responsable del tratamiento es el titular indicado en el apartado anterior.
+        Para cualquier cuestión sobre tus datos puedes escribir al correo de contacto.
+      </p>
+
+      <h3>Qué datos se recogen y para qué</h3>
+      <table class="legal-tabla">
+        <thead><tr><th>Dato</th><th>Para qué</th><th>Base jurídica</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>Nombre</td>
+            <td>Identificar tu pedido en el mostrador al recogerlo.</td>
+            <td>Ejecución del encargo (art. 6.1.b RGPD)</td>
+          </tr>
+          <tr>
+            <td>Teléfono</td>
+            <td>Avisarte de que el trabajo está listo o consultarte una duda.</td>
+            <td>Ejecución del encargo (art. 6.1.b RGPD)</td>
+          </tr>
+          <tr>
+            <td>Archivo a imprimir</td>
+            <td>Imprimirlo según las opciones que hayas elegido.</td>
+            <td>Ejecución del encargo (art. 6.1.b RGPD)</td>
+          </tr>
+          <tr>
+            <td>Opciones del pedido</td>
+            <td>Copias, color, caras, páginas y notas: definen el trabajo y su precio.</td>
+            <td>Ejecución del encargo (art. 6.1.b RGPD)</td>
+          </tr>
+        </tbody>
+      </table>
+      <p>
+        No se elabora ningún perfil, no se toman decisiones automatizadas con efectos
+        jurídicos y no se usan tus datos para enviarte publicidad.
+      </p>
+
+      <h3>Cuánto tiempo se conservan</h3>
+      <p>
+        Los archivos y los datos del pedido se conservan como máximo
+        <strong><span data-dias>30</span> días</strong> desde que el trabajo se entrega, y
+        se borran después. Las facturas y los justificantes que exija la normativa fiscal se
+        conservan el plazo legal que corresponda, con independencia de lo anterior.
+      </p>
+
+      <h3>Quién más puede verlos</h3>
+      <p>
+        El personal de la copistería, para atender tu pedido. Además, la infraestructura
+        técnica la presta <strong>Google</strong> (servicios Firebase y Google Cloud), que
+        actúa como encargado del tratamiento. Los datos se almacenan en la
+        <strong>Unión Europea</strong> (multirregión <code>eur3</code>), por lo que no se
+        produce transferencia internacional fuera del Espacio Económico Europeo.
+      </p>
+      <p>No se ceden datos a terceros salvo obligación legal.</p>
+
+      <h3>Tus derechos</h3>
+      <p>
+        Puedes solicitar el acceso a tus datos, su rectificación o su supresión, así como
+        la limitación u oposición al tratamiento y la portabilidad. Basta con escribir al
+        correo de contacto indicando qué pides; puede pedírsete que acredites tu identidad.
+      </p>
+      <p>
+        Si consideras que tus datos no se han tratado correctamente, puedes reclamar ante la
+        <a href="https://www.aepd.es" target="_blank" rel="noopener">Agencia Española de
+        Protección de Datos</a>.
+      </p>
+    </section>
+
+    <section id="archivos">
+      <h2>3. Qué pasa con los archivos que envías</h2>
+      <ul class="legal-lista">
+        <li>Se suben cifrados en tránsito (HTTPS) y se guardan en el almacenamiento del proveedor técnico.</li>
+        <li>Solo son accesibles para el personal de la copistería, que debe identificarse con una cuenta propia.</li>
+        <li>No se abren para nada que no sea atender tu encargo.</li>
+        <li>Se borran al cumplirse el plazo de conservación, junto con los datos del pedido.</li>
+        <li>Si quieres que se borre antes, pídelo por teléfono o por correo.</li>
+      </ul>
+      <p class="legal-aviso">
+        Envía solo archivos sobre los que tengas derecho a hacer copias. La copistería no
+        revisa el contenido y no responde del uso que hagas de material protegido por
+        derechos de autor.
+      </p>
+    </section>
+
+    <section id="almacenamiento">
+      <h2>4. Cookies y almacenamiento en tu navegador</h2>
+      <p>
+        Esta web <strong>no usa cookies de análisis, de publicidad ni de terceros</strong>, y
+        por tanto no muestra ningún banner de consentimiento.
+      </p>
+      <p>
+        Sí guarda un par de valores en el almacenamiento local de tu navegador
+        (<code>localStorage</code>) para recordar la apariencia elegida por la copistería.
+        Son datos técnicos, no identifican a nadie y no salen de tu dispositivo. Puedes
+        borrarlos vaciando los datos del sitio desde tu navegador.
+      </p>
+    </section>
+
+    <section id="condiciones">
+      <h2>5. Condiciones del servicio</h2>
+      <ul class="legal-lista">
+        <li>Enviar un archivo es una solicitud de trabajo; el encargo se confirma en la copistería.</li>
+        <li>El precio final se calcula sobre las páginas realmente impresas y se comunica al recoger.</li>
+        <li>La copistería puede rechazar un encargo cuyo contenido sea ilícito o cuyo archivo esté dañado.</li>
+        <li>El trabajo se entrega en el establecimiento; no hay envío a domicilio.</li>
+        <li>Este servicio es una herramienta de encargo: no es una tienda en línea y no se cobra por la web.</li>
+      </ul>
+    </section>
+
+    <p class="legal-pie">
+      Última actualización: <span data-fecha></span>.
+      Para cualquier duda sobre este texto, escribe al correo de contacto indicado arriba.
+    </p>
+  </div>
+</main>
+
+<footer class="pie-legal">
+  <div class="wrap">
+    <a href="index.html">Enviar un archivo</a>
+    <span data-copyright></span>
+  </div>
+</footer>
+
+<script>
+/* Los datos del titular salen de la ficha de la tienda, así que cambiarlos en
+   el panel actualiza el aviso legal sin tocar este archivo. */
+(function () {
+  const pon = (sel, texto) => {
+    document.querySelectorAll(sel).forEach((e) => { if (texto) e.textContent = texto; });
+  };
+  window.CopiMarca.subscribe(function (m) {
+    document.title = 'Aviso legal — ' + m.nombre;
+    pon('[data-nombre]', m.nombre);
+    pon('[data-direccion]', m.direccion);
+    pon('[data-direccion-larga]', m.direccion);
+    pon('[data-telefono]', m.telefono);
+    pon('[data-razon]', m.razonSocial || m.nombre);
+    pon('[data-nif]', m.nif);
+    pon('[data-email]', m.emailLegal);
+    pon('[data-dias]', String(m.conservacionDias || 30));
+    pon('[data-copyright]', '© ' + new Date().getFullYear() + ' ' + (m.razonSocial || m.nombre));
+
+    const logo = document.querySelector('[data-logo]');
+    if (m.logoUrl && logo && logo.tagName === 'SPAN') {
+      const img = document.createElement('img');
+      img.className = 'shop-logo shop-logo--img';
+      img.src = m.logoUrl;
+      img.alt = '';
+      logo.replaceWith(img);
+    } else if (logo) {
+      logo.textContent = window.CopiMarca.iniciales(m.nombre);
+    }
+    window.CopiPaletas.aplicar(m.paleta);
+    window.CopiPaletas.aplicarEstilo(m.estilo);
+  });
+
+  document.querySelector('[data-fecha]').textContent =
+    new Date(document.lastModified).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+})();
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+/* KrypTon — Webfonts (v2)
+   Inter (text) + JetBrains Mono (labels, section numbers, developer-first accents),
+   from Google Fonts CDN. No binaries were provided — drop licensed .woff2 in
+   assets/fonts/ and replace this @import with local @font-face rules if you have them. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+/* Varelmo — brand wordmark face (applied only to the "KrypTon" logotype) */
+@font-face {
+  font-family: 'Varelmo';
+  src: url('../assets/fonts/Varelmo.ttf') format('truetype');
+  font-weight: 400 800;
+  font-style: normal;
+  font-display: swap;
+}

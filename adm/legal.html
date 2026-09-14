@@ -1,0 +1,217 @@
+<!-- @dsCard group="Copistería" viewport="1120x800" name="Trabajador — normas internas" subtitle="Obligaciones del personal con los datos y archivos de los clientes" -->
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Normas internas</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/copisteria.css">
+<script src="assets/paletas.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js" integrity="sha384-ZaR6mWzmJtrRibZ1Vm7SoHFr8OXjyAuGAXalGDKqbxFT18oi/z+oZLIRFkpeNor1" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js" integrity="sha384-Ke0FJhH7LyRqDxZ0wt+/OXV38yfQVu7g9VPEEGjYmB4RVOY/ta04uecRhsMwT7V3" crossorigin="anonymous"></script>
+<script src="assets/firebase.js"></script>
+<script src="assets/marca.js"></script>
+</head>
+<body>
+
+<header class="cab">
+  <div class="wrap cab-in">
+    <div class="cab-marca">
+      <span class="shop-logo" data-logo>··</span>
+      <div class="cab-txt">
+        <div class="shop-name" data-nombre>Copistería</div>
+        <div class="shop-meta">Documento de uso interno</div>
+      </div>
+    </div>
+    <a class="salir" href="index.html">← Volver al panel</a>
+  </div>
+</header>
+
+<main>
+  <div class="wrap legal">
+    <span class="kt-eyebrow">Uso interno</span>
+    <h1>Normas de manejo de datos y archivos</h1>
+    <p class="legal-intro">
+      Quien entra al panel ve nombres, teléfonos y documentos de personas reales. Este
+      documento recoge qué se puede hacer con ellos y qué no. Va dirigido al personal de
+      <span data-razon>la copistería</span>, no a los clientes.
+    </p>
+
+    <nav class="legal-indice" aria-label="Secciones">
+      <a href="#alcance">1. Alcance</a>
+      <a href="#datos">2. Qué se maneja</a>
+      <a href="#reglas">3. Reglas de uso</a>
+      <a href="#cuentas">4. Cuentas</a>
+      <a href="#plazos">5. Plazos</a>
+      <a href="#derechos">6. Peticiones</a>
+      <a href="#brechas">7. Incidentes</a>
+      <a href="#proveedor">8. Proveedor</a>
+    </nav>
+
+    <section id="alcance">
+      <h2>1. A quién obliga</h2>
+      <p>
+        A cualquier persona con acceso al panel del trabajador, sea plantilla fija, personal
+        temporal o en prácticas. El acceso se concede para atender pedidos y para nada más.
+      </p>
+      <p>
+        El responsable del tratamiento es <strong><span data-razon-fuerte>el titular del
+        negocio</span></strong> (NIF <span data-nif>—</span>). Las dudas se resuelven con
+        él, no por cuenta propia.
+      </p>
+    </section>
+
+    <section id="datos">
+      <h2>2. Qué datos se manejan</h2>
+      <table class="legal-tabla">
+        <thead><tr><th>Dato</th><th>Dónde está</th><th>Sensibilidad</th></tr></thead>
+        <tbody>
+          <tr><td>Nombre y teléfono del cliente</td><td>Base de datos del panel</td><td>Datos personales</td></tr>
+          <tr><td>Archivo a imprimir</td><td>Almacenamiento del proveedor</td><td>Puede contener cualquier cosa</td></tr>
+          <tr><td>Opciones y notas del pedido</td><td>Base de datos del panel</td><td>Datos personales</td></tr>
+        </tbody>
+      </table>
+      <p class="legal-aviso">
+        Los archivos son lo delicado. Una copistería recibe contratos, informes médicos,
+        expedientes, currículos y documentación judicial. Trátalos como si fueran tuyos y
+        estuvieran en manos de otro.
+      </p>
+    </section>
+
+    <section id="reglas">
+      <h2>3. Reglas de uso</h2>
+      <h3>Se puede</h3>
+      <ul class="legal-lista">
+        <li>Abrir un archivo para previsualizarlo y comprobar que va a salir bien.</li>
+        <li>Descargarlo al equipo de la copistería cuando haga falta para imprimirlo.</li>
+        <li>Llamar al cliente al teléfono del pedido para resolver una duda del trabajo.</li>
+        <li>Cancelar o borrar pedidos ya atendidos.</li>
+      </ul>
+      <h3>No se puede</h3>
+      <ul class="legal-lista legal-no">
+        <li>Leer un documento por curiosidad, ni comentar su contenido con nadie.</li>
+        <li>Copiar archivos a un pendrive, a un correo personal, al móvil o a la nube propia.</li>
+        <li>Fotografiar la pantalla del panel o un documento.</li>
+        <li>Usar el teléfono de un cliente para nada que no sea su pedido.</li>
+        <li>Dejar la sesión abierta en un equipo que quede sin vigilancia.</li>
+        <li>Compartir la cuenta con otra persona, ni siquiera con un compañero.</li>
+      </ul>
+      <p>
+        El deber de confidencialidad <strong>sigue vigente después de dejar el puesto</strong>.
+      </p>
+    </section>
+
+    <section id="cuentas">
+      <h2>4. Cuentas de acceso</h2>
+      <ul class="legal-lista">
+        <li>Cada persona tiene su propia cuenta. No hay cuenta compartida de la tienda.</li>
+        <li>Las da de alta el responsable; en el panel no existe registro por eso mismo.</li>
+        <li>La contraseña no se apunta en un papel junto al mostrador ni se manda por WhatsApp.</li>
+        <li>Al terminar el turno, o al dejar el puesto, se pulsa <strong>Salir</strong>.</li>
+        <li>Cuando alguien deja de trabajar aquí, su cuenta se borra el mismo día.</li>
+      </ul>
+    </section>
+
+    <section id="plazos">
+      <h2>5. Plazos de conservación</h2>
+      <p>
+        Al cliente se le anuncia que sus archivos se guardan como máximo
+        <strong><span data-dias>30</span> días</strong>. Ese plazo hay que cumplirlo: no basta
+        con haberlo escrito.
+      </p>
+      <ul class="legal-lista">
+        <li>Marca los pedidos como <strong>Listos</strong> al entregarlos.</li>
+        <li>Vacía periódicamente con el botón <strong>«Vaciar listos y cancelados»</strong>, que borra el registro y el archivo.</li>
+        <li>Guardar un archivo «por si acaso» pasado el plazo incumple lo que se le prometió al cliente.</li>
+      </ul>
+    </section>
+
+    <section id="derechos">
+      <h2>6. Si un cliente pregunta por sus datos</h2>
+      <p>
+        Puede pedir ver, corregir o borrar lo suyo. No se resuelve en el mostrador sobre la
+        marcha: se toma nota, se pasa al responsable y se atiende dentro de un mes.
+      </p>
+      <ul class="legal-lista">
+        <li>Si pide el borrado inmediato de su archivo y el pedido ya está entregado, se puede borrar y confirmar.</li>
+        <li>Nunca se dan datos de un pedido a quien no lo hizo, aunque diga ser familiar.</li>
+        <li>Ante la duda, no se entrega nada y se consulta.</li>
+      </ul>
+    </section>
+
+    <section id="brechas">
+      <h2>7. Si algo sale mal</h2>
+      <p>
+        Un archivo entregado a quien no era, un equipo robado con la sesión abierta, una
+        contraseña filtrada o un borrado accidental son <strong>incidentes de seguridad</strong>.
+      </p>
+      <ul class="legal-lista">
+        <li>Se avisa al responsable <strong>el mismo día</strong>, sin esperar a ver si tiene consecuencias.</li>
+        <li>No se intenta tapar ni arreglar por cuenta propia.</li>
+        <li>El responsable valora si hay que notificarlo a la Agencia Española de Protección de Datos en el plazo de <strong>72 horas</strong> (art. 33 RGPD).</li>
+      </ul>
+    </section>
+
+    <section id="proveedor">
+      <h2>8. Proveedor técnico</h2>
+      <p>
+        La base de datos, el almacenamiento de archivos y el acceso con contraseña los presta
+        <strong>Google</strong> (Firebase y Google Cloud), como encargado del tratamiento. Los
+        datos se guardan en la <strong>Unión Europea</strong> (multirregión <code>eur3</code>).
+      </p>
+      <p>
+        El acceso está limitado por reglas de seguridad: el cliente puede crear un pedido pero
+        no leer los de nadie, y leer, modificar o borrar exige haber iniciado sesión. No las
+        cambies sin hablarlo con quien lleva la parte técnica.
+      </p>
+    </section>
+
+    <p class="legal-pie">
+      Última actualización: <span data-fecha></span>. Documento interno: no se publica ni se
+      entrega a clientes.
+    </p>
+  </div>
+</main>
+
+<footer class="pie-legal">
+  <div class="wrap">
+    <a href="index.html">Volver al panel</a>
+    <a href="/nube/legal.html">Aviso legal del cliente</a>
+  </div>
+</footer>
+
+<script>
+(function () {
+  const pon = (sel, texto) => {
+    document.querySelectorAll(sel).forEach((e) => { if (texto) e.textContent = texto; });
+  };
+  window.CopiMarca.subscribe(function (m) {
+    document.title = 'Normas internas — ' + m.nombre;
+    pon('[data-nombre]', m.nombre);
+    pon('[data-razon]', m.razonSocial || m.nombre);
+    pon('[data-razon-fuerte]', m.razonSocial || m.nombre);
+    pon('[data-nif]', m.nif);
+    pon('[data-dias]', String(m.conservacionDias || 30));
+
+    const logo = document.querySelector('[data-logo]');
+    if (m.logoUrl && logo && logo.tagName === 'SPAN') {
+      const img = document.createElement('img');
+      img.className = 'shop-logo shop-logo--img';
+      img.src = m.logoUrl;
+      img.alt = '';
+      logo.replaceWith(img);
+    } else if (logo) {
+      logo.textContent = window.CopiMarca.iniciales(m.nombre);
+    }
+    window.CopiPaletas.aplicar(m.paleta);
+    window.CopiPaletas.aplicarEstilo(m.estilo);
+  });
+
+  document.querySelector('[data-fecha]').textContent =
+    new Date(document.lastModified).toLocaleDateString('es-ES', { year: 'numeric', month: 'long', day: 'numeric' });
+})();
+</script>
+</body>
+</html>

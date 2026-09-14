@@ -1,0 +1,22 @@
+/* KrypTon — Shadow, border, motion tokens (v2: flat, hairline-driven) */
+:root {
+  /* Shadows — almost none. Depth comes from bg steps + hairlines. */
+  --kt-shadow-sm: 0 1px 0 rgba(255,255,255,0.02);
+  --kt-shadow-md: 0 1px 2px rgba(0,0,0,0.4);
+  --kt-shadow-lg: 0 24px 60px -32px rgba(0,0,0,0.8);
+  --kt-glow-violet: 0 0 0 1px rgba(108,77,255,0.4);
+  --kt-glow-turquoise: 0 0 0 1px rgba(0,194,168,0.4);
+
+  /* Borders */
+  --kt-border: 1px solid var(--kt-line);
+  --kt-border-soft: 1px solid var(--kt-line-soft);
+
+  /* Motion — discreet */
+  --kt-ease: cubic-bezier(0.22, 0.61, 0.36, 1); /* @kind other */
+  --kt-dur-fast: 130ms; /* @kind other */
+  --kt-dur: 200ms; /* @kind other */
+  --kt-dur-slow: 560ms; /* @kind other */
+
+  /* Focus ring */
+  --kt-focus-ring: 0 0 0 3px rgba(167,139,255,0.5); /* @kind shadow */
+}

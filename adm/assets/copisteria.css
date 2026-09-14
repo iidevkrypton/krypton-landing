@@ -1,0 +1,307 @@
+/* Valores de fábrica de los tokens propios del kit. paletas.js los pisa en
+   :root al elegir otra paleta; aquí quedan como respaldo por si ese script no
+   llega a cargar. */
+:root {
+  --copi-cabecera: rgba(9,9,11,0.72);
+  --copi-sombra: rgba(0,0,0,0.45);
+  --copi-fila-alt: rgba(255,255,255,0.014);
+  --copi-fila-hover: rgba(108,77,255,0.07);
+  --copi-danger: #FF8A8A;
+  --copi-danger-bg: rgba(255,138,138,0.10);
+  --copi-danger-line: rgba(255,138,138,0.45);
+  --copi-pend: #B7A3FF;
+  --copi-pend-line: rgba(108,77,255,0.45);
+  --copi-print: #F0BABE;
+  --copi-print-line: #F0BABE;
+  --copi-listo: #5FE3D2;
+  --copi-listo-line: rgba(0,194,168,0.45);
+}
+
+/* Copistería — estilos de página (demo). Hereda los tokens de KrypTon. */
+
+.wrap { width: 100%; max-width: 720px; margin: 0 auto; padding: 0 24px; }
+.wrap-wide { width: 100%; max-width: 1120px; margin: 0 auto; padding: 0 24px; }
+
+.shop { display: flex; align-items: center; gap: 14px; }
+.shop-logo { width: 46px; height: 46px; border-radius: var(--kt-radius-md); background: var(--kt-gradient); color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; letter-spacing: -0.02em; flex: none; }
+.shop-name { font-size: 1.125rem; font-weight: 600; letter-spacing: -0.02em; }
+.shop-meta { font-size: var(--kt-fs-small); color: var(--kt-text-muted); }
+
+/* Zona de arrastre */
+.drop { border: 1.5px dashed var(--kt-line); border-radius: var(--kt-radius-lg); background: var(--kt-bg-raise); padding: 44px 28px; text-align: center; transition: border-color var(--kt-dur) var(--kt-ease), background var(--kt-dur) var(--kt-ease); cursor: pointer; }
+.drop:hover { border-color: var(--kt-text-muted); }
+.drop.over { border-color: var(--kt-violet); background: var(--copi-fila-hover); }
+.drop-ico { width: 52px; height: 52px; margin: 0 auto 16px; border-radius: var(--kt-radius-md); border: 1px solid var(--copi-pend-line); color: var(--kt-violet); display: flex; align-items: center; justify-content: center; }
+.drop h3 { font-size: 1.0625rem; font-weight: 600; }
+.drop p { color: var(--kt-text-muted); font-size: var(--kt-fs-small); margin-top: 6px; }
+
+/* Fila de archivo */
+.row { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid var(--kt-line-soft); }
+.row:first-child { border-top: 0; }
+.chip { width: 40px; height: 40px; flex: none; border-radius: var(--kt-radius-sm); background: var(--kt-surface-2); border: 1px solid var(--kt-line); color: var(--kt-text-muted); display: inline-flex; align-items: center; justify-content: center; font-family: var(--kt-mono); font-size: 10px; letter-spacing: 0.06em; }
+.row .nm { font-weight: 500; font-size: 0.9375rem; word-break: break-all; }
+.row .mt { color: var(--kt-text-muted); font-size: var(--kt-fs-small); font-family: var(--kt-mono); }
+
+/* Botón icono */
+.ibtn { width: 34px; height: 34px; display: inline-flex; align-items: center; justify-content: center; border-radius: var(--kt-radius-sm); border: 1px solid var(--kt-line); background: transparent; color: var(--kt-text-muted); cursor: pointer; transition: color var(--kt-dur) var(--kt-ease), border-color var(--kt-dur) var(--kt-ease), background var(--kt-dur) var(--kt-ease); }
+.ibtn:hover { color: var(--kt-text); border-color: var(--kt-text-muted); }
+.ibtn.danger:hover { color: var(--copi-danger); border-color: var(--copi-danger-line); }
+.ibtn.go:hover { color: var(--kt-violet); border-color: var(--copi-pend-line); }
+
+.pill { display: inline-flex; align-items: center; gap: 6px; padding: 4px 10px; border-radius: var(--kt-radius-sm); border: 1px solid; font-family: var(--kt-mono); font-size: 0.625rem; letter-spacing: 0.1em; text-transform: uppercase; }
+.live { display: inline-flex; align-items: center; gap: 8px; font-family: var(--kt-mono); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--kt-text-muted); }
+.live i { width: 7px; height: 7px; border-radius: 50%; background: var(--kt-turquoise); box-shadow: 0 0 0 4px var(--copi-listo-line); }
+
+.empty { padding: 48px 20px; text-align: center; color: var(--kt-text-muted); }
+.jobs { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 18px; }
+/* Enlace de respaldo dentro del aviso: aparece cuando el panel no ha podido
+   traerse el archivo y deja abrirlo directamente desde Firebase. */
+.aviso-link { display: inline-block; margin-left: 10px; color: var(--kt-primary, var(--copi-pend)); font-weight: 600; text-decoration: underline; text-underline-offset: 2px; }
+.aviso-link:hover { opacity: .85; }
+
+/* Estado de la conexión con Firestore en el panel. */
+.conexion-mal { flex: none; margin-bottom: 12px; padding: 10px 14px; border-radius: var(--kt-radius-md); border: 1px solid var(--copi-print); background: var(--copi-danger-bg); color: var(--copi-print); font-size: var(--kt-fs-small); }
+.conexion-espera { flex: none; margin-bottom: 12px; color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+.live.off { color: var(--kt-text-muted); border-color: var(--kt-line); }
+.live.off i { background: var(--kt-text-muted); animation: none; }
+
+/* Pantalla de acceso del trabajador. */
+.acceso { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 32px; }
+.acceso-marca { display: flex; }
+.acceso-fallo { margin: 0; padding: 10px 14px; border-radius: var(--kt-radius-md); border: 1px solid var(--copi-print); background: var(--copi-danger-bg); color: var(--copi-print); font-size: var(--kt-fs-small); }
+.acceso-pie { margin-top: 18px; color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+.acceso-volver { display: inline-block; margin-top: 10px; color: var(--kt-text-lavender); font-size: var(--kt-fs-small); }
+.sesion { color: var(--kt-text-muted); font-size: var(--kt-fs-small); max-width: 190px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.salir { background: none; border: 1px solid var(--kt-line); color: var(--kt-text); border-radius: var(--kt-radius-md); padding: 6px 12px; font-family: var(--kt-font); font-size: var(--kt-fs-small); cursor: pointer; }
+.salir:hover { border-color: var(--kt-violet); color: var(--kt-text-lavender); }
+
+/* Logo subido: ocupa el mismo hueco que el recuadro de iniciales. */
+.shop-logo--img { object-fit: cover; padding: 0; background: var(--kt-bg-raise); }
+
+/* Ficha de la tienda, en el panel. */
+.modal-fondo { position: fixed; inset: 0; z-index: 60; background: var(--copi-cabecera); backdrop-filter: blur(6px); display: flex; align-items: center; justify-content: center; padding: 24px; overflow: auto; }
+/* El modal no puede pasar de la pantalla: con las dos rejillas de apariencia
+   se iba a 1230px y el botón Guardar quedaba fuera. Cabecera y pie quietos,
+   solo rueda el cuerpo. */
+.modal { display: flex; flex-direction: column; max-height: calc(100vh - 48px); width: 100%; max-width: 560px; background: var(--kt-surface-2); border: 1px solid var(--kt-line); border-radius: var(--kt-radius-xl); padding: 26px; box-shadow: 0 24px 60px var(--copi-sombra); }
+.modal-cab { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.modal-nota { margin: 6px 0 0; color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+/* El logo y sus acciones van agrupados en un bloque con marco: si no, el
+   recuadro pequeño flota suelto junto a campos que le triplican la altura. */
+.logo-fila { display: flex; align-items: center; gap: 18px; padding: 16px; border: 1px solid var(--kt-line); border-radius: var(--kt-radius-lg); background: var(--kt-bg-raise); }
+/* Tamaño de vista previa, no de cabecera. Se acota a .logo-fila para no
+   agrandar el logo de las cabeceras, que comparte clase. */
+.logo-fila .shop-logo { width: 76px; height: 76px; border-radius: var(--kt-radius-lg); font-size: 30px; }
+.logo-acc { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.logo-pista { color: var(--kt-text-muted); font-size: 0.8125rem; line-height: 1.45; }
+
+/* Dos datos cortos por fila: teléfono y horario no necesitan 500 px cada uno,
+   y apilados alargaban el modal sin motivo. */
+.modal-par { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+@media (max-width: 520px) { .modal-par { grid-template-columns: 1fr; } }
+.check { display: flex; align-items: flex-start; gap: 10px; color: var(--kt-text-muted); font-size: var(--kt-fs-small); cursor: pointer; }
+.check input { margin-top: 2px; accent-color: var(--kt-violet); width: 16px; height: 16px; flex: none; }
+
+/* Selector de paleta. Cada opción enseña sus tres colores clave: el nombre
+   solo no dice nada, y probarlas una a una para verlas es un fastidio. */
+.paleta-rejilla { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+@media (max-width: 520px) { .paleta-rejilla { grid-template-columns: 1fr; } }
+.paleta-op { display: flex; flex-direction: column; gap: 8px; text-align: left; padding: 14px; border-radius: var(--kt-radius-lg); border: 1px solid var(--kt-line); background: var(--kt-bg-raise); color: var(--kt-text); font-family: var(--kt-font); cursor: pointer; transition: border-color var(--kt-dur) var(--kt-ease), background var(--kt-dur) var(--kt-ease); }
+.paleta-op:hover { border-color: var(--kt-violet); background: var(--copi-fila-hover); }
+.paleta-op.on { border-color: var(--kt-violet); box-shadow: 0 0 0 1px var(--kt-violet) inset; }
+.paleta-muestras { display: flex; gap: 6px; }
+.paleta-muestras i { width: 22px; height: 22px; border-radius: 7px; border: 1px solid var(--kt-line); }
+.paleta-nombre { font-weight: 600; font-size: 0.9375rem; }
+.paleta-pista { color: var(--kt-text-muted); font-size: 0.8125rem; line-height: 1.4; }
+
+/* ─── Eje de estilo ───────────────────────────────────────────────────────
+   Lo que no cabe en una variable de color o de radio. Se activa por el
+   atributo data-copi-estilo que paletas.js pone en el <html>. La base de la
+   página no cambia: solo su acabado. */
+
+/* Grosor de filete y relieve, comunes a todos los estilos. */
+.kt-card, .modal, .sheet-wrap, .paleta-op, .logo-fila, .drop {
+  border-width: var(--copi-borde, 1px);
+  box-shadow: var(--copi-elevacion, none);
+}
+.kt-btn, .salir, .ibtn, .tab { border-radius: var(--copi-boton-radio, var(--kt-radius-md)); }
+
+/* Minimalista — fuera marcos y rellenos; manda el espacio en blanco. */
+[data-copi-estilo="minimalista"] .kt-card,
+[data-copi-estilo="minimalista"] .sheet-wrap,
+[data-copi-estilo="minimalista"] .drop { border-color: transparent; background: transparent; }
+[data-copi-estilo="minimalista"] .drop { border: 1px dashed var(--kt-line); }
+[data-copi-estilo="minimalista"] .sheet tbody tr:nth-child(even) td { background: transparent; }
+[data-copi-estilo="minimalista"] .sheet td,
+[data-copi-estilo="minimalista"] .sheet th { border-bottom: 1px solid var(--kt-line-soft); }
+[data-copi-estilo="minimalista"] .ibtn { border-color: transparent; }
+[data-copi-estilo="minimalista"] .ibtn:hover { border-color: var(--kt-line); }
+[data-copi-estilo="minimalista"] .panel-head { margin-bottom: 10px; }
+
+/* Cyber — rectas, filete grueso y versalitas en cabeceras y píldoras. */
+[data-copi-estilo="cyber"] .sheet th,
+[data-copi-estilo="cyber"] .kt-eyebrow,
+[data-copi-estilo="cyber"] .tab,
+[data-copi-estilo="cyber"] .shop-meta { text-transform: uppercase; letter-spacing: 0.1em; font-size: 0.6875rem; }
+[data-copi-estilo="cyber"] .pill { border-width: 2px; text-transform: uppercase; letter-spacing: 0.08em; }
+[data-copi-estilo="cyber"] .sheet td { border-bottom: 2px solid var(--kt-line-soft); }
+[data-copi-estilo="cyber"] .kt-btn,
+[data-copi-estilo="cyber"] .salir { border-width: 2px; text-transform: uppercase; letter-spacing: 0.06em; font-weight: 600; }
+[data-copi-estilo="cyber"] .shop-logo { border: 2px solid var(--kt-text); }
+[data-copi-estilo="cyber"] .tab.on { box-shadow: 3px 3px 0 var(--copi-pend-line); }
+
+/* Suave — todo mullido; las filas se separan en vez de compartir filete. */
+[data-copi-estilo="suave"] .sheet td { border-bottom: 0; }
+[data-copi-estilo="suave"] .sheet tbody tr td:first-child { border-radius: 14px 0 0 14px; }
+[data-copi-estilo="suave"] .sheet tbody tr td:last-child { border-radius: 0 14px 14px 0; }
+[data-copi-estilo="suave"] .sheet tbody tr:nth-child(even) td { background: var(--copi-fila-alt); }
+[data-copi-estilo="suave"] .pill { border-radius: 999px; }
+[data-copi-estilo="suave"] .shop-logo { border-radius: 50%; }
+
+/* Simple — plano y compacto; se ve más pedido de un vistazo. */
+[data-copi-estilo="simple"] .sheet td { padding-top: 8px; padding-bottom: 8px; }
+[data-copi-estilo="simple"] .sheet tbody tr:nth-child(even) td { background: var(--copi-fila-alt); }
+[data-copi-estilo="simple"] .kt-card { background: var(--kt-surface); }
+[data-copi-estilo="simple"] .pill { border-radius: 4px; }
+
+/* El aire entre bloques lo marca el estilo, no cada página. */
+.panel-head { margin-bottom: var(--copi-aire, 18px); }
+
+/* Selector de formas: cada opción lleva una maqueta en miniatura con el
+   redondeo y el filete de ese estilo. El nombre solo no deja verlo. */
+.ap-titulo { font-size: 0.9375rem; font-weight: 600; margin: 6px 0 0; }
+.ap-nota { margin: 0; color: var(--kt-text-muted); font-size: 0.8125rem; }
+.estilo-demo { display: flex; flex-direction: column; gap: 5px; width: 100%; }
+.estilo-demo i { display: block; background: var(--kt-surface-2); border: 1px solid var(--kt-line); height: 9px; }
+.estilo-demo .ed-boton { width: 46px; height: 15px; background: var(--kt-violet); border-color: var(--kt-violet); }
+.estilo-demo--moderno i { border-radius: 5px; }
+.estilo-demo--moderno .ed-boton { border-radius: 7px; }
+.estilo-demo--minimalista i { border-radius: 2px; border-color: transparent; border-bottom-color: var(--kt-line); }
+.estilo-demo--minimalista .ed-boton { border-radius: 3px; border-color: var(--kt-violet); }
+.estilo-demo--suave i { border-radius: 999px; }
+.estilo-demo--suave .ed-boton { border-radius: 999px; }
+.estilo-demo--cyber i { border-radius: 0; border-width: 2px; }
+.estilo-demo--cyber .ed-boton { border-radius: 0; border-width: 2px; box-shadow: 3px 3px 0 var(--copi-pend-line); }
+.estilo-demo--simple i { border-radius: 3px; height: 8px; }
+.estilo-demo--simple .ed-boton { border-radius: 4px; height: 14px; }
+
+.modal-form { display: flex; flex-direction: column; min-height: 0; flex: 1; margin-top: 18px; }
+.modal-cuerpo { display: grid; gap: 14px; overflow-y: auto; min-height: 0; flex: 1; padding-right: 4px; }
+.modal-pie { display: flex; gap: 10px; justify-content: flex-end; padding-top: 16px; margin-top: 4px; border-top: 1px solid var(--kt-line-soft); }
+
+/* Visor previo: casi toda la pantalla, porque un A4 en pequeño no se lee. */
+.visor { display: flex; flex-direction: column; width: 100%; max-width: 940px; max-height: calc(100vh - 48px); background: var(--kt-surface-2); border: var(--copi-borde, 1px) solid var(--kt-line); border-radius: var(--kt-radius-xl); padding: 22px; box-shadow: 0 24px 60px var(--copi-sombra); }
+.visor-nombre { font-size: var(--kt-fs-h3); letter-spacing: -0.02em; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.visor-meta { margin: 4px 0 0; color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+.visor-nota { margin: 12px 0 0; padding: 10px 14px; border-radius: var(--kt-radius-md); background: var(--kt-bg-raise); border: 1px solid var(--kt-line); color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+/* min-height para que una imagen pequeña no deje el lienzo aplastado. */
+.visor-lienzo { flex: 1; min-height: 46vh; margin-top: 16px; border-radius: var(--kt-radius-lg); border: 1px solid var(--kt-line); background: var(--kt-bg-raise); overflow: auto; display: flex; align-items: center; justify-content: center; }
+.visor-lienzo iframe { width: 100%; height: 100%; min-height: 62vh; border: 0; display: block; background: #fff; }
+.visor-lienzo img { max-width: 100%; max-height: 62vh; display: block; object-fit: contain; }
+.visor-sin { padding: 56px 24px; text-align: center; color: var(--kt-text); }
+.visor-sin p { margin: 0; }
+.visor-pista { margin-top: 6px !important; color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+
+/* Paginación del TIFF multipágina. */
+.visor-pags { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 14px; }
+.visor-cuenta { color: var(--kt-text-muted); font-size: var(--kt-fs-small); font-family: var(--kt-mono); }
+.visor-pags .salir:disabled { opacity: .45; cursor: default; }
+
+/* Membrete del cliente: marca a la izquierda, contacto y estado a la derecha.
+   Compacta, así que vuelve a quedarse fija arriba sin robar pantalla. */
+.cab { position: sticky; top: 0; z-index: 20; border-bottom: 1px solid var(--kt-line); background: var(--copi-cabecera); backdrop-filter: blur(14px); }
+.cab-in { display: flex; align-items: center; justify-content: space-between; gap: 20px; padding: 15px 24px; flex-wrap: wrap; }
+.cab-marca { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.cab-txt { min-width: 0; }
+.cab .shop-name { font-size: 1.1875rem; line-height: 1.25; }
+.cab .shop-meta { line-height: 1.35; }
+.cab .shop-logo { width: 52px; height: 52px; font-size: 21px; }
+.cab-datos { display: flex; flex-direction: column; align-items: flex-end; gap: 6px; }
+.cab-contacto { display: flex; align-items: center; gap: 10px; }
+.cab-tel { font-family: var(--kt-mono); font-size: var(--kt-fs-small); color: var(--kt-text); }
+.cab-tel:hover { color: var(--kt-violet); }
+.cab-sep { width: 1px; height: 14px; background: var(--kt-line); flex: none; }
+
+/* El estado como punto y palabra, no como recuadro: menos ruido que una
+   insignia y se lee igual de rápido. */
+.estado { display: inline-flex; align-items: center; gap: 7px; font-size: var(--kt-fs-small); color: var(--kt-text-muted); }
+.estado i { width: 8px; height: 8px; border-radius: 50%; background: var(--kt-text-muted); flex: none; }
+.estado.on { color: var(--copi-listo); }
+.estado.on i { background: var(--copi-listo); box-shadow: 0 0 0 3px var(--copi-listo-line); }
+
+@media (max-width: 620px) {
+  .cab-in { gap: 12px; }
+  .cab-datos { align-items: flex-start; width: 100%; }
+}
+.shop-logo-btn { padding: 0; border: 0; background: none; cursor: zoom-in; border-radius: var(--kt-radius-md); line-height: 0; transition: transform var(--kt-dur) var(--kt-ease); }
+.shop-logo-btn:hover { transform: scale(1.04); }
+.shop-logo-btn:focus-visible { outline: 2px solid var(--kt-focus); outline-offset: 3px; }
+
+/* Logotipo a tamaño completo. */
+.logo-grande { display: flex; flex-direction: column; align-items: center; gap: 16px; padding: 22px; background: var(--kt-surface-2); border: 1px solid var(--kt-line); border-radius: var(--kt-radius-xl); box-shadow: 0 24px 60px var(--copi-sombra); max-width: min(90vw, 620px); }
+.logo-grande img { max-width: 100%; max-height: 70vh; display: block; border-radius: var(--kt-radius-lg); object-fit: contain; }
+
+/* Un pedido cancelado se aparta visualmente sin desaparecer. */
+.sheet tbody tr.cancelado td { opacity: .62; }
+.sheet tbody tr.cancelado:hover td { opacity: 1; }
+.sheet tbody tr.cancelado .fname { text-decoration: line-through; text-decoration-thickness: 1px; }
+.salir:disabled { opacity: .45; cursor: default; }
+
+/* Páginas y precio en la lista de archivos elegidos. */
+.pags { display: flex; align-items: center; gap: 8px; color: var(--kt-text-muted); font-size: var(--kt-fs-small); flex: none; }
+.pags-num { width: 68px; background: var(--kt-bg-raise); color: var(--kt-text); border: 1px solid var(--kt-line); border-radius: var(--kt-radius-md); padding: 7px 9px; font-family: var(--kt-font); font-size: 0.9375rem; text-align: right; }
+.pags-num:focus { outline: none; border-color: var(--kt-violet); }
+.presu-nota { margin: 12px 0 0; color: var(--kt-text-lavender); font-size: 0.8125rem; line-height: 1.45; }
+
+/* El precio destaca: es el dato que se canta en el mostrador. */
+.sheet td.precio { font-weight: 600; color: var(--kt-text); }
+
+/* Tabla de tarifas: tramo a la izquierda, un precio por color. */
+.tarifa-rejilla { display: grid; grid-template-columns: 1fr auto auto; gap: 10px 12px; align-items: center; }
+.tar-cab { color: var(--kt-text-muted); font-size: 0.8125rem; text-align: center; }
+.tar-tramo { color: var(--kt-text); font-size: var(--kt-fs-small); }
+.tar-euro { display: inline-flex; align-items: center; gap: 6px; }
+.tar-euro input { width: 84px; background: var(--kt-bg-raise); color: var(--kt-text); border: 1px solid var(--kt-line); border-radius: var(--kt-radius-md); padding: 8px 10px; font-family: var(--kt-mono); font-size: 0.9375rem; text-align: right; }
+.tar-euro input:focus { outline: none; border-color: var(--kt-violet); }
+.tar-euro > span { color: var(--kt-text-muted); font-size: var(--kt-fs-small); width: 12px; }
+.tar-suelto { display: flex; flex-direction: column; gap: 8px; color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+.tar-ejemplo { margin: 4px 0 0; padding: 12px 14px; border-radius: var(--kt-radius-md); background: var(--kt-bg-raise); border: 1px solid var(--kt-line); color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+.tar-ejemplo strong { color: var(--kt-text); font-family: var(--kt-mono); font-size: 1.0625rem; }
+
+.legal-enlaces { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.legal-enlaces .salir { text-decoration: none; }
+
+/* ─── Páginas legales ────────────────────────────────────────────────────
+   Texto largo: medida de lectura corta, jerarquía marcada y una tabla que
+   pueda desbordarse a lo ancho sin romper la página. */
+.legal { max-width: 760px; padding: clamp(32px,5vw,56px) 24px clamp(48px,6vw,72px); }
+.legal h1 { font-size: var(--kt-fs-h1); letter-spacing: -0.03em; margin: 10px 0 0; }
+.legal h2 { font-size: var(--kt-fs-h3); letter-spacing: -0.02em; margin: 40px 0 12px; padding-top: 20px; border-top: 1px solid var(--kt-line-soft); }
+.legal h3 { font-size: 1rem; margin: 22px 0 8px; }
+.legal p { margin: 0 0 12px; line-height: 1.65; color: var(--kt-text-muted); }
+.legal-intro { font-size: 1.0625rem; color: var(--kt-text) !important; margin-top: 14px !important; }
+.legal a { color: var(--kt-violet); text-decoration: underline; text-underline-offset: 2px; }
+
+.legal-indice { display: flex; flex-wrap: wrap; gap: 8px; margin: 22px 0 8px; }
+.legal-indice a { padding: 6px 12px; border: 1px solid var(--kt-line); border-radius: var(--copi-boton-radio, var(--kt-radius-md)); color: var(--kt-text-muted); font-size: var(--kt-fs-small); text-decoration: none; }
+.legal-indice a:hover { border-color: var(--kt-violet); color: var(--kt-text); }
+
+.legal-datos { display: grid; grid-template-columns: minmax(120px, 180px) 1fr; gap: 8px 18px; margin: 16px 0 0; }
+.legal-datos dt { color: var(--kt-text-muted); font-size: var(--kt-fs-small); }
+.legal-datos dd { margin: 0; color: var(--kt-text); }
+
+.legal-tabla { width: 100%; border-collapse: collapse; margin: 14px 0 16px; display: block; overflow-x: auto; }
+.legal-tabla th, .legal-tabla td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--kt-line-soft); font-size: var(--kt-fs-small); vertical-align: top; }
+.legal-tabla th { color: var(--kt-text-muted); font-weight: 600; white-space: nowrap; }
+.legal-tabla td { color: var(--kt-text); }
+
+.legal-lista { margin: 0 0 14px; padding-left: 20px; color: var(--kt-text-muted); }
+.legal-lista li { margin-bottom: 7px; line-height: 1.6; }
+.legal-no li::marker { color: var(--copi-danger); }
+.legal-aviso { padding: 12px 16px; border-radius: var(--kt-radius-md); border: 1px solid var(--kt-line); background: var(--kt-bg-raise); }
+.legal-pie { margin-top: 40px !important; padding-top: 18px; border-top: 1px solid var(--kt-line-soft); font-size: var(--kt-fs-small); }
+
+.pie-legal { border-top: 1px solid var(--kt-line-soft); }
+.pie-legal .wrap { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px; padding: 18px 24px; font-size: var(--kt-fs-small); color: var(--kt-text-muted); }
+.pie-legal a { color: var(--kt-text-muted); }
+.pie-legal a:hover { color: var(--kt-violet); }

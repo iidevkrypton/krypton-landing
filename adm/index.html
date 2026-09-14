@@ -1,0 +1,1084 @@
+<!-- @dsCard group="Copistería" viewport="1120x800" name="Trabajador — panel en vivo" subtitle="Archivos entrantes: imprimir, descargar o borrar" -->
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="robots" content="noindex, nofollow">
+<title>Panel</title>
+<link rel="stylesheet" href="assets/styles.css">
+<link rel="stylesheet" href="assets/copisteria.css">
+<!-- Antes que el resto: aplica la paleta guardada sin parpadeo. -->
+<script src="assets/paletas.js"></script>
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+<script src="assets/ds-bundle.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-app-compat.js" integrity="sha384-ZaR6mWzmJtrRibZ1Vm7SoHFr8OXjyAuGAXalGDKqbxFT18oi/z+oZLIRFkpeNor1" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-storage-compat.js" integrity="sha384-XgUhjZUY/4vSJ8bUS7DFmLGK73fbJgS+nlrQDEC5X3QBpGgO+597wN8Syegw3ONj" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore-compat.js" integrity="sha384-Ke0FJhH7LyRqDxZ0wt+/OXV38yfQVu7g9VPEEGjYmB4RVOY/ta04uecRhsMwT7V3" crossorigin="anonymous"></script>
+<script src="https://www.gstatic.com/firebasejs/10.14.1/firebase-auth-compat.js" integrity="sha384-I1LYojsZ5RM1cOda44Z2h42Qa6YfsQ1XkXxREnhp4ueYBR/4d1pG1K+NZM537Vsj" crossorigin="anonymous"></script>
+<script src="assets/firebase.js"></script>
+<script src="assets/store.js"></script>
+<script src="assets/marca.js"></script>
+<script src="assets/tarifa.js"></script>
+<script src="https://unpkg.com/pako@2.1.0/dist/pako.min.js" integrity="sha384-rNlaE5fs9dGIjmxWDALQh/RBAaGRYT5ChrzHo6tRfgrZ36iRFAiquP5g41Jsv+0j" crossorigin="anonymous"></script>
+<!-- pako va antes: UTIF captura self.pako al iniciarse. -->
+<script src="https://unpkg.com/utif@3.1.0/UTIF.js" integrity="sha384-RyBmXHdfZ/Uon+ud+/AqSyWpUWnKYt2tkRG/P4gWoRUGDU+qIAV3tGBPNlYTBZEF" crossorigin="anonymous"></script>
+<script src="assets/tiff.js"></script>
+<style>
+  html, body { height: 100%; }
+  body { overflow: hidden; }
+  #root { height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
+  main { flex: 1; min-height: 0; display: flex; }
+  /* La hoja ocupa toda la altura libre bajo la cabecera */
+  .panel { display: flex; flex-direction: column; height: 100%; min-height: 0; padding-top: 22px; padding-bottom: 16px; }
+  .panel-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; flex: none; }
+
+  /* Pestañas */
+  .tabs { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tab { padding: 8px 14px; border-radius: var(--kt-radius-md); border: 1px solid transparent; background: transparent; color: var(--kt-text-muted); font-family: var(--kt-font); font-size: var(--kt-fs-small); font-weight: 500; cursor: pointer; }
+  .tab:hover { color: var(--kt-text); }
+  .tab.on { color: var(--kt-text); background: var(--kt-surface-2); border-color: var(--kt-line); }
+  .tab .n { font-family: var(--kt-mono); font-size: 0.6875rem; color: var(--kt-text-lavender); margin-left: 6px; }
+
+  /* Hoja estilo Excel */
+  .sheet-wrap { flex: 1; min-height: 0; border: 1px solid var(--kt-line); border-radius: var(--kt-radius-lg); background: var(--kt-bg-raise); overflow: auto; }
+  .sheet-empty { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; border: 1px solid var(--kt-line); border-radius: var(--kt-radius-lg); background: var(--kt-bg-raise); color: var(--kt-text-muted); }
+  table.sheet { width: 100%; min-width: 940px; border-collapse: separate; border-spacing: 0; font-size: var(--kt-fs-small); }
+  .sheet th, .sheet td { padding: 9px 12px; border-bottom: 1px solid var(--kt-line-soft); border-right: 1px solid var(--kt-line-soft); text-align: left; vertical-align: middle; white-space: nowrap; }
+  .sheet th:last-child, .sheet td:last-child { border-right: 0; }
+  .sheet tbody tr:last-child td { border-bottom: 0; }
+  .sheet thead th { position: sticky; top: 0; z-index: 2; background: var(--kt-surface-2); border-bottom: 1px solid var(--kt-line); font-family: var(--kt-mono); font-size: 0.625rem; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--kt-text-muted); user-select: none; }
+  .sheet thead th.sortable { cursor: pointer; }
+  .sheet thead th.sortable:hover { color: var(--kt-text); }
+  .sheet thead th .dir { color: var(--kt-text-lavender); margin-left: 4px; }
+  .sheet tbody tr:nth-child(even) td { background: var(--copi-fila-alt); }
+  .sheet tbody tr:hover td { background: var(--copi-fila-hover); }
+  .sheet tbody tr.nuevo td { box-shadow: inset 2px 0 0 var(--kt-violet); }
+
+  .gut { width: 42px; text-align: right; font-family: var(--kt-mono); font-size: 0.6875rem; color: var(--kt-text-muted); background: var(--kt-surface-2) !important; border-right: 1px solid var(--kt-line) !important; }
+  .c-file { white-space: normal; }
+  .fname { font-weight: 500; display: flex; align-items: center; gap: 8px; cursor: default; }
+  .fext { font-family: var(--kt-mono); font-size: 9px; letter-spacing: 0.06em; color: var(--kt-text-muted); border: 1px solid var(--kt-line); border-radius: 3px; padding: 1px 5px; flex: none; }
+  .fnota { color: var(--kt-text-muted); font-size: 0.75rem; margin-top: 3px; white-space: normal; }
+  .num { font-family: var(--kt-mono); text-align: right; }
+  .mono { font-family: var(--kt-mono); color: var(--kt-text-muted); }
+  .acts { display: flex; gap: 5px; justify-content: flex-end; }
+  .ibtn.sm { width: 28px; height: 28px; }
+  .ibtn.sm svg { width: 14px; height: 14px; }
+  .sheet td a { color: inherit; }
+
+  .aviso { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); z-index: 40; max-width: min(560px, calc(100vw - 48px)); padding: 12px 18px; border-radius: var(--kt-radius-md); border: 1px solid var(--kt-line); background: var(--kt-surface-2); color: var(--kt-text); font-size: var(--kt-fs-small); box-shadow: 0 12px 32px var(--copi-sombra); }
+
+  .sheet-foot { flex: none; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-top: 8px; font-family: var(--kt-mono); font-size: 0.6875rem; letter-spacing: 0.06em; color: var(--kt-text-muted); }
+</style>
+</head>
+<body>
+<div id="root"></div>
+<script type="text/babel" data-presets="react">
+(function () {
+const { Button, Card, Badge, Logo, Field } = window.KrypTonDesignSystem_6d2e6d;
+const { size, ext, hora } = window.CopiUtil;
+const Store = window.CopiStore;
+
+const Ic = {
+  print: (p) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M7 8V3h10v5"/><rect x="4" y="8" width="16" height="8" rx="2"/><path d="M7 16h10v5H7z"/></svg>,
+  eye: (p) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M2 12s3.6-6.5 10-6.5S22 12 22 12s-3.6 6.5-10 6.5S2 12 2 12z"/><circle cx="12" cy="12" r="2.6"/></svg>,
+  down: (p) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M12 4v12M7 11l5 5 5-5"/><path d="M4 20h16"/></svg>,
+  ban: (p) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><circle cx="12" cy="12" r="8.5"/><path d="M6 18L18 6"/></svg>,
+  trash: (p) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M4 7h16M9 7V5h6v2M6 7l1 13h10l1-13"/></svg>,
+  check: (p) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M20 6L9 17l-5-5"/></svg>,
+  undo: (p) => <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M9 14L4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-4"/></svg>,
+  arrow: (p) => <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" {...p}><path d="M5 12h14M13 6l6 6-6 6"/></svg>,
+};
+
+const DEMO = [
+  { id: 'x1', archivo: 'TFG_final_v3.pdf', bytes: 2411724, cliente: 'Laura Sanz', telefono: '611 98 76 54', copias: '2', color: 'Blanco y negro', caras: 'Doble cara', nota: 'Encuadernado con espiral negra, por favor.', estado: 'Pendiente', fecha: new Date(Date.now() - 4 * 60000).toISOString() },
+  { id: 'x2', archivo: 'cartel_fiestas.jpg', bytes: 845321, cliente: 'Miguel Torres', telefono: '622 33 44 55', copias: '25', color: 'Color', caras: 'Una cara', nota: '', estado: 'Imprimiendo', fecha: new Date(Date.now() - 22 * 60000).toISOString() },
+  { id: 'x3', archivo: 'contrato_alquiler.docx', bytes: 42110, cliente: 'Antonio García', telefono: '600 12 34 56', copias: '3', color: 'Blanco y negro', caras: 'Una cara', nota: '', estado: 'Listo', fecha: new Date(Date.now() - 95 * 60000).toISOString() },
+];
+
+// Nombre recortado a 10 caracteres; el completo queda en el title del elemento.
+const corto = (s) => { s = s || ''; return s.length > 10 ? s.slice(0, 10) + '...' : s; };
+
+// Lo que el navegador sabe pintar y, por tanto, imprimir sin ayuda externa.
+/* Lo que el navegador sabe pintar por su cuenta. El TIFF encaja en
+   ^image/ pero no lo pinta nadie salvo Safari: va por su propio camino
+   (tiff.js lo pasa a PNG), así que aquí se excluye a mano. */
+/* Detectar TIFF sin depender de que tiff.js haya cargado: si ese script
+   falla, la excepción tumbaba el árbol de React entero y la página se quedaba
+   congelada en el último fotograma, sin decir nada. */
+const esTiff = (t, nombre) =>
+  window.CopiTiff ? window.CopiTiff.esTiff(t, nombre)
+                  : (/^image\/tiff?$/i.test(t || '') || /\.tiff?$/i.test(nombre || ''));
+
+const imprimible = (t, nombre) =>
+  !esTiff(t, nombre) && /^application\/pdf$|^image\//.test(t || '');
+
+/* Manda el archivo al diálogo de impresión del sistema: se carga en un iframe
+   oculto y se llama a print() sobre él. Sin ventanas intermedias.
+   Se imprime desde un Blob propio, no desde la URL de Firebase: sobre un iframe
+   de otro origen el navegador no deja llamar a print(). */
+function imprimirBlob(blob, tipo) {
+  return new Promise((resolve, reject) => {
+    // Firebase puede devolver el PDF como octet-stream; sin el tipo correcto el
+    // iframe lo descarga en vez de pintarlo y no hay nada que imprimir.
+    const real = tipo || blob.type || '';
+    const datos = blob.type === real ? blob : new Blob([blob], { type: real });
+    const url = URL.createObjectURL(datos);
+    const marco = document.createElement('iframe');
+    let abierto = false;
+    const limpiar = () => { marco.remove(); URL.revokeObjectURL(url); };
+    const fallar = (m) => { if (!abierto) { limpiar(); reject(new Error(m)); } };
+
+    marco.setAttribute('aria-hidden', 'true');
+    // Fuera de la pantalla, pero con tamaño de folio: en un iframe de 1x1 —o con
+    // display:none / opacity:0— Chrome no llega a montar el visor de PDF y
+    // print() no abre nada.
+    marco.style.cssText = 'position:fixed;left:-10000px;top:0;width:794px;height:1123px;border:0';
+
+    marco.onload = () => {
+      clearTimeout(vigilante);
+      // El visor de PDF tarda algo más que el propio evento load en estar listo.
+      setTimeout(() => {
+        try {
+          marco.contentWindow.focus();
+          marco.contentWindow.print();
+          abierto = true;
+          resolve();
+          // El iframe debe seguir vivo mientras el diálogo esté abierto.
+          setTimeout(limpiar, 120000);
+        } catch (e) {
+          fallar('el navegador ha bloqueado print(): ' + (e.message || e));
+        }
+      }, 400);
+    };
+    marco.onerror = () => { clearTimeout(vigilante); fallar('el archivo no se pudo cargar en el visor'); };
+    // Si load no llega a dispararse, no dejamos al usuario mirando una pantalla muda.
+    const vigilante = setTimeout(() => fallar('el visor no ha llegado a cargar el archivo'), 15000);
+
+    if (/^image\//.test(real)) {
+      marco.srcdoc = '<!doctype html><style>@page{margin:12mm}html,body{margin:0}'
+        + 'img{max-width:100%;max-height:100vh;display:block;margin:0 auto}</style>'
+        + '<img src="' + url + '" alt="">';
+    } else {
+      marco.src = url;
+    }
+    document.body.appendChild(marco);
+  });
+}
+
+function descargarBlob(blob, nombre) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = nombre;
+  document.body.appendChild(a); a.click(); a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 10000);
+}
+
+/* Cancelado va en gris apagado a propósito: no es un error —para eso está el
+   rojo— sino un pedido que ya no sigue vivo. */
+const tone = (e) => e === 'Cancelado' ? { color: 'var(--kt-text-muted)', borderColor: 'var(--kt-line)' }
+  : e === 'Pendiente' ? { color: 'var(--copi-pend)', borderColor: 'var(--copi-pend-line)' }
+  : e === 'Imprimiendo' ? { color: 'var(--copi-print)', borderColor: 'var(--copi-print-line)' }
+  : { color: 'var(--copi-listo)', borderColor: 'var(--copi-listo-line)' };
+
+const COLS = [
+  { key: 'archivo', label: 'Archivo', sortable: true },
+  { key: 'bytes', label: 'Tamaño', sortable: true, num: true },
+  { key: 'cliente', label: 'Cliente', sortable: true },
+  { key: 'telefono', label: 'Teléfono' },
+  { key: 'paginas', label: 'Págs.', sortable: true, num: true },
+  { key: 'copias', label: 'Copias', sortable: true, num: true },
+  { key: 'precio', label: 'Precio', sortable: true, num: true },
+  { key: 'color', label: 'Color', sortable: true },
+  { key: 'caras', label: 'Caras', sortable: true },
+  { key: 'estado', label: 'Estado', sortable: true },
+  { key: 'fecha', label: 'Recibido', sortable: true, num: true },
+];
+
+function Fila({ j, n, onVista, onImprimir, onDescargar, onChange, onDelete }) {
+  /* El estado se mira en el propio pedido, no en la pestaña abierta: al añadir
+     Cancelado, un booleano `listo` ya no daba para distinguir los tres casos. */
+  const esListo = j.estado === 'Listo';
+  const esCancelado = j.estado === 'Cancelado';
+  return (
+    <tr className={j.estado === 'Pendiente' ? 'nuevo' : (esCancelado ? 'cancelado' : '')}>
+      <td className="gut">{n}</td>
+      <td className="c-file">
+        <div className="fname" title={j.archivo}><span className="fext">{ext(j.archivo)}</span>{corto(j.archivo)}</div>
+        {j.nota && <div className="fnota">↳ {j.nota}</div>}
+      </td>
+      <td className="num mono">{size(j.bytes)}</td>
+      <td>{j.cliente || <span className="mono">—</span>}</td>
+      <td className="mono">{j.telefono ? <a href={'tel:' + j.telefono.replace(/\s/g, '')}>{j.telefono}</a> : '—'}</td>
+      <td className="num mono">{j.paginas || '—'}</td>
+      <td className="num">{j.copias}</td>
+      <td className="num mono precio">{typeof j.precio === 'number' ? window.CopiTarifa.euros(j.precio) : '—'}</td>
+      <td>{j.color}</td>
+      <td>{j.caras}</td>
+      <td><span className="pill" style={tone(j.estado)}>{j.estado}</span></td>
+      <td className="num mono">{hora(j.fecha)}</td>
+      <td>
+        <div className="acts">
+          <button className="ibtn sm" title="Previsualizar" onClick={() => onVista(j)}>{Ic.eye()}</button>
+          {/* Un pedido cancelado no se imprime ni se marca listo: solo se mira,
+              se descarga, se reabre o se borra. */}
+          {!esCancelado && (
+            <button className="ibtn sm go" title={esListo ? 'Volver a imprimir' : 'Imprimir'} onClick={() => onImprimir(j)}>{Ic.print()}</button>
+          )}
+          <button className="ibtn sm" title="Descargar" onClick={() => onDescargar(j)}>{Ic.down()}</button>
+          {esCancelado
+            ? <button className="ibtn sm" title="Reabrir el pedido" onClick={() => onChange(j.id, { estado: 'Pendiente' })}>{Ic.undo()}</button>
+            : esListo
+              ? <button className="ibtn sm" title="Devolver a pendientes" onClick={() => onChange(j.id, { estado: 'Pendiente' })}>{Ic.undo()}</button>
+              : <button className="ibtn sm" title="Marcar listo" onClick={() => onChange(j.id, { estado: 'Listo' })}>{Ic.check()}</button>}
+          {!esCancelado && (
+            <button className="ibtn sm" title="Cancelar el pedido"
+                    onClick={() => onChange(j.id, { estado: 'Cancelado' })}>{Ic.ban()}</button>
+          )}
+          <button className="ibtn sm danger" title="Borrar" onClick={() => { if (confirm('¿Borrar «' + j.archivo + '» y su archivo en Firebase?')) onDelete(j); }}>{Ic.trash()}</button>
+        </div>
+      </td>
+    </tr>
+  );
+}
+
+/* Ficha de la tienda, editable desde el panel. Guarda al enviar y no a cada
+   tecla: así media edición no llega a la página del cliente. */
+/* Visor previo. Pinta desde un Blob propio, no desde la URL de Firebase: el
+   iframe de otro origen no dejaría imprimir después sin volver a descargar. */
+function Vista({ trabajo, onImprimir, onDescargar, onCerrar }) {
+  const { j, url, tipo, blob } = trabajo;
+  const tif = esTiff(tipo, j.archivo);
+  const esImagen = !tif && /^image\//.test(tipo);
+  const sePuedeVer = imprimible(tipo, j.archivo);
+
+  /* El TIFF se abre al entrar en el visor —leer los IFD es barato y ya da el
+     número de páginas—, pero cada página se descodifica solo cuando se mira.
+     Hacerlas todas de golpe bloqueaba el hilo principal decenas de segundos:
+     el navegador no llegaba a pintar el visor y parecía colgado. */
+  const [lector, setLector] = React.useState(null);
+  const [pag, setPag] = React.useState(0);
+  const [hoja, setHoja] = React.useState(null);
+  const [falloTiff, setFalloTiff] = React.useState('');
+
+  React.useEffect(() => {
+    if (!tif) return;
+    let vivo = true;
+    let abierto = null;
+    setLector(null); setHoja(null); setFalloTiff(''); setPag(0);
+    if (!window.CopiTiff) {
+      // Lanzar aquí tumbaría el árbol entero y dejaría la página congelada.
+      setFalloTiff('no se ha cargado tiff.js; recarga la página');
+      return;
+    }
+    window.CopiTiff.abrir(blob)
+      .then((r) => { abierto = r; if (vivo) setLector(r); else r.libera(); })
+      .catch((e) => { if (vivo) setFalloTiff(e.message || String(e)); });
+    return () => { vivo = false; if (abierto) abierto.libera(); };
+  }, [tif, blob]);
+
+  /* Solo la página visible. Al cambiar de página se descodifica la siguiente;
+     las ya hechas las guarda el lector. */
+  React.useEffect(() => {
+    if (!lector) return;
+    let vivo = true;
+    setHoja(null); setFalloTiff('');
+    lector.pagina(pag)
+      .then((h) => { if (vivo) setHoja(h); })
+      .catch((e) => { if (vivo) setFalloTiff(e.message || String(e)); });
+    return () => { vivo = false; };
+  }, [lector, pag]);
+
+  // Escape cierra: es lo que espera cualquiera con algo a pantalla completa.
+  React.useEffect(() => {
+    const tecla = (e) => { if (e.key === 'Escape') onCerrar(); };
+    window.addEventListener('keydown', tecla);
+    return () => window.removeEventListener('keydown', tecla);
+  }, [onCerrar]);
+
+  return (
+    <div className="modal-fondo" onClick={onCerrar}>
+      <div className="visor" role="dialog" aria-label={'Vista previa de ' + j.archivo} onClick={(e) => e.stopPropagation()}>
+        <div className="modal-cab">
+          <div style={{ minWidth: 0 }}>
+            <h2 className="visor-nombre" title={j.archivo}>{j.archivo}</h2>
+            <p className="visor-meta">
+              {[j.cliente, size(j.bytes), j.copias + (j.copias === '1' ? ' copia' : ' copias'), j.color, j.caras]
+                .filter(Boolean).join(' · ')}
+            </p>
+          </div>
+          <button className="ibtn sm" onClick={onCerrar} title="Cerrar" aria-label="Cerrar">✕</button>
+        </div>
+
+        {j.nota && <p className="visor-nota">↳ {j.nota}</p>}
+
+        {tif && lector && lector.total > 1 && (
+          <div className="visor-pags">
+            <button type="button" className="salir" onClick={() => setPag((n) => Math.max(0, n - 1))} disabled={pag === 0}>‹ Anterior</button>
+            <span className="visor-cuenta">Página {pag + 1} de {lector.total}</span>
+            <button type="button" className="salir" onClick={() => setPag((n) => Math.min(lector.total - 1, n + 1))} disabled={pag === lector.total - 1}>Siguiente ›</button>
+          </div>
+        )}
+
+        <div className="visor-lienzo">
+          {tif ? (
+            falloTiff ? (
+              <div className="visor-sin">
+                <p>No se pudo descodificar «{j.archivo}»: {falloTiff}.</p>
+                <p className="visor-pista">Descárgalo y ábrelo con un visor de imágenes.</p>
+              </div>
+            ) : !hoja ? (
+              <div className="visor-sin">
+                <p>{lector
+                     ? 'Descodificando la página ' + (pag + 1) + (lector.total > 1 ? ' de ' + lector.total : '') + '…'
+                     : 'Abriendo el TIFF…'}</p>
+                <p className="visor-pista">Un escaneo a 300 ppp tarda un momento.</p>
+              </div>
+            ) : (
+              <img src={hoja.url} alt={j.archivo + ' — página ' + (pag + 1)} />
+            )
+          ) : sePuedeVer ? (
+            esImagen
+              ? <img src={url} alt={j.archivo} />
+              : <iframe src={url} title={'Vista previa de ' + j.archivo} />
+          ) : (
+            <div className="visor-sin">
+              <p>El navegador no sabe enseñar un {ext(j.archivo)}.</p>
+              <p className="visor-pista">Descárgalo para verlo antes de mandarlo a la impresora.</p>
+            </div>
+          )}
+        </div>
+
+        <div className="modal-pie">
+          <button type="button" className="salir" onClick={() => onDescargar(j)}>Descargar</button>
+          <Button
+            disabled={tif && !hoja}
+            onClick={() => { const png = tif && hoja ? hoja.blob : null; onCerrar(); onImprimir(j, png); }}>
+            {tif && lector && lector.total > 1 ? 'Imprimir esta página' : 'Imprimir'}
+          </Button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function Ajustes({ marca, onCerrar }) {
+  const [f, setF] = React.useState({
+    nombre: marca.nombre, direccion: marca.direccion,
+    telefono: marca.telefono, horario: marca.horario, abierto: !!marca.abierto,
+    razonSocial: marca.razonSocial || '', nif: marca.nif || '',
+    emailLegal: marca.emailLegal || '',
+    conservacionDias: String(marca.conservacionDias || 30),
+  });
+  const [logo, setLogo] = React.useState({ url: marca.logoUrl, ruta: marca.logoRuta });
+  /* Las tarifas se editan como texto, no como <input type="number">. Dos
+     razones: el campo numérico colapsa 0,10 a 0,1 —que es el mismo número pero
+     no se lee como dinero— y no acepta la coma, que es lo que teclea cualquiera
+     con un teclado español. Se admite coma o punto y se formatea al salir. */
+  const aNumero = (v) => {
+    const n = parseFloat(String(v).replace(',', '.'));
+    return isFinite(n) && n >= 0 ? n : 0;
+  };
+  const aDosDecimales = (v) => aNumero(v).toFixed(2).replace('.', ',');
+
+  const [tar, setTar] = React.useState(() => {
+    const t = window.CopiTarifa.normaliza(marca.tarifas);
+    const dec = (n) => n.toFixed(2).replace('.', ',');
+    return { bn: t.bn.map(dec), color: t.color.map(dec), tramos: t.tramos.slice(),
+             descuentoDoble: String(Math.round(t.descuentoDoble * 100)), minimo: dec(t.minimo) };
+  });
+  const ponTarifa = (fila, i, v) => setTar((p) => {
+    const copia = { ...p, [fila]: p[fila].slice() };
+    copia[fila][i] = v;
+    return copia;
+  });
+  const tarifasGuardables = () => ({
+    tramos: tar.tramos.map(Number),
+    bn: tar.bn.map(aNumero),
+    color: tar.color.map(aNumero),
+    descuentoDoble: aNumero(tar.descuentoDoble) / 100,
+    minimo: aNumero(tar.minimo),
+  });
+  const [pestana, setPestana] = React.useState('datos');
+  /* La paleta se previsualiza en vivo al pulsarla, pero solo se guarda al
+     enviar. Si se cancela hay que devolver la que había. */
+  const [paleta, setPaleta] = React.useState(marca.paleta);
+  const [estilo, setEstilo] = React.useState(marca.estilo);
+  const [guardando, setGuardando] = React.useState(false);
+  const [subiendo, setSubiendo] = React.useState(null);
+  const [fallo, setFallo] = React.useState('');
+  const archivo = React.useRef(null);
+  const set = (k) => (e) => setF((p) => ({ ...p, [k]: e.target.value }));
+
+  const elegirLogo = async (file) => {
+    if (!file) return;
+    setFallo('');
+    if (!/^image\//.test(file.type)) return setFallo('El logo tiene que ser una imagen.');
+    if (file.size > 4 * 1024 * 1024) return setFallo('La imagen no puede pasar de 4 MB.');
+    try {
+      setSubiendo(0);
+      const g = await window.CopiMarca.subirLogo(file, setSubiendo);
+      // El anterior se retira solo si el nuevo ha llegado entero.
+      if (logo.ruta) window.CopiMarca.borrarLogo(logo.ruta).catch(() => {});
+      setLogo({ url: g.url, ruta: g.ruta });
+    } catch (err) {
+      setFallo('No se pudo subir el logo: ' + (err.message || err));
+    } finally { setSubiendo(null); }
+  };
+
+  const quitarLogo = () => {
+    if (logo.ruta) window.CopiMarca.borrarLogo(logo.ruta).catch(() => {});
+    setLogo({ url: '', ruta: '' });
+  };
+
+  const probar = (id) => { setPaleta(id); window.CopiPaletas.aplicar(id); };
+  const probarEstilo = (id) => { setEstilo(id); window.CopiPaletas.aplicarEstilo(id); };
+  const cancelar = () => {
+    window.CopiPaletas.aplicar(marca.paleta);
+    window.CopiPaletas.aplicarEstilo(marca.estilo);
+    onCerrar();
+  };
+
+  const enviar = async (e) => {
+    e.preventDefault();
+    setFallo(''); setGuardando(true);
+    try {
+      await window.CopiMarca.guardar({
+        nombre: f.nombre.trim() || window.CopiMarca.POR_DEFECTO.nombre,
+        direccion: f.direccion.trim(), telefono: f.telefono.trim(),
+        horario: f.horario.trim(), abierto: !!f.abierto,
+        razonSocial: f.razonSocial.trim(), nif: f.nif.trim(), emailLegal: f.emailLegal.trim(),
+        conservacionDias: Math.max(1, Math.min(3650, parseInt(f.conservacionDias, 10) || 30)),
+        logoUrl: logo.url, logoRuta: logo.ruta, paleta, estilo,
+        tarifas: tarifasGuardables(),
+      });
+      onCerrar();
+    } catch (err) {
+      setFallo('No se pudo guardar: ' + (err.message || err));
+      setGuardando(false);
+    }
+  };
+
+  return (
+    <div className="modal-fondo" onClick={cancelar}>
+      <div className="modal" role="dialog" aria-label="Ajustes de la copistería" onClick={(e) => e.stopPropagation()}>
+        <div className="modal-cab">
+          <h2 style={{ fontSize: 'var(--kt-fs-h3)', letterSpacing: '-0.02em' }}>Ajustes de la copistería</h2>
+          <button className="ibtn sm" onClick={cancelar} title="Cerrar" aria-label="Cerrar">✕</button>
+        </div>
+
+        <div className="tabs" style={{ marginTop: 16 }}>
+          <button type="button" className={'tab' + (pestana === 'datos' ? ' on' : '')} onClick={() => setPestana('datos')}>Datos</button>
+          <button type="button" className={'tab' + (pestana === 'color' ? ' on' : '')} onClick={() => setPestana('color')}>Apariencia</button>
+          <button type="button" className={'tab' + (pestana === 'precios' ? ' on' : '')} onClick={() => setPestana('precios')}>Precios</button>
+          <button type="button" className={'tab' + (pestana === 'legal' ? ' on' : '')} onClick={() => setPestana('legal')}>Legal</button>
+        </div>
+
+        <p className="modal-nota">
+          {pestana === 'datos'
+            ? 'Esto es lo que ve el cliente en la cabecera de la página pública.'
+            : pestana === 'color'
+              ? 'Color y formas se aplican a las dos páginas. Pulsa para probarlas al momento; se guardan al pulsar Guardar.'
+              : pestana === 'precios'
+                ? 'Precio por cara impresa, IVA incluido. El cliente no los ve: se aplican al pedido y aparecen en la columna Precio del panel.'
+                : 'Identificación del titular. Rellena las páginas legales: sin estos datos el aviso legal no cumple.'}
+        </p>
+
+        <form onSubmit={enviar} className="modal-form">
+         <div className="modal-cuerpo">
+          {pestana === 'datos' && <>
+          <div className="logo-fila">
+            {logo.url
+              ? <img className="shop-logo shop-logo--img" src={logo.url} alt="" />
+              : <span className="shop-logo">{window.CopiMarca.iniciales(f.nombre)}</span>}
+            <div className="logo-acc">
+              <div style={{ display: 'flex', gap: 8 }}>
+                <button type="button" className="salir" onClick={() => archivo.current.click()} disabled={subiendo !== null}>
+                  {subiendo !== null ? 'Subiendo ' + subiendo + '%' : logo.url ? 'Cambiar imagen' : 'Subir imagen'}
+                </button>
+                {logo.url && <button type="button" className="salir" onClick={quitarLogo}>Quitar</button>}
+              </div>
+              <span className="logo-pista">PNG o JPG, hasta 4 MB. Sin imagen se usan las iniciales.</span>
+            </div>
+            <input ref={archivo} type="file" accept="image/*" style={{ display: 'none' }}
+                   onChange={(e) => { elegirLogo(e.target.files[0]); e.target.value = ''; }} />
+          </div>
+
+          <Field label="Nombre" value={f.nombre} onChange={set('nombre')} maxLength={80} required placeholder="Copistería Ebro" />
+          <Field label="Dirección" value={f.direccion} onChange={set('direccion')} placeholder="C/ Delicias 12 · Zaragoza" />
+          <div className="modal-par">
+            <Field label="Teléfono" type="tel" value={f.telefono} onChange={set('telefono')} placeholder="976 00 00 00" />
+            <Field label="Horario" value={f.horario} onChange={set('horario')} placeholder="L-V 9:00-20:00" />
+          </div>
+
+          <label className="check">
+            <input type="checkbox" checked={f.abierto} onChange={(e) => setF((p) => ({ ...p, abierto: e.target.checked }))} />
+            <span>Mostrar la tienda como <strong>Abierta</strong> en la página del cliente</span>
+          </label>
+          </>}
+
+          {pestana === 'color' && <>
+            <h3 className="ap-titulo">Color</h3>
+            <div className="paleta-rejilla">
+              {window.CopiPaletas.lista.map((op) => (
+                <button type="button" key={op.id}
+                        className={'paleta-op' + (paleta === op.id ? ' on' : '')}
+                        onClick={() => probar(op.id)}
+                        aria-pressed={paleta === op.id}>
+                  <span className="paleta-muestras">
+                    {op.muestras.map((c, n) => <i key={n} style={{ background: c }} />)}
+                  </span>
+                  <span className="paleta-nombre">{op.nombre}</span>
+                  <span className="paleta-pista">{op.pista}</span>
+                </button>
+              ))}
+            </div>
+
+            <h3 className="ap-titulo">Formas</h3>
+            <p className="ap-nota">Botones, tablas y tarjetas. Se combina con cualquier color.</p>
+            <div className="paleta-rejilla">
+              {window.CopiPaletas.estilos.map((op) => (
+                <button type="button" key={op.id}
+                        className={'paleta-op' + (estilo === op.id ? ' on' : '')}
+                        onClick={() => probarEstilo(op.id)}
+                        aria-pressed={estilo === op.id}>
+                  {/* Maqueta en miniatura: enseña el redondeo y el filete
+                      reales del estilo, que es lo que de verdad cambia. */}
+                  <span className={'estilo-demo estilo-demo--' + op.id}>
+                    <i className="ed-boton" />
+                    <i className="ed-fila" />
+                    <i className="ed-fila" />
+                  </span>
+                  <span className="paleta-nombre">{op.nombre}</span>
+                  <span className="paleta-pista">{op.pista}</span>
+                </button>
+              ))}
+            </div>
+          </>}
+
+          {pestana === 'precios' && <>
+            <div className="tarifa-rejilla">
+              <span className="tar-cab" />
+              <span className="tar-cab">Blanco y negro</span>
+              <span className="tar-cab">Color</span>
+              {[0, 1, 2, 3].map((i) => (
+                <React.Fragment key={i}>
+                  <span className="tar-tramo">
+                    {i === 0 ? 'Hasta ' + tar.tramos[0] + ' caras'
+                      : i < 3 ? (tar.tramos[i - 1] + 1) + ' – ' + tar.tramos[i]
+                      : (tar.tramos[2] + 1) + ' o más'}
+                  </span>
+                  <label className="tar-euro">
+                    <input type="text" inputMode="decimal" value={tar.bn[i]}
+                           onChange={(e) => ponTarifa('bn', i, e.target.value)}
+                           onBlur={(e) => ponTarifa('bn', i, aDosDecimales(e.target.value))}
+                           aria-label={'Blanco y negro, tramo ' + (i + 1)} />
+                    <span>€</span>
+                  </label>
+                  <label className="tar-euro">
+                    <input type="text" inputMode="decimal" value={tar.color[i]}
+                           onChange={(e) => ponTarifa('color', i, e.target.value)}
+                           onBlur={(e) => ponTarifa('color', i, aDosDecimales(e.target.value))}
+                           aria-label={'Color, tramo ' + (i + 1)} />
+                    <span>€</span>
+                  </label>
+                </React.Fragment>
+              ))}
+            </div>
+
+            <div className="modal-par">
+              <label className="tar-suelto">
+                <span>Descuento por doble cara</span>
+                <span className="tar-euro">
+                  <input type="number" step="1" min="0" max="90" value={tar.descuentoDoble}
+                         onChange={(e) => setTar((p) => ({ ...p, descuentoDoble: e.target.value }))} />
+                  <span>%</span>
+                </span>
+              </label>
+              <label className="tar-suelto">
+                <span>Mínimo por archivo</span>
+                <span className="tar-euro">
+                  <input type="text" inputMode="decimal" value={tar.minimo}
+                         onChange={(e) => setTar((p) => ({ ...p, minimo: e.target.value }))}
+                         onBlur={(e) => setTar((p) => ({ ...p, minimo: aDosDecimales(e.target.value) }))} />
+                  <span>€</span>
+                </span>
+              </label>
+            </div>
+
+            {/* Un ejemplo vivo: se ve el efecto del cambio sin salir de aquí. */}
+            <p className="tar-ejemplo">
+              Ejemplo — 12 páginas × 2 copias, color, doble cara:
+              <strong>{' ' + window.CopiTarifa.calcular({
+                paginas: 12, copias: 2, color: 'Color', caras: 'Doble cara', tarifas: tarifasGuardables(),
+              }).euros}</strong>
+            </p>
+            <p className="modal-nota">
+              El tramo lo marcan las caras totales del pedido (páginas × copias), no las copias sueltas.
+            </p>
+          </>}
+
+          {pestana === 'legal' && <>
+            {(() => {
+              const faltan = [
+                !f.razonSocial.trim() && 'la razón social',
+                !f.nif.trim() && 'el NIF/CIF',
+                !f.emailLegal.trim() && 'el correo de contacto',
+                !f.direccion.trim() && 'la dirección (pestaña Datos)',
+              ].filter(Boolean);
+              return faltan.length ? (
+                <p className="acceso-fallo" role="alert">
+                  Las páginas legales están publicadas pero incompletas: falta {faltan.join(', ')}.
+                </p>
+              ) : null;
+            })()}
+
+            <Field label="Razón social" value={f.razonSocial} onChange={set('razonSocial')}
+                   maxLength={120} placeholder="Ej. Copistería Effingo S.L. o Nombre Apellidos" />
+            <div className="modal-par">
+              <Field label="NIF / CIF" value={f.nif} onChange={set('nif')} maxLength={20} placeholder="B12345678" />
+              <Field label="Correo de contacto" type="email" value={f.emailLegal} onChange={set('emailLegal')}
+                     maxLength={120} placeholder="info@copisteria.com" />
+            </div>
+            <label className="tar-suelto">
+              <span>Días que se conservan los archivos de los pedidos</span>
+              <span className="tar-euro">
+                <input type="number" min="1" max="3650" value={f.conservacionDias}
+                       onChange={(e) => setF((p) => ({ ...p, conservacionDias: e.target.value }))} />
+                <span>días</span>
+              </span>
+            </label>
+
+            <p className="modal-nota">
+              Es el plazo que se anuncia al cliente. Borrar de verdad los pedidos
+              viejos sigue siendo cosa tuya: el botón «Vaciar listos y cancelados».
+            </p>
+
+            <div className="legal-enlaces">
+              <a className="salir" href="/nube/legal.html" target="_blank" rel="noopener">Ver aviso legal del cliente ↗</a>
+              <a className="salir" href="/nube/legal.html" target="_blank" rel="noopener">Ver normas internas ↗</a>
+            </div>
+          </>}
+
+          {fallo && <p className="acceso-fallo" role="alert">{fallo}</p>}
+         </div>
+          <div className="modal-pie">
+            <button type="button" className="salir" onClick={cancelar}>Cancelar</button>
+            <Button type="submit" disabled={guardando || subiendo !== null}>{guardando ? 'Guardando…' : 'Guardar'}</Button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function Panel({ usuario }) {
+  const [real, setReal] = React.useState(Store.list());
+  const [demoJobs, setDemoJobs] = React.useState(DEMO);
+  const [pestana, setPestana] = React.useState('curso');
+  const [orden, setOrden] = React.useState({ key: 'fecha', dir: 'desc' });
+
+  const [marca, setMarca] = React.useState(window.CopiMarca.actual());
+  const [ajustes, setAjustes] = React.useState(false);
+  React.useEffect(() => window.CopiMarca.subscribe(setMarca), []);
+  React.useEffect(() => { window.CopiPaletas.aplicar(marca.paleta); }, [marca.paleta]);
+  React.useEffect(() => { window.CopiPaletas.aplicarEstilo(marca.estilo); }, [marca.estilo]);
+
+  const [conexion, setConexion] = React.useState(Store.info());
+  React.useEffect(() => Store.subscribe((lista, info) => { setReal(lista); setConexion(info); }), []);
+
+  /* Los datos de ejemplo solo se enseñan mientras el panel esté virgen. Si
+     bastara con que la lista quedara vacía, al borrar el último pedido
+     reaparecerían las filas de ejemplo y parecería que el borrado no ha hecho
+     nada. Tampoco se enseñan mientras Firestore aún no ha contestado: serían
+     filas falsas sobre las que se puede hacer clic. */
+  const [estrenado, setEstrenado] = React.useState(Store.usado());
+  React.useEffect(() => { if (real.length) setEstrenado(true); }, [real.length]);
+  const demo = !real.length && !estrenado && conexion.estado !== 'cargando';
+  const list = demo ? demoJobs : real;
+
+  /* Firestore ya reparte el cambio a todas las pestañas, así que aquí no hay
+     que tocar el estado local: llega de vuelta por el onSnapshot. */
+  const onChange = (id, patch) => {
+    if (demo) return setDemoJobs((p) => p.map((j) => j.id === id ? { ...j, ...patch } : j));
+    Store.update(id, patch).catch((e) => avisar('No se pudo guardar el estado: ' + e.message));
+  };
+
+  /* Primero el registro y después el archivo: si cae en medio queda un archivo
+     huérfano en el bucket, molesto pero inofensivo. Al revés tendríamos un
+     pedido en el panel apuntando a un archivo que ya no existe. */
+  const onDelete = (j) => {
+    if (demo) return setDemoJobs((p) => p.filter((x) => x.id !== j.id));
+    Store.remove(j.id)
+      .then(() => window.CopiApi.borrar(j.ruta).catch((e) => {
+        // El pedido ya no está; lo que ha fallado es retirar el archivo.
+        avisar('Pedido borrado, pero «' + j.archivo + '» sigue en el bucket: ' + e.message);
+      }))
+      .catch((e) => avisar('No se pudo borrar el pedido: ' + e.message));
+  };
+
+  // Aviso discreto en la propia página; nada de alert()
+  const [aviso, setAviso] = React.useState(null);
+  const reloj = React.useRef(null);
+  /* `extra` puede traer { url, nombre, accion }: un enlace directo al bucket
+     como plan B. Al pulsarlo hay gesto del usuario, así que ni el bloqueador de
+     ventanas ni la política de descargas lo frenan. */
+  const avisar = (m, extra) => {
+    setAviso(m ? { texto: m, ...extra } : null);
+    clearTimeout(reloj.current);
+    if (m) reloj.current = setTimeout(() => setAviso(null), extra && extra.url ? 20000 : 5000);
+  };
+
+  // Los trabajos reales traen la url de descarga de Firebase Storage.
+  const traer = async (j) => {
+    if (!j.url) {
+      avisar(demo
+        ? '«' + j.archivo + '» es un dato de ejemplo: no hay archivo real. Sube uno desde la página del cliente.'
+        : 'El pedido de «' + j.archivo + '» no tiene archivo asociado. Pide al cliente que lo vuelva a enviar.');
+      return null;
+    }
+    if (!window.CopiApi || !window.CopiApi.configurado) {
+      avisar('Firebase no está disponible en esta página: comprueba en la consola que se hayan cargado los scripts de gstatic y firebase.js.');
+      return null;
+    }
+    try {
+      avisar('Descargando «' + j.archivo + '»…');
+      const blob = await window.CopiApi.blob(j.url);
+      setAviso(null);
+      return blob;
+    } catch (err) {
+      avisar('No se pudo traer «' + j.archivo + '»: ' + err.message,
+             { url: j.url, accion: 'Abrirlo en otra pestaña' });
+      return null;
+    }
+  };
+
+  /* El Blob se guarda en el estado para no volver a bajarlo al imprimir
+     desde el propio visor. La URL se revoca al cerrar. */
+  const [vista, setVista] = React.useState(null);
+
+  const cerrarVista = () => {
+    setVista((v) => { if (v) URL.revokeObjectURL(v.url); return null; });
+  };
+
+  const onVista = async (j) => {
+    const blob = await traer(j);
+    if (!blob) return;
+    const tipo = j.tipo || blob.type || '';
+    const datos = blob.type === tipo ? blob : new Blob([blob], { type: tipo });
+    cerrarVista();
+    setVista({ j, tipo, blob: datos, url: URL.createObjectURL(datos) });
+  };
+
+  /* pngPagina llega cuando se imprime desde el visor de un TIFF: es el Blob
+     PNG de la página que se estaba viendo, porque el TIFF crudo la impresora
+     del navegador no sabría pintarlo. */
+  /* Borra de una vez los pedidos que ya no están en juego. Va de uno en uno
+     y no se detiene en el primer fallo: si un archivo del bucket se resiste,
+     el resto de la limpieza igual debe completarse. */
+  const [vaciando, setVaciando] = React.useState(null);
+
+  const vaciarArchivados = async () => {
+    const lote = list.filter((j) => j.estado === 'Listo' || j.estado === 'Cancelado');
+    if (!lote.length) return;
+    if (!confirm('Se van a borrar ' + lote.length + ' pedido' + (lote.length === 1 ? '' : 's') +
+                 ' (listos y cancelados) y sus archivos en Firebase.\n\nEsto no se puede deshacer. ¿Seguir?')) return;
+
+    if (demo) { setDemoJobs((p) => p.filter((j) => j.estado !== 'Listo' && j.estado !== 'Cancelado')); return; }
+
+    let hechos = 0;
+    const fallos = [];
+    for (let i = 0; i < lote.length; i++) {
+      setVaciando((i + 1) + '/' + lote.length);
+      const j = lote[i];
+      try {
+        await Store.remove(j.id);
+        hechos++;
+        await window.CopiApi.borrar(j.ruta).catch((e) => fallos.push(j.archivo + ' (archivo: ' + e.message + ')'));
+      } catch (e) {
+        fallos.push(j.archivo + ' (' + e.message + ')');
+      }
+    }
+    setVaciando(null);
+    avisar(fallos.length
+      ? 'Borrados ' + hechos + ' de ' + lote.length + '. No se pudo del todo con: ' + fallos.slice(0, 3).join('; ') + (fallos.length > 3 ? '…' : '')
+      : 'Borrados ' + hechos + ' pedido' + (hechos === 1 ? '' : 's') + '.');
+  };
+
+  const onImprimir = async (j, pngPagina) => {
+    if (pngPagina) {
+      try {
+        onChange(j.id, { estado: 'Imprimiendo' });
+        await imprimirBlob(pngPagina, 'image/png');
+      } catch (err) {
+        avisar('No se pudo imprimir la página del TIFF: ' + (err.message || err));
+      }
+      return;
+    }
+    const blob = await traer(j);
+    if (!blob) return;
+    const tipo = j.tipo || blob.type || '';
+    if (esTiff(tipo, j.archivo)) {
+      // Un TIFF puede traer varias páginas: que elija cuál en el visor.
+      cerrarVista();
+      setVista({ j, tipo, blob, url: URL.createObjectURL(blob) });
+      avisar('«' + j.archivo + '» es un TIFF: elige la página en la vista previa y dale a Imprimir.');
+      return;
+    }
+    if (!imprimible(tipo, j.archivo)) {
+      // Word, ODT y compañía: el navegador no los sabe pintar, se abren fuera.
+      descargarBlob(blob, j.archivo);
+      avisar('El navegador no puede imprimir un ' + ext(j.archivo) + '. Se ha descargado «' + j.archivo + '»: ábrelo e imprime desde ahí.');
+      onChange(j.id, { estado: 'Imprimiendo' });
+      return;
+    }
+    try {
+      await imprimirBlob(blob, tipo);
+      onChange(j.id, { estado: 'Imprimiendo' });
+    } catch (err) {
+      // El visor no ha arrancado: al menos le dejamos el archivo en el disco.
+      descargarBlob(blob, j.archivo);
+      avisar('No se pudo abrir el diálogo de impresión (' + err.message + '). Se ha descargado «' + j.archivo + '»: imprímelo desde el visor del sistema.');
+    }
+  };
+
+  const onDescargar = async (j) => {
+    const blob = await traer(j);
+    if (blob) descargarBlob(blob, j.archivo);
+  };
+
+  const enCurso = list.filter((j) => j.estado !== 'Listo' && j.estado !== 'Cancelado');
+  const listos = list.filter((j) => j.estado === 'Listo');
+  const cancelados = list.filter((j) => j.estado === 'Cancelado');
+  const base = pestana === 'curso' ? enCurso : pestana === 'listos' ? listos : cancelados;
+  // Lo que se lleva por delante el botón de vaciar.
+  const archivables = listos.length + cancelados.length;
+
+  // Los más recientes arriba por defecto; cualquier cabecera reordena la hoja.
+  const shown = React.useMemo(() => {
+    const val = (j) => {
+      const v = j[orden.key];
+      if (orden.key === 'fecha') return new Date(v || 0).getTime();
+      if (orden.key === 'bytes' || orden.key === 'copias' || orden.key === 'paginas' || orden.key === 'precio') return Number(v) || 0;
+      return String(v || '').toLowerCase();
+    };
+    return [...base].sort((a, b) => {
+      const x = val(a), y = val(b);
+      const r = x < y ? -1 : x > y ? 1 : 0;
+      return orden.dir === 'asc' ? r : -r;
+    });
+  }, [base, orden]);
+
+  const ordenar = (key) => setOrden((o) => o.key === key
+    ? { key, dir: o.dir === 'asc' ? 'desc' : 'asc' }
+    : { key, dir: ['fecha', 'bytes', 'copias'].includes(key) ? 'desc' : 'asc' });
+
+  const pendientes = enCurso.filter((j) => j.estado === 'Pendiente').length;
+  const colOrden = COLS.find((c) => c.key === orden.key);
+
+  return (
+    <>
+      <header style={{ borderBottom: '1px solid var(--kt-line-soft)', background: 'var(--copi-cabecera)', backdropFilter: 'blur(14px)', position: 'sticky', top: 0, zIndex: 20 }}>
+        <div className="wrap-wide" style={{ height: 68, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 }}>
+          <div className="shop">
+            {marca.logoUrl
+              ? <img className="shop-logo shop-logo--img" src={marca.logoUrl} alt="" />
+              : <span className="shop-logo">{window.CopiMarca.iniciales(marca.nombre)}</span>}
+            <div>
+              <div className="shop-name">{marca.nombre}</div>
+              <div className="shop-meta">Panel del trabajador</div>
+            </div>
+          </div>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+            <span className={'live' + (conexion.estado === 'listo' ? '' : ' off')}>
+              <i></i>{conexion.estado === 'listo' ? 'En vivo' : conexion.estado === 'error' ? 'Sin conexión' : 'Conectando…'}
+            </span>
+            <span className="sesion" title={usuario.email}>{usuario.email}</span>
+            <a className="salir" href="legal.html">Normas internas</a>
+            <button className="salir" onClick={() => setAjustes(true)}>Datos de la tienda</button>
+            <button className="salir" onClick={() => window.CopiAuth.salir()}>Salir</button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <div className="wrap-wide panel">
+          <div className="panel-head">
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <span className="kt-eyebrow">Archivos recibidos</span>
+              <h1 style={{ fontSize: 'var(--kt-fs-h1)', letterSpacing: '-0.03em' }}>
+                {pendientes} pendiente{pendientes === 1 ? '' : 's'}
+              </h1>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+              {/* Vaciar solo lo que ya no está en juego: listos y cancelados.
+                  Lo que está en curso no se toca ni por descuido. */}
+              <button className="salir" onClick={vaciarArchivados} disabled={!archivables || vaciando}>
+                {vaciando ? 'Borrando… ' + vaciando : 'Vaciar listos y cancelados' + (archivables ? ' (' + archivables + ')' : '')}
+              </button>
+              <Button as="a" href="/nube/" variant="secondary">Página del cliente {Ic.arrow()}</Button>
+            </div>
+          </div>
+
+          {/* Sin esto, unas reglas de Firestore que deniegan la lectura se leen
+              como «hoy no hay pedidos»: el panel silenciaría el fallo. */}
+          {conexion.estado === 'error' && (
+            <p className="conexion-mal" role="alert">
+              No se puede leer la lista de pedidos en Firestore: {conexion.error}
+            </p>
+          )}
+          {conexion.estado === 'cargando' && (
+            <p className="conexion-espera">Cargando pedidos de Firestore…</p>
+          )}
+          {demo && (
+            <p style={{ flex: 'none', color: 'var(--kt-text-lavender)', fontSize: 'var(--kt-fs-small)', marginBottom: 12 }}>
+              Datos de ejemplo. Sube un archivo desde la página del cliente y aparecerá aquí al instante.
+            </p>
+          )}
+
+          <div className="tabs" style={{ flex: 'none', marginBottom: 12 }}>
+            <button className={'tab' + (pestana === 'curso' ? ' on' : '')} onClick={() => setPestana('curso')}>
+              En curso <span className="n">{enCurso.length}</span>
+            </button>
+            <button className={'tab' + (pestana === 'listos' ? ' on' : '')} onClick={() => setPestana('listos')}>
+              Listos <span className="n">{listos.length}</span>
+            </button>
+            <button className={'tab' + (pestana === 'cancelados' ? ' on' : '')} onClick={() => setPestana('cancelados')}>
+              Cancelados <span className="n">{cancelados.length}</span>
+            </button>
+          </div>
+
+          {shown.length ? (
+            <>
+              <div className="sheet-wrap">
+                <table className="sheet">
+                  <thead>
+                    <tr>
+                      <th className="gut"> </th>
+                      {COLS.map((c) => (
+                        <th key={c.key}
+                            className={c.sortable ? 'sortable' : ''}
+                            style={c.num ? { textAlign: 'right' } : null}
+                            onClick={c.sortable ? () => ordenar(c.key) : undefined}>
+                          {c.label}
+                          {orden.key === c.key && <span className="dir">{orden.dir === 'asc' ? '▲' : '▼'}</span>}
+                        </th>
+                      ))}
+                      <th style={{ textAlign: 'right' }}>Acciones</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {shown.map((j, i) => (
+                      <Fila key={j.id} j={j} n={i + 1}
+                            onVista={onVista} onImprimir={onImprimir} onDescargar={onDescargar}
+                            onChange={onChange} onDelete={onDelete} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+              <div className="sheet-foot">
+                <span>{shown.length} fila{shown.length === 1 ? '' : 's'} · orden: {colOrden ? colOrden.label : ''} {orden.dir === 'asc' ? '↑' : '↓'}</span>
+                <span>Pulsa una cabecera para reordenar</span>
+              </div>
+            </>
+          ) : (
+            <div className="sheet-empty">
+              {pestana === 'curso' ? 'No hay archivos en curso.'
+                : pestana === 'listos' ? 'Todavía no hay trabajos listos.'
+                : 'No hay pedidos cancelados.'}
+            </div>
+          )}
+        </div>
+      </main>
+
+      {vista && (
+        <Vista trabajo={vista} onImprimir={onImprimir} onDescargar={onDescargar} onCerrar={cerrarVista} />
+      )}
+
+      {ajustes && <Ajustes marca={marca} onCerrar={() => setAjustes(false)} />}
+
+      {aviso && (
+        <div className="aviso" role="status">
+          {aviso.texto}
+          {aviso.url && (
+            <a className="aviso-link" href={aviso.url} target="_blank" rel="noopener noreferrer">
+              {aviso.accion || 'Abrir el archivo'}
+            </a>
+          )}
+        </div>
+      )}
+    </>
+  );
+}
+
+/* Puerta de acceso. El panel no se monta hasta que hay sesión: así el
+   onSnapshot de Firestore no llega a dispararse sin permisos, y de paso no se
+   pinta una tabla vacía que en realidad es un "no puedes verlo". */
+function Acceso() {
+  const [email, setEmail] = React.useState('');
+  const [clave, setClave] = React.useState('');
+  const [fallo, setFallo] = React.useState('');
+  const [entrando, setEntrando] = React.useState(false);
+
+  const enviar = async (e) => {
+    e.preventDefault();
+    setFallo(''); setEntrando(true);
+    try {
+      await window.CopiAuth.entrar(email.trim(), clave);
+      // No hay que hacer nada más: onUsuario re-renderiza con la sesión puesta.
+    } catch (err) {
+      setFallo(window.CopiAuth.motivo(err));
+      setEntrando(false);
+    }
+  };
+
+  return (
+    <div className="acceso">
+      <Card style={{ borderRadius: 'var(--kt-radius-xl)', maxWidth: 420, width: '100%' }}>
+        <div className="acceso-marca"><Logo size={26} /></div>
+        <h1 style={{ fontSize: 'var(--kt-fs-h2)', letterSpacing: '-0.03em', marginTop: 14 }}>Acceso trabajadores</h1>
+        <p style={{ color: 'var(--kt-text-muted)', fontSize: 'var(--kt-fs-small)', marginTop: 6 }}>
+          La lista de pedidos lleva datos de clientes. Identifícate para verla.
+        </p>
+        <form onSubmit={enviar} style={{ display: 'grid', gap: 14, marginTop: 22 }}>
+          <Field label="Correo" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                 placeholder="trabajador@copisteria.com" required autoComplete="username" />
+          <Field label="Contraseña" type="password" value={clave} onChange={(e) => setClave(e.target.value)}
+                 placeholder="••••••••" required autoComplete="current-password" />
+          {fallo && <p className="acceso-fallo" role="alert">{fallo}</p>}
+          <Button type="submit" disabled={entrando}>{entrando ? 'Entrando…' : 'Entrar'}</Button>
+        </form>
+        <p className="acceso-pie">
+          ¿Sin cuenta? Las da de alta el responsable de la copistería; aquí no hay registro.
+        </p>
+        <a className="acceso-volver" href="/nube/">← Volver a la página del cliente</a>
+      </Card>
+    </div>
+  );
+}
+
+function App() {
+  // undefined = Firebase todavía no ha dicho si hay sesión guardada.
+  const [usuario, setUsuario] = React.useState(undefined);
+  React.useEffect(() => window.CopiAuth.onUsuario(setUsuario), []);
+
+  /* El título se pone aquí y no dentro de Panel: la pantalla de acceso también
+     es esta página, y antes se quedaba con el nombre escrito a mano en el HTML. */
+  React.useEffect(() => window.CopiMarca.subscribe((m) => {
+    document.title = 'Panel — ' + m.nombre;
+  }), []);
+
+  if (usuario === undefined) return <div className="acceso"><p className="conexion-espera">Comprobando la sesión…</p></div>;
+  if (!usuario) return <Acceso />;
+  return <Panel usuario={usuario} />;
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+})();
+</script>
+</body>
+</html>
