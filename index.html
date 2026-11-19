@@ -6,12 +6,12 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KrypTon — Software propio, desde Zaragoza</title>
-<link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="../../styles.css">
 <link rel="stylesheet" href="site.css">
 <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
 <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
-<script src="ds-bundle.js"></script>
+<script src="../../_ds_bundle.js"></script>
 <style>
   #root { min-height: 100vh; display: flex; flex-direction: column; }
   main { flex: 1; }
@@ -19,6 +19,9 @@
   @media (max-width: 860px) { .hero-grid { grid-template-columns: 1fr; } }
   .prod-grid { display: grid; grid-template-columns: 1.55fr 1fr; gap: 24px; align-items: stretch; }
   @media (max-width: 820px) { .prod-grid { grid-template-columns: 1fr; } }
+  .webs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+  .svc-grid { display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 24px; margin-top: 36px; }
+  @media (max-width: 820px) { .webs-grid, .svc-grid { grid-template-columns: 1fr; } }
 </style>
 </head>
 <body>
@@ -73,16 +76,72 @@ function Productos() {
           <a className="kt-textlink" href="aplicaciones.html">Ver las dos apps {Ic.arrow({ width: 16, height: 16 })}</a>
         </div>
         <div className="prod-grid">
-          <AppCard tone="violet" name="KBook" glyph={<img src="assets/kbook-icon.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit' }} />}
+          <AppCard tone="violet" name="KBook" glyph={<img src="../../assets/kbook-icon.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit' }} />}
             tagline="Reservas y citas para tu negocio de barrio"
             description="La agenda que se queda con tus clientes en tu casa: peluquerías, barberías, estética, clínicas y cualquier negocio con cita previa. También reserva de mesa en restaurantes."
             badge={<Badge tone="violet">Producto insignia</Badge>}
             cta={<Button as="a" href="aplicaciones.html" variant="primary">Conocer KBook {Ic.arrow()}</Button>} />
-          <AppCard tone="turquoise" style={{ borderTopColor: '#f0babe' }} name="KImpostor" glyph={<img src="assets/kimpostor-icon.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit' }} />}
+          <AppCard tone="turquoise" style={{ borderTopColor: '#f0babe' }} name="KImpostor" glyph={<img src="../../assets/kimpostor-icon.png" alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'inherit' }} />}
             tagline="Juego social de fiesta"
             description="Para jugar en grupo, en el sofá o en el bar. Encuentra al impostor antes de que te descubran."
             badge={<Badge tone="turquoise" style={{ borderColor: '#f0babe', color: '#f0babe' }}>Ocio</Badge>}
             cta={<a className="kt-textlink" href="aplicaciones.html">Ver KImpostor {Ic.arrow({ width: 16, height: 16 })}</a>} />
+        </div>
+      </Container>
+    </Section>
+  );
+}
+
+function Webs() {
+  const sites = [
+    { id: 'shot-zokko', img: '../../assets/web-zokko.png', url: 'https://zokkostreetwear.com', dom: 'zokkostreetwear.com', name: 'Zokko Streetwear', kind: 'Tienda online', desc: 'Tienda de ropa urbana para hombre: chaquetas, sudaderas y ediciones limitadas. Estética de calle, catálogo por categorías y compra online.' },
+    { id: 'shot-tienda', img: '../../assets/web-tienda-krypton.png', url: 'https://tienda.devkrypton.com', dom: 'tienda.devkrypton.com', name: 'Tienda KrypTon', kind: 'Tienda online', desc: 'Tienda de juguetes y regalos: trenes, construcción, teledirigidos y drones. Campaña de Navidad con cuenta atrás y pago 100% seguro.' },
+  ];
+  return (
+    <Section id="webs" style={{ paddingTop: 0 }}>
+      <Container>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12, marginBottom: 28 }}>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <Eyebrow>Tiendas online y diseño web</Eyebrow>
+            <h2 style={{ fontSize: 'var(--kt-fs-h2)', maxWidth: '22ch' }}>También construyo webs y tiendas para tu negocio</h2>
+            <p style={{ color: 'var(--kt-text-muted)', maxWidth: '58ch' }}>Con el mismo cuidado que mis apps: diseño a medida, rápida en el móvil y lista para vender. La hago yo, la publico yo y te la mantengo.</p>
+          </div>
+          <Button as="a" href="contacto.html" variant="primary">Quiero mi web {Ic.arrow()}</Button>
+        </div>
+        <div className="webs-grid">
+          {sites.map((s) => (
+            <article key={s.id} className="kt-card kt-card--interactive" style={{ background: 'var(--kt-surface)', border: '1px solid var(--kt-line)', borderTop: '2px solid var(--kt-violet)', borderRadius: 'var(--kt-radius-lg)', overflow: 'hidden', display: 'flex', flexDirection: 'column', transition: 'border-color var(--kt-dur) var(--kt-ease), transform var(--kt-dur) var(--kt-ease)' }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 6, padding: '10px 14px', borderBottom: '1px solid var(--kt-line-soft)', background: 'var(--kt-bg-raise)' }}>
+                <i style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--kt-line)' }}></i>
+                <i style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--kt-line)' }}></i>
+                <i style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--kt-line)' }}></i>
+                <span style={{ marginLeft: 10, fontFamily: 'var(--kt-mono)', fontSize: 12, color: 'var(--kt-text-muted)' }}>{s.dom}</span>
+              </div>
+              <div style={{ position: 'relative', width: '100%', aspectRatio: '16 / 10' }}>
+                <a href={s.url} target="_blank" rel="noopener" aria-label={'Abrir ' + s.dom} style={{ display: 'block', width: '100%', height: '100%' }}><img src={s.img} alt={'Captura de ' + s.dom} style={{ display: 'block', width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'top' }} /></a>
+              </div>
+              <div style={{ padding: 24, display: 'flex', flexDirection: 'column', gap: 10, flex: 1 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+                  <h3 style={{ fontSize: 'var(--kt-fs-h3)' }}>{s.name}</h3>
+                  <Badge tone="violet" style={{ marginLeft: 'auto' }}>{s.kind}</Badge>
+                </div>
+                <p style={{ color: 'var(--kt-text-muted)' }}>{s.desc}</p>
+                <a className="kt-textlink" href={s.url} target="_blank" rel="noopener" style={{ marginTop: 'auto', paddingTop: 6 }}>Visitar {s.dom} {Ic.arrow({ width: 16, height: 16 })}</a>
+              </div>
+            </article>
+          ))}
+        </div>
+        <div className="svc-grid">
+          {[
+            ['Tiendas online', 'Catálogo, carrito y pagos. Vende 24/7 sin depender de marketplaces.'],
+            ['Diseño web', 'Webs corporativas a medida, claras y rápidas en cualquier móvil.'],
+            ['Mantenimiento', 'Cambios, soporte y actualizaciones. Me llamas y lo resuelvo yo.'],
+          ].map(([t, d]) => (
+            <div key={t} style={{ borderTop: '1px solid var(--kt-line)', paddingTop: 16 }}>
+              <h4 style={{ fontSize: '1.0625rem', marginBottom: 6 }}>{t}</h4>
+              <p style={{ color: 'var(--kt-text-muted)', fontSize: 'var(--kt-fs-small)' }}>{d}</p>
+            </div>
+          ))}
         </div>
       </Container>
     </Section>
@@ -94,7 +153,7 @@ function Maker() {
     <Section style={{ paddingTop: 0 }}>
       <Container>
         <div style={{ borderRadius: 'var(--kt-radius-xl)', border: '1px solid var(--kt-line)', background: 'var(--kt-surface)', padding: 'clamp(28px,4vw,52px)', display: 'grid', gridTemplateColumns: 'auto 1fr', gap: 'clamp(20px,4vw,44px)', alignItems: 'center' }}>
-          <img src="assets/kevin.jpg" alt="Kevin Rodríguez" style={{ width: 132, height: 132, borderRadius: 'var(--kt-radius-lg)', objectFit: 'cover', border: '1px solid var(--kt-line)', flex: 'none', display: 'block' }} />
+          <img src="../../assets/kevin.jpg" alt="Kevin Rodríguez" style={{ width: 132, height: 132, borderRadius: 'var(--kt-radius-lg)', objectFit: 'cover', border: '1px solid var(--kt-line)', flex: 'none', display: 'block' }} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             <Eyebrow>Quién está detrás</Eyebrow>
             <h2 style={{ fontSize: 'var(--kt-fs-h3)', fontWeight: 600 }}>Kevin Rodríguez — desarrollador y fundador</h2>
@@ -115,6 +174,7 @@ function App() {
       <main>
         <Hero />
         <Productos />
+        <Webs />
         {window.KtClosingCta({ heading: '¿Tienes una idea? Vamos a construirla', body: 'Estoy abierto a escuchar propuestas de todo tipo. Si tienes una idea para una app, hablemos y veamos cómo desarrollarla juntos.' })}
         <Maker />
       </main>
